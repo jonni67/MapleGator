@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -6,9 +6,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{50CC8FDA-EA76-412E-97BE-775AE620C9DE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BBBBot</RootNamespace>
-    <AssemblyName>BBBBot</AssemblyName>
+    <RootNamespace>MapleGatorBot</RootNamespace>
+    <AssemblyName>MapleGatorBot</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -46,30 +47,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Data.cs" />
+    <Compile Include="Primary.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Primary.Designer.cs">
+      <DependentUpon>Primary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pathfinding.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pathfinding.Designer.cs">
+      <DependentUpon>Pathfinding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapleGator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapleGator.Designer.cs">
+      <DependentUpon>MapleGator.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Pathfinding.resx">
+      <DependentUpon>Pathfinding.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapleGator.aa.resx">
+      <DependentUpon>MapleGator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapleGator.resx">
+      <DependentUpon>MapleGator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Primary.resx">
+      <DependentUpon>Primary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -78,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ms-gator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\box-140x25.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
