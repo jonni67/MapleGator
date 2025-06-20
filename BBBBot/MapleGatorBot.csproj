@@ -119,5 +119,8 @@
   <ItemGroup>
     <None Include="Resources\gator-toggle-off1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gator-toggle-on.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

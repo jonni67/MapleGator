@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace MapleGatorBot
 {
@@ -9,6 +11,8 @@ namespace MapleGatorBot
 		// works in 99% of cases //
 		public static bool ACRYLIC_STYLING = true;
 		public static byte STYLING_ALPHA = 24;
+		public static Color COLOR_ON = Color.FromArgb(128, 255, 128);
+		public static Color COLOR_OFF = Color.FromArgb(255, 128, 128);
 
 		static int ARGB(byte a, byte r, byte g, byte b) =>
 		unchecked((int)((uint)(a << 24 | r << 16 | g << 8 | b)));
@@ -37,6 +41,19 @@ namespace MapleGatorBot
 
 			User32.SetWindowCompositionAttribute(handle, ref data);
 			Marshal.FreeHGlobal(accentPtr);
+		}
+
+		public static void ToggleButton(bool enabled, Button btn)
+		{
+			btn.Image = enabled ? Properties.Resources.gator_toggle_on : Properties.Resources.gator_toggle_off;
+			btn.FlatAppearance.BorderColor = enabled ? COLOR_ON : COLOR_OFF;
+
+		}
+
+		public static void ToggleLabel(bool enabled, Label lbl)
+		{
+			lbl.ForeColor = enabled ? COLOR_ON : COLOR_OFF;
+			lbl.Text = enabled ? "ON" : "OFF";
 		}
 	}
 

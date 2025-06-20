@@ -66,5 +66,12 @@ namespace MapleGatorBot
 		}
 
 		#endregion
+
+		private void Btn_AutoLoginToggle_Click(object sender, EventArgs e)
+		{
+			_parent.AutoLoginEnabled = !_parent.AutoLoginEnabled;
+			Styling.ToggleLabel(_parent.AutoLoginEnabled, autoLoginToggleLabel);
+			Styling.ToggleButton(_parent.AutoLoginEnabled, buttonAutoLoginToggle);
+		}
 	}
 }

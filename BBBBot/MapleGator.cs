@@ -51,14 +51,29 @@ namespace MapleGatorBot
 
 		#endregion
 
+		#region Public Fields
+
+		public bool AutoLoginEnabled
+		{
+			get { return _autoLoginEnabled; }
+			set { _autoLoginEnabled = value; }
+		}
+
+		#endregion
+
 		#region Private Members
 
+		// components
 		Dictionary<ComponentIDs, Form> _components;
 		List<ComponentIDs> _componentIds;
 
 		Primary _primary;
 		Pathfinding _pathfinding;
 
+		// states
+		bool _autoLoginEnabled = false;
+		
+		// constructor
 		public MapleGator() { InitializeComponent(); }
 
 		#endregion
