@@ -5,17 +5,17 @@ using System.Windows.Forms;
 
 namespace MapleGatorBot
 {
+	// early win10 versions acrylic styling may not work //
+	// works in 99% of cases //
+
 	public static class Styling
 	{
-		// early win10 versions acrylic styling may not work //
-		// works in 99% of cases //
+		public static int PANEL_ALPHA = 64;
+		public static Color PANEL_COLOR = Color.Black;
 		public static bool ACRYLIC_STYLING = true;
 		public static byte STYLING_ALPHA = 24;
 		public static Color COLOR_ON = Color.FromArgb(128, 255, 128);
 		public static Color COLOR_OFF = Color.FromArgb(255, 128, 128);
-
-		static int ARGB(byte a, byte r, byte g, byte b) =>
-		unchecked((int)((uint)(a << 24 | r << 16 | g << 8 | b)));
 
 		public static void SetModernStyling(IntPtr handle)
 		{
@@ -47,7 +47,6 @@ namespace MapleGatorBot
 		{
 			btn.Image = enabled ? Properties.Resources.gator_toggle_on : Properties.Resources.gator_toggle_off;
 			btn.FlatAppearance.BorderColor = enabled ? COLOR_ON : COLOR_OFF;
-
 		}
 
 		public static void ToggleLabel(bool enabled, Label lbl)
@@ -55,6 +54,27 @@ namespace MapleGatorBot
 			lbl.ForeColor = enabled ? COLOR_ON : COLOR_OFF;
 			lbl.Text = enabled ? "ON" : "OFF";
 		}
+
+		public static void HideFormWithoutFlicker(Form f)
+		{
+			if (!f.IsHandleCreated)
+				_ = f.Handle;
+
+			f.TopMost = false;
+			f.Enabled = false;
+			f.Visible = true;
+			f.Opacity = 0;
+		}
+
+		public static void ShowFormWithoutFlicker(Form f)
+		{
+			f.Opacity = 1;
+			f.Enabled = true;
+			f.TopMost = true; // Optional: restore if needed
+		}
+
+		static int ARGB(byte a, byte r, byte g, byte b) =>
+			unchecked((int)((uint)(a << 24 | r << 16 | g << 8 | b)));
 	}
 
 	internal enum AccentState

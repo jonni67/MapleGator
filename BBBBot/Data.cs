@@ -7,5 +7,6 @@ namespace MapleGatorBot
 	{
 		Primary,
 		Pathfinding,
+		Metrics,
 	}
 }

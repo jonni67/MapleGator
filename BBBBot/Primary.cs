@@ -45,10 +45,11 @@ namespace MapleGatorBot
 		
 		private void SetDesignParams()
 		{
-			_panelColor = Color.FromArgb(MapleGator.PANEL_ALPHA, MapleGator.PANEL_COLOR);
+			_panelColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
 			processPanel.BackColor = _panelColor;
 			autoLoginPanel.BackColor = _panelColor;
 			topPanel.BackColor = _panelColor;
+			statPanel.BackColor = _panelColor;
 		}
 
 		#region Callbacks

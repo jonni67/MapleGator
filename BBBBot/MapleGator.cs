@@ -6,14 +6,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace MapleGatorBot
 {
     public partial class MapleGator : Form
     {
-		public static int PANEL_ALPHA = 64;
-		public static Color PANEL_COLOR = Color.Black;
-
 		#region Injections
 		// DLL Injection P/Invoke Declarations
 		[DllImport("kernel32.dll", SetLastError = true)]
@@ -69,12 +67,22 @@ namespace MapleGatorBot
 
 		Primary _primary;
 		Pathfinding _pathfinding;
+		Form _shownComponent;
 
 		// states
 		bool _autoLoginEnabled = false;
 		
 		// constructor
-		public MapleGator() { InitializeComponent(); }
+		public MapleGator()
+		{
+			InitializeComponent();
+			if (Styling.ACRYLIC_STYLING)
+			{
+				Styling.SetModernStyling(Handle);
+			}
+
+			SetStyling();
+		}
 
 		#endregion
 
@@ -159,30 +167,35 @@ namespace MapleGatorBot
 			// set all components in dict
 			foreach (ComponentIDs id in Enum.GetValues(typeof(ComponentIDs)))
 			{
+				if (!_components.ContainsKey(id) || _components[id] == null)
+					continue;
 				_components[id].MdiParent = this;
 				_componentIds.Add(id);
 			}
-
-			// primary is first component shown on load
-			SwitchComponent(ComponentIDs.Primary);
+			
+			_pathfinding.Show();
+			_primary.Show(); // primary is first component shown on load
+			_shownComponent = _components[ComponentIDs.Primary];
+			Console.WriteLine("Loaded Form Components");
+			Console.WriteLine(ClientSize);
 		}
 
 		private void SwitchComponent(ComponentIDs id)
 		{
-			// switch off any components not id then show id
-			_componentIds.Where(f => f != id).ToList().ForEach(f => _components[f].Hide());
-			_components[id].Show();
+			if (_shownComponent.Name == _components[id].Name)
+				return;
+
+			SuspendLayout();
+			Styling.ShowFormWithoutFlicker(_components[id]);
+			Styling.HideFormWithoutFlicker(_shownComponent);
+			ResumeLayout();
+			_shownComponent = _components[id];
 		}
 
 		private void SetStyling()
 		{
 			BackColor = Color.Black;
-			menuStrip.BackColor = Color.FromArgb(PANEL_ALPHA, PANEL_COLOR);
-
-			if (Styling.ACRYLIC_STYLING)
-			{
-				Styling.SetModernStyling(Handle);
-			}
+			menuStrip.BackColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
 		}
 
 		#endregion
@@ -192,12 +205,12 @@ namespace MapleGatorBot
 		private void MapleGator_Load(object sender, EventArgs e)
 		{
 			LoadComponents();
-			SetStyling();
 		}
 
 		private void MenuItem_Main_Click(object sender, EventArgs e)
 		{
 			SwitchComponent(ComponentIDs.Primary);
+			//Console.WriteLine(_primary.ClientSize);
 		}
 
 		private void MenuItem_Pathfinding_Click(object sender, EventArgs e)
