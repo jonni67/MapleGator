@@ -1,0 +1,80 @@
+﻿using System.Runtime.InteropServices;
+using System;
+
+namespace MapleGatorBot
+{
+	public static class Styling
+	{
+		// early win10 versions acrylic styling may not work //
+		// works in 99% of cases //
+		public static bool ACRYLIC_STYLING = true;
+		public static byte STYLING_ALPHA = 24;
+
+		static int ARGB(byte a, byte r, byte g, byte b) =>
+		unchecked((int)((uint)(a << 24 | r << 16 | g << 8 | b)));
+
+		public static void SetModernStyling(IntPtr handle)
+		{
+			var accent = new AccentPolicy 
+			{ 
+				AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND 
+			};
+
+			accent.GradientColor = ARGB(STYLING_ALPHA, 0, 0, 0);
+
+			var accentStructSize = Marshal.SizeOf(accent);
+
+			var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+			Marshal.StructureToPtr(accent, accentPtr, false);
+
+			var data = new WindowCompositionAttributeData
+			{
+				Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY,
+				SizeOfData = accentStructSize,
+				Data = accentPtr
+			};
+
+
+			User32.SetWindowCompositionAttribute(handle, ref data);
+			Marshal.FreeHGlobal(accentPtr);
+		}
+	}
+
+	internal enum AccentState
+	{
+		ACCENT_DISABLED = 0,
+		ACCENT_ENABLE_GRADIENT = 1,
+		ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
+		ACCENT_ENABLE_BLURBEHIND = 3,
+		ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
+		ACCENT_INVALID_STATE = 5,
+	}
+
+	internal enum WindowCompositionAttribute
+	{
+		WCA_ACCENT_POLICY = 19
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct AccentPolicy
+	{
+		public AccentState AccentState;
+		public int AccentFlags;
+		public int GradientColor;
+		public int AnimationId;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct WindowCompositionAttributeData
+	{
+		public WindowCompositionAttribute Attribute;
+		public IntPtr Data;
+		public int SizeOfData;
+	}
+
+	internal static class User32
+	{
+		[DllImport("user32.dll")]
+		internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+	}
+}

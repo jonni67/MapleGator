@@ -20,12 +20,15 @@ namespace MapleGatorBot
 		}
 
 		MapleGator _parent;
+		Color _panelColor;
 
 		public Primary(MapleGator parent)
 		{
 			InitializeComponent();
 			_parent = parent;
+
 			LoadProcessList();
+			SetDesignParams();
 		}
 
 		private void LoadProcessList()
@@ -38,6 +41,14 @@ namespace MapleGatorBot
 
 			if (processComboBox.Items.Count > 0)
 				processComboBox.SelectedIndex = 0;
+		}
+		
+		private void SetDesignParams()
+		{
+			_panelColor = Color.FromArgb(MapleGator.PANEL_ALPHA, MapleGator.PANEL_COLOR);
+			processPanel.BackColor = _panelColor;
+			autoLoginPanel.BackColor = _panelColor;
+			topPanel.BackColor = _panelColor;
 		}
 
 		#region Callbacks
