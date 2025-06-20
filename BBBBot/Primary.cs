@@ -31,6 +31,9 @@ namespace MapleGatorBot
 			SetDesignParams();
 		}
 
+		/// <summary>
+		/// Loads processes into the UI combo box.
+		/// </summary>
 		private void LoadProcessList()
 		{
 			processComboBox.Items.Clear();
@@ -53,6 +56,7 @@ namespace MapleGatorBot
 		}
 
 		#region Callbacks
+
 		private void Btn_Hook_Click(object sender, EventArgs e)
 		{
 			if (processComboBox.SelectedItem == null)
@@ -61,12 +65,9 @@ namespace MapleGatorBot
 				return;
 			}
 
-			// Extract PID from dropdown item
 			string selected = processComboBox.SelectedItem.ToString();
 			_parent.HookProcess(selected);
 		}
-
-		#endregion
 
 		private void Btn_AutoLoginToggle_Click(object sender, EventArgs e)
 		{
@@ -74,5 +75,7 @@ namespace MapleGatorBot
 			Styling.ToggleLabel(_parent.AutoLoginEnabled, autoLoginToggleLabel);
 			Styling.ToggleButton(_parent.AutoLoginEnabled, buttonAutoLoginToggle);
 		}
+
+		#endregion
 	}
 }

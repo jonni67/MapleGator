@@ -17,15 +17,18 @@ namespace MapleGatorBot
 		public static Color COLOR_ON = Color.FromArgb(128, 255, 128);
 		public static Color COLOR_OFF = Color.FromArgb(255, 128, 128);
 
-		public static void SetModernStyling(IntPtr handle)
+		public static void SetAcrylicStyling(IntPtr handle)
 		{
+			// create accent policy
 			var accent = new AccentPolicy 
 			{ 
 				AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND 
 			};
 
+			// set gradient color to provide proper blur
 			accent.GradientColor = ARGB(STYLING_ALPHA, 0, 0, 0);
 
+			// create modified window composition
 			var accentStructSize = Marshal.SizeOf(accent);
 
 			var accentPtr = Marshal.AllocHGlobal(accentStructSize);
@@ -38,7 +41,7 @@ namespace MapleGatorBot
 				Data = accentPtr
 			};
 
-
+			// apply new composition to window
 			User32.SetWindowCompositionAttribute(handle, ref data);
 			Marshal.FreeHGlobal(accentPtr);
 		}
@@ -55,6 +58,10 @@ namespace MapleGatorBot
 			lbl.Text = enabled ? "ON" : "OFF";
 		}
 
+		/// <summary>
+		/// Hides a form without calling Hide().
+		/// </summary>
+		/// <param name="f"></param>
 		public static void HideFormWithoutFlicker(Form f)
 		{
 			if (!f.IsHandleCreated)
@@ -66,6 +73,10 @@ namespace MapleGatorBot
 			f.Opacity = 0;
 		}
 
+		/// <summary>
+		/// Shows a form without calling Show().
+		/// </summary>
+		/// <param name="f"></param>
 		public static void ShowFormWithoutFlicker(Form f)
 		{
 			f.Opacity = 1;
@@ -73,6 +84,10 @@ namespace MapleGatorBot
 			f.TopMost = true; // Optional: restore if needed
 		}
 
+		/// <summary>
+		/// Converts ARGB to bounded unsigned color.
+		/// </summary>
+		/// <returns>uint color code</returns>
 		static int ARGB(byte a, byte r, byte g, byte b) =>
 			unchecked((int)((uint)(a << 24 | r << 16 | g << 8 | b)));
 	}

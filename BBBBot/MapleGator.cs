@@ -12,7 +12,7 @@ namespace MapleGatorBot
 {
     public partial class MapleGator : Form
     {
-		#region Injections
+		#region DLL Imports
 		// DLL Injection P/Invoke Declarations
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
@@ -40,15 +40,6 @@ namespace MapleGatorBot
 
 		#endregion
 
-		#region Process Memory
-
-		const int PROCESS_ALL_ACCESS = 0x1F0FFF;
-		const uint MEM_COMMIT = 0x1000;
-		const uint MEM_RESERVE = 0x2000;
-		const uint PAGE_READWRITE = 0x04;
-
-		#endregion
-
 		#region Public Fields
 
 		public bool AutoLoginEnabled
@@ -61,35 +52,46 @@ namespace MapleGatorBot
 
 		#region Private Members
 
-		// components
+		// memory hex //
+		const int PROCESS_ALL_ACCESS = 0x1F0FFF;
+		const uint MEM_COMMIT = 0x1000;
+		const uint MEM_RESERVE = 0x2000;
+		const uint PAGE_READWRITE = 0x04;
+		
+		// components //
 		Dictionary<ComponentIDs, Form> _components;
-		List<ComponentIDs> _componentIds;
 
 		Primary _primary;
 		Pathfinding _pathfinding;
 		Form _shownComponent;
 
-		// states
+		// states //
 		bool _autoLoginEnabled = false;
-		
-		// constructor
-		public MapleGator()
-		{
-			InitializeComponent();
-			if (Styling.ACRYLIC_STYLING)
-			{
-				Styling.SetModernStyling(Handle);
-			}
-
-			SetStyling();
-		}
 
 		#endregion
 
 		#region Public Methods
 
+		// constructor //
+		public MapleGator()
+		{
+			InitializeComponent();
+
+			if (Styling.ACRYLIC_STYLING)
+			{
+				Styling.SetAcrylicStyling(Handle);
+			}
+
+			SetStyling();
+		}
+
+		/// <summary>
+		/// Hooks to process writing bytes.
+		/// </summary>
+		/// <param name="process">The full name of the process.</param>
 		public void HookProcess(string process)
 		{
+			// Extract PID
 			int pidStart = process.IndexOf("PID: ") + 5;
 			int pidEnd = process.IndexOf(")", pidStart);
 			string pidStr = process.Substring(pidStart, pidEnd - pidStart);
@@ -152,11 +154,14 @@ namespace MapleGatorBot
 
 		#region Private Methods
 
+		/// <summary>
+		/// Loads forms as indentifiable components.
+		/// </summary>
 		private void LoadComponents()
 		{
 			_components = new Dictionary<ComponentIDs, Form>();
-			_componentIds = new List<ComponentIDs>();
 
+			// create form components
 			_primary = new Primary(this);
 			_pathfinding = new Pathfinding(this);
 
@@ -170,16 +175,17 @@ namespace MapleGatorBot
 				if (!_components.ContainsKey(id) || _components[id] == null)
 					continue;
 				_components[id].MdiParent = this;
-				_componentIds.Add(id);
 			}
 			
 			_pathfinding.Show();
 			_primary.Show(); // primary is first component shown on load
 			_shownComponent = _components[ComponentIDs.Primary];
 			Console.WriteLine("Loaded Form Components");
-			Console.WriteLine(ClientSize);
 		}
 
+		/// <summary>
+		/// Switches to a new visible form component.
+		/// </summary>
 		private void SwitchComponent(ComponentIDs id)
 		{
 			if (_shownComponent.Name == _components[id].Name)
@@ -210,7 +216,6 @@ namespace MapleGatorBot
 		private void MenuItem_Main_Click(object sender, EventArgs e)
 		{
 			SwitchComponent(ComponentIDs.Primary);
-			//Console.WriteLine(_primary.ClientSize);
 		}
 
 		private void MenuItem_Pathfinding_Click(object sender, EventArgs e)
