@@ -158,6 +158,13 @@ namespace MapleGatorBot
 			}
 
 			CloseHandle(hProcess);
+
+			_moveController.Initialize();
+			// 2. Start movement control
+			Console.WriteLine("✓ Movement enabled");
+
+			// 3. Move the character
+			_moveController.MoveRight();
 		}
 
 		#endregion
@@ -234,7 +241,8 @@ namespace MapleGatorBot
 
 					case BotStates.Moving:
 						_primary.StatusLabel.Text = "Moving ...";
-						await DoMove();
+						await DelayWithProgress(1000);
+						//await DoMove();
 						_state = BotStates.Waiting;
 						break;
 
@@ -285,8 +293,14 @@ namespace MapleGatorBot
 		private async Task DoMove()
 		{
 			// 1. Initialize the DLL
-			if (_moveController.Initialize())
+			if (!_hooked)
 			{
+				Console.WriteLine("✗ Failed to initialize. Is MapleLegends running?");
+				return;
+			}
+			else
+			{
+
 				Console.WriteLine("✓ Hooks installed");
 
 				// 2. Start movement control
@@ -295,10 +309,10 @@ namespace MapleGatorBot
 
 				// 3. Move the character
 				_moveController.MoveRight();
-				Thread.Sleep(1000);
+				await DelayWithProgress(1000);
 
 				_moveController.MoveUp();
-				Thread.Sleep(1000);
+				await DelayWithProgress(1000);
 
 				_moveController.StopMove();
 				Console.WriteLine("✓ Movement stopped");
@@ -306,10 +320,6 @@ namespace MapleGatorBot
 				// 4. Cleanup when done
 				_moveController.Cleanup();
 				Console.WriteLine("✓ Cleaned up");
-			}
-			else
-			{
-				Console.WriteLine("✗ Failed to initialize. Is MapleLegends running?");
 			}
 		}
 

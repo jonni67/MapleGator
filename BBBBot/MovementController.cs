@@ -29,6 +29,8 @@ namespace MapleGatorBot
 		[DllImport(DLL_NAME, CallingConvention = CallingConvention.StdCall)]
 		private static extern bool IsHookActive();
 
+		public static bool Initialized = false;
+
 		// Initialize the system (call once at startup)
 		public bool Initialize()
 		{
