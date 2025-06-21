@@ -15,6 +15,7 @@ namespace MapleGatorBot
     public partial class MapleGator : Form
     {
 		#region DLL Imports
+
 		// DLL Injection P/Invoke Declarations
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
@@ -40,6 +41,13 @@ namespace MapleGatorBot
 		[DllImport("kernel32.dll", SetLastError = true)]
 		static extern bool CloseHandle(IntPtr hObject);
 
+		// Add these P/Invoke declarations if you don't have them:
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
+
 		#endregion
 
 		#region Public Fields
@@ -59,7 +67,9 @@ namespace MapleGatorBot
 		const uint MEM_COMMIT = 0x1000;
 		const uint MEM_RESERVE = 0x2000;
 		const uint PAGE_READWRITE = 0x04;
-		
+		const uint WAIT_OBJECT_0 = 0x00000000;
+		const uint WAIT_TIMEOUT = 0x00000102;
+
 		// components //
 		Dictionary<ComponentIDs, Form> _components;
 
@@ -76,6 +86,8 @@ namespace MapleGatorBot
 		bool _running = false;
 		bool _hooked = false;
 		bool _autoLoginEnabled = false;
+
+        int _currPID = -1;
 
 		#endregion
 
@@ -110,7 +122,9 @@ namespace MapleGatorBot
                 return;
             }
 
-            string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
+            _currPID = pid;
+
+			string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
             if (!File.Exists(dllPath))
             {
                 MessageBox.Show("backend.dll not found in application directory.");
@@ -181,6 +195,8 @@ namespace MapleGatorBot
 
                 CloseHandle(remoteThread);
                 _hooked = true;
+                _primary.HookedLabel.Text = "HOOKED";
+                _primary.HookedLabel.ForeColor = Styling.COLOR_ON;
                 MessageBox.Show("DLL injected successfully! Movement will be tested when bot runs.");
 
                 // Wait for DLL to initialize its shared memory
@@ -193,16 +209,6 @@ namespace MapleGatorBot
                 CloseHandle(hProcess);
             }
         }
-
-        // Add these P/Invoke declarations if you don't have them:
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
-
-        private const uint WAIT_OBJECT_0 = 0x00000000;
-        private const uint WAIT_TIMEOUT = 0x00000102;
 
         // **NEW METHOD**: Initialize with retry logic
         private bool InitializeWithRetry(int maxAttempts = 5, int delayMs = 1000)
@@ -235,20 +241,6 @@ namespace MapleGatorBot
         }
 
         #endregion
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            _running = false;
-
-            if (_moveController != null && _moveController.IsConnected())
-            {
-                _moveController.Stop();
-                _moveController.Cleanup();
-            }
-
-            base.OnFormClosing(e);
-        }
-
 
         #region Private Methods
 
@@ -303,10 +295,38 @@ namespace MapleGatorBot
 			menuStrip.BackColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
 		}
 
+        private void CheckProcessAvailable()
+        {
+			try
+			{
+				Process localById = Process.GetProcessById(_currPID);
+			}
+			catch (Exception ex)
+			{
+                Console.WriteLine(ex);
+                ResetHook();
+			}
+		}
+
+        private void ResetHook()
+        {
+			_currPID = -1;
+			_moveController.Stop();
+			_moveController.Cleanup();
+			_hooked = false;
+			_primary.HookedLabel.Text = "NOT HOOKED";
+			_primary.HookedLabel.ForeColor = Styling.COLOR_OFF;
+		}
+
 		private async void RunBot()
 		{
 			while (_running)
 			{
+				if (_hooked)
+				{
+                    CheckProcessAvailable();
+				}
+
 				switch (_state)
 				{
 					case BotStates.Idle:
@@ -317,14 +337,12 @@ namespace MapleGatorBot
 					case BotStates.Waiting:
 						_primary.StatusLabel.Text = "Waiting ...";
 						await DoWait();
-						_state = BotStates.Moving;
 						break;
 
 					case BotStates.Moving:
 						_primary.StatusLabel.Text = "Moving ...";
 						await DelayWithProgress(1000);
 						await DoMove();
-						_state = BotStates.Waiting;
 						break;
 
 					case BotStates.Attacking:
@@ -357,6 +375,7 @@ namespace MapleGatorBot
 			{
 				await DelayWithProgress(1000);
 				_primary.StatusLabel.Text = "No Hook";
+				_primary.LoadProcessList();
 				await DelayWithProgress(1000);
 				_state = BotStates.Idle;
 				return;
@@ -367,12 +386,25 @@ namespace MapleGatorBot
 
 		private async Task DoWait()
 		{
+			if (!_hooked)
+			{
+				_state = BotStates.Idle;
+				return;
+			}
+
 			int delayMs = 800;
 			await DelayWithProgress(delayMs);
+			_state = BotStates.Moving;
 		}
 
         private async Task DoMove()
         {
+            if(!_hooked)
+            {
+                _state = BotStates.Idle;
+                return;
+            }
+
             try
             {
                 // Check if we're connected and initialized
@@ -501,10 +533,11 @@ namespace MapleGatorBot
 
                 // Keep movement enabled but stop moving
                 _moveController.StopMove();
+				_state = BotStates.Waiting;
 
-                // Note: We're NOT calling Cleanup() here anymore
-                // The movement controller stays connected for the next cycle
-            }
+				// Note: We're NOT calling Cleanup() here anymore
+				// The movement controller stays connected for the next cycle
+			}
             catch (Exception ex)
             {
                 Console.WriteLine($"✗ Error during movement test: {ex.Message}");
@@ -528,6 +561,19 @@ namespace MapleGatorBot
 			_state = BotStates.Idle;
 			_running = true;
 			RunBot();
+		}
+
+		protected override void OnFormClosing(FormClosingEventArgs e)
+		{
+			_running = false;
+
+			if (_moveController != null && _moveController.IsConnected())
+			{
+				_moveController.Stop();
+				_moveController.Cleanup();
+			}
+
+			base.OnFormClosing(e);
 		}
 
 		private void MenuItem_Main_Click(object sender, EventArgs e)

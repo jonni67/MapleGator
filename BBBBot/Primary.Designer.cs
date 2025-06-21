@@ -30,7 +30,7 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Primary));
 			this.processPanel = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
+			this.hookedLabel = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.buttonHook = new System.Windows.Forms.Button();
 			this.processComboBox = new System.Windows.Forms.ComboBox();
@@ -56,9 +56,9 @@
 			this.label10 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.statusPanel = new System.Windows.Forms.Panel();
-			this.label15 = new System.Windows.Forms.Label();
-			this.statusLabel = new System.Windows.Forms.Label();
 			this.timerLabel = new System.Windows.Forms.Label();
+			this.statusLabel = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
 			this.processPanel.SuspendLayout();
 			this.autoLoginPanel.SuspendLayout();
 			this.topPanel.SuspendLayout();
@@ -72,7 +72,7 @@
 			this.processPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
 			this.processPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.processPanel.CausesValidation = false;
-			this.processPanel.Controls.Add(this.label2);
+			this.processPanel.Controls.Add(this.hookedLabel);
 			this.processPanel.Controls.Add(this.label4);
 			this.processPanel.Controls.Add(this.buttonHook);
 			this.processPanel.Controls.Add(this.processComboBox);
@@ -82,18 +82,18 @@
 			this.processPanel.Size = new System.Drawing.Size(176, 133);
 			this.processPanel.TabIndex = 7;
 			// 
-			// label2
+			// hookedLabel
 			// 
-			this.label2.AutoSize = true;
-			this.label2.BackColor = System.Drawing.Color.Black;
-			this.label2.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-			this.label2.Location = new System.Drawing.Point(8, 103);
-			this.label2.Margin = new System.Windows.Forms.Padding(8);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(108, 18);
-			this.label2.TabIndex = 13;
-			this.label2.Text = "NOT HOOKED";
+			this.hookedLabel.AutoSize = true;
+			this.hookedLabel.BackColor = System.Drawing.Color.Black;
+			this.hookedLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.hookedLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			this.hookedLabel.Location = new System.Drawing.Point(8, 103);
+			this.hookedLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.hookedLabel.Name = "hookedLabel";
+			this.hookedLabel.Size = new System.Drawing.Size(108, 18);
+			this.hookedLabel.TabIndex = 13;
+			this.hookedLabel.Text = "NOT HOOKED";
 			// 
 			// label4
 			// 
@@ -420,17 +420,18 @@
 			this.statusPanel.Size = new System.Drawing.Size(209, 161);
 			this.statusPanel.TabIndex = 13;
 			// 
-			// label15
+			// timerLabel
 			// 
-			this.label15.AutoSize = true;
-			this.label15.BackColor = System.Drawing.Color.Black;
-			this.label15.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-			this.label15.Location = new System.Drawing.Point(8, 8);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(68, 18);
-			this.label15.TabIndex = 10;
-			this.label15.Text = "STATUS";
+			this.timerLabel.AutoSize = true;
+			this.timerLabel.BackColor = System.Drawing.Color.Black;
+			this.timerLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.timerLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.timerLabel.Location = new System.Drawing.Point(8, 56);
+			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.timerLabel.Name = "timerLabel";
+			this.timerLabel.Size = new System.Drawing.Size(128, 18);
+			this.timerLabel.TabIndex = 17;
+			this.timerLabel.Text = "0.0 Sec Left";
 			// 
 			// statusLabel
 			// 
@@ -445,18 +446,17 @@
 			this.statusLabel.TabIndex = 16;
 			this.statusLabel.Text = "NONE";
 			// 
-			// timerLabel
+			// label15
 			// 
-			this.timerLabel.AutoSize = true;
-			this.timerLabel.BackColor = System.Drawing.Color.Black;
-			this.timerLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.timerLabel.ForeColor = System.Drawing.SystemColors.Control;
-			this.timerLabel.Location = new System.Drawing.Point(8, 56);
-			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
-			this.timerLabel.Name = "timerLabel";
-			this.timerLabel.Size = new System.Drawing.Size(128, 18);
-			this.timerLabel.TabIndex = 17;
-			this.timerLabel.Text = "0.0 Sec Left";
+			this.label15.AutoSize = true;
+			this.label15.BackColor = System.Drawing.Color.Black;
+			this.label15.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+			this.label15.Location = new System.Drawing.Point(8, 8);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(68, 18);
+			this.label15.TabIndex = 10;
+			this.label15.Text = "STATUS";
 			// 
 			// Primary
 			// 
@@ -517,7 +517,7 @@
 		private System.Windows.Forms.Label autoLoginToggleLabel;
 		private System.Windows.Forms.Panel topPanel;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label hookedLabel;
 		private System.Windows.Forms.Panel statPanel;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;

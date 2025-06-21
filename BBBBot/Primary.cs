@@ -31,6 +31,12 @@ namespace MapleGatorBot
 			set { statusLabel = value; }
 		}
 
+		public System.Windows.Forms.Label HookedLabel
+		{
+			get { return hookedLabel; }
+			set { hookedLabel = value; }
+		}
+
 		MapleGator _parent;
 		Color _panelColor;
 
@@ -46,9 +52,10 @@ namespace MapleGatorBot
 		/// <summary>
 		/// Loads processes into the UI combo box.
 		/// </summary>
-		private void LoadProcessList()
+		public void LoadProcessList()
 		{
 			processComboBox.Items.Clear();
+			processComboBox.Text = "";
 			foreach (var proc in Process.GetProcessesByName("MapleLegends"))
 			{
 				processComboBox.Items.Add($"{proc.ProcessName} (PID: {proc.Id})");
@@ -66,6 +73,7 @@ namespace MapleGatorBot
 			topPanel.BackColor = _panelColor;
 			statPanel.BackColor = _panelColor;
 			statusPanel.BackColor = _panelColor;
+			hookedLabel.ForeColor = Styling.COLOR_OFF;
 		}
 
 		#region Callbacks
