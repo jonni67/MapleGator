@@ -94,87 +94,168 @@ namespace MapleGatorBot
 			SetStyling();
 		}
 
-		/// <summary>
-		/// Hooks to process writing bytes.
-		/// </summary>
-		/// <param name="process">The full name of the process.</param>
-		public void HookProcess(string process)
-		{
-			// Extract PID
-			int pidStart = process.IndexOf("PID: ") + 5;
-			int pidEnd = process.IndexOf(")", pidStart);
-			string pidStr = process.Substring(pidStart, pidEnd - pidStart);
+        /// <summary>
+        /// Hooks to process writing bytes.
+        /// </summary>
+        /// <param name="process">The full name of the process.</param>
+        public void HookProcess(string process)
+        {
+            // Extract PID
+            int pidStart = process.IndexOf("PID: ") + 5;
+            int pidEnd = process.IndexOf(")", pidStart);
+            string pidStr = process.Substring(pidStart, pidEnd - pidStart);
+            if (!int.TryParse(pidStr, out int pid))
+            {
+                MessageBox.Show("Invalid PID.");
+                return;
+            }
 
-			if (!int.TryParse(pidStr, out int pid))
-			{
-				MessageBox.Show("Invalid PID.");
-				return;
-			}
+            string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
+            if (!File.Exists(dllPath))
+            {
+                MessageBox.Show("backend.dll not found in application directory.");
+                return;
+            }
 
-			string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
-			if (!File.Exists(dllPath))
-			{
-				MessageBox.Show("backend.dll not found in application directory.");
-				return;
-			}
+            IntPtr hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
+            if (hProcess == IntPtr.Zero)
+            {
+                MessageBox.Show("Failed to open target process.");
+                return;
+            }
 
-			IntPtr hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
-			if (hProcess == IntPtr.Zero)
-			{
-				MessageBox.Show("Failed to open target process.");
-				return;
-			}
+            try
+            {
+                IntPtr allocMemAddress = VirtualAllocEx(hProcess, IntPtr.Zero,
+                    (uint)((dllPath.Length + 1) * Marshal.SizeOf(typeof(char))),
+                    MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
-			IntPtr allocMemAddress = VirtualAllocEx(hProcess, IntPtr.Zero, (uint)((dllPath.Length + 1) * Marshal.SizeOf(typeof(char))),
-													MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+                if (allocMemAddress == IntPtr.Zero)
+                {
+                    MessageBox.Show("Failed to allocate memory in target process.");
+                    return;
+                }
 
-			if (allocMemAddress == IntPtr.Zero)
-			{
-				MessageBox.Show("Failed to allocate memory in target process.");
-				CloseHandle(hProcess);
-				return;
-			}
+                byte[] dllBytes = Encoding.ASCII.GetBytes(dllPath + "\0");
+                if (!WriteProcessMemory(hProcess, allocMemAddress, dllBytes, (uint)dllBytes.Length, out _))
+                {
+                    MessageBox.Show("Failed to write DLL path to target process.");
+                    return;
+                }
 
-			byte[] dllBytes = Encoding.ASCII.GetBytes(dllPath + "\0");
-			WriteProcessMemory(hProcess, allocMemAddress, dllBytes, (uint)dllBytes.Length, out _);
+                IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+                if (loadLibraryAddr == IntPtr.Zero)
+                {
+                    MessageBox.Show("Failed to get address of LoadLibraryA.");
+                    return;
+                }
 
-			IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-			if (loadLibraryAddr == IntPtr.Zero)
-			{
-				MessageBox.Show("Failed to get address of LoadLibraryA.");
-				CloseHandle(hProcess);
-				return;
-			}
+                IntPtr remoteThread = CreateRemoteThread(hProcess, IntPtr.Zero, 0, loadLibraryAddr,
+                    allocMemAddress, 0, IntPtr.Zero);
 
-			IntPtr remoteThread = CreateRemoteThread(hProcess, IntPtr.Zero, 0, loadLibraryAddr, allocMemAddress, 0, IntPtr.Zero);
-			if (remoteThread == IntPtr.Zero)
-			{
-				MessageBox.Show("Failed to create remote thread.");
-			}
-			else
-			{
-				_hooked = true;
-				MessageBox.Show("DLL injected successfully!");
-			}
+                if (remoteThread == IntPtr.Zero)
+                {
+                    MessageBox.Show("Failed to create remote thread.");
+                    return;
+                }
 
-			CloseHandle(hProcess);
+                // Wait for the remote thread to complete
+                uint waitResult = WaitForSingleObject(remoteThread, 10000); // 10 second timeout
+                if (waitResult != WAIT_OBJECT_0)
+                {
+                    MessageBox.Show("DLL injection thread did not complete in time.");
+                    CloseHandle(remoteThread);
+                    return;
+                }
 
-			_moveController.Initialize();
-			// 2. Start movement control
-			Console.WriteLine("✓ Movement enabled");
+                // Get the exit code to verify LoadLibrary succeeded
+                if (GetExitCodeThread(remoteThread, out uint exitCode))
+                {
+                    if (exitCode == 0) // LoadLibrary returns NULL on failure
+                    {
+                        MessageBox.Show("LoadLibrary failed in target process.");
+                        CloseHandle(remoteThread);
+                        return;
+                    }
+                }
 
-			// 3. Move the character
-			_moveController.MoveRight();
-		}
+                CloseHandle(remoteThread);
+                _hooked = true;
+                MessageBox.Show("DLL injected successfully! Movement will be tested when bot runs.");
 
-		#endregion
+                // Wait for DLL to initialize its shared memory
+                Thread.Sleep(1000);
 
-		#region Private Methods
+                // Don't initialize or test here - let the bot state machine handle it
+            }
+            finally
+            {
+                CloseHandle(hProcess);
+            }
+        }
 
-		/// <summary>
-		/// Loads forms as indentifiable components.
-		/// </summary>
-		private void LoadComponents()
+        // Add these P/Invoke declarations if you don't have them:
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
+
+        private const uint WAIT_OBJECT_0 = 0x00000000;
+        private const uint WAIT_TIMEOUT = 0x00000102;
+
+        // **NEW METHOD**: Initialize with retry logic
+        private bool InitializeWithRetry(int maxAttempts = 5, int delayMs = 1000)
+        {
+            for (int attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
+                {
+                    Console.WriteLine($"Initialization attempt {attempt}/{maxAttempts}...");
+
+                    if (_moveController.Initialize())
+                    {
+                        Console.WriteLine("✓ MovementController initialized successfully");
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
+
+                    if (attempt < maxAttempts)
+                    {
+                        Console.WriteLine($"Waiting {delayMs}ms before retry...");
+                        Thread.Sleep(delayMs);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            _running = false;
+
+            if (_moveController != null && _moveController.IsConnected())
+            {
+                _moveController.Stop();
+                _moveController.Cleanup();
+            }
+
+            base.OnFormClosing(e);
+        }
+
+
+        #region Private Methods
+
+        /// <summary>
+        /// Loads forms as indentifiable components.
+        /// </summary>
+        private void LoadComponents()
 		{
 			_components = new Dictionary<ComponentIDs, Form>();
 
@@ -242,7 +323,7 @@ namespace MapleGatorBot
 					case BotStates.Moving:
 						_primary.StatusLabel.Text = "Moving ...";
 						await DelayWithProgress(1000);
-						//await DoMove();
+						await DoMove();
 						_state = BotStates.Waiting;
 						break;
 
@@ -290,40 +371,148 @@ namespace MapleGatorBot
 			await DelayWithProgress(delayMs);
 		}
 
-		private async Task DoMove()
-		{
-			// 1. Initialize the DLL
-			if (!_hooked)
-			{
-				Console.WriteLine("✗ Failed to initialize. Is MapleLegends running?");
-				return;
-			}
-			else
-			{
+        private async Task DoMove()
+        {
+            try
+            {
+                // Check if we're connected and initialized
+                if (!_moveController.IsConnected())
+                {
+                    Console.WriteLine("Movement controller not connected. Reinitializing...");
 
-				Console.WriteLine("✓ Hooks installed");
+                    if (!_moveController.Initialize())
+                    {
+                        Console.WriteLine("✗ Failed to initialize movement controller");
+                        return;
+                    }
+                    Console.WriteLine("✓ Movement controller initialized");
+                }
 
-				// 2. Start movement control
-				_moveController.Start();
-				Console.WriteLine("✓ Movement enabled");
+                // Check if hooks are active
+                if (!_moveController.IsHookActive())
+                {
+                    Console.WriteLine("✗ Hooks not active");
+                    return;
+                }
 
-				// 3. Move the character
-				_moveController.MoveRight();
-				await DelayWithProgress(1000);
+                // Enable movement if not already enabled
+                if (!_moveController.IsMovementEnabled())
+                {
+                    Console.WriteLine("Enabling movement...");
+                    if (!_moveController.Start())
+                    {
+                        Console.WriteLine("✗ Failed to enable movement");
+                        return;
+                    }
+                    Console.WriteLine("✓ Movement enabled");
+                }
 
-				_moveController.MoveUp();
-				await DelayWithProgress(1000);
+                // Perform movement test sequence
+                Console.WriteLine("=== Starting Movement Test Sequence ===");
 
-				_moveController.StopMove();
-				Console.WriteLine("✓ Movement stopped");
+                // 1. Basic directional movement
+                Console.WriteLine("Test 1: Basic Directions");
 
-				// 4. Cleanup when done
-				_moveController.Cleanup();
-				Console.WriteLine("✓ Cleaned up");
-			}
-		}
+                _moveController.MoveRight();
+                Console.WriteLine("→ Moving right");
+                await DelayWithProgress(1000);
 
-		private async Task DoAttack()
+                _moveController.MoveLeft();
+                Console.WriteLine("← Moving left");
+                await DelayWithProgress(1000);
+
+                _moveController.MoveUp();
+                Console.WriteLine("↑ Moving up");
+                await DelayWithProgress(1000);
+
+                _moveController.MoveDown();
+                Console.WriteLine("↓ Moving down");
+                await DelayWithProgress(1000);
+
+                _moveController.StopMove();
+                Console.WriteLine("✓ Stopped");
+                await DelayWithProgress(500);
+
+                // 2. Diagonal movement (key combos)
+                Console.WriteLine("\nTest 2: Diagonal Movement (Key Combos)");
+
+                _moveController.MoveUpRight();
+                Console.WriteLine("↗ Moving up-right");
+                await DelayWithProgress(1000);
+
+                _moveController.MoveUpLeft();
+                Console.WriteLine("↖ Moving up-left");
+                await DelayWithProgress(1000);
+
+                _moveController.MoveDownRight();
+                Console.WriteLine("↘ Moving down-right");
+                await DelayWithProgress(1000);
+
+                _moveController.MoveDownLeft();
+                Console.WriteLine("↙ Moving down-left");
+                await DelayWithProgress(1000);
+
+                _moveController.StopMove();
+                Console.WriteLine("✓ Stopped");
+                await DelayWithProgress(500);
+
+                // 3. Rapid direction changes
+                Console.WriteLine("\nTest 3: Rapid Direction Changes");
+
+                for (int i = 0; i < 5; i++)
+                {
+                    _moveController.MoveRight();
+                    await Task.Delay(200);
+                    _moveController.MoveLeft();
+                    await Task.Delay(200);
+                }
+
+                _moveController.StopMove();
+                Console.WriteLine("✓ Rapid changes complete");
+                await DelayWithProgress(500);
+
+                // 4. Complex movement pattern (simulate real gameplay)
+                Console.WriteLine("\nTest 4: Complex Movement Pattern");
+
+                // Move right while jumping (up+right)
+                _moveController.MoveUpRight();
+                Console.WriteLine("Jump right");
+                await Task.Delay(300);
+
+                // Land and continue right
+                _moveController.MoveRight();
+                Console.WriteLine("Continue right");
+                await Task.Delay(500);
+
+                // Jump left
+                _moveController.MoveUpLeft();
+                Console.WriteLine("Jump left");
+                await Task.Delay(300);
+
+                // Drop down
+                _moveController.MoveDown();
+                Console.WriteLine("Drop down");
+                await Task.Delay(500);
+
+                _moveController.StopMove();
+                Console.WriteLine("✓ Complex pattern complete");
+
+                Console.WriteLine("\n=== Movement Test Sequence Complete ===");
+
+                // Keep movement enabled but stop moving
+                _moveController.StopMove();
+
+                // Note: We're NOT calling Cleanup() here anymore
+                // The movement controller stays connected for the next cycle
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"✗ Error during movement test: {ex.Message}");
+                _moveController.StopMove();
+            }
+        }
+
+        private async Task DoAttack()
 		{
 			int delayMs = 800;
 			await DelayWithProgress(delayMs);
@@ -354,3 +543,5 @@ namespace MapleGatorBot
 		#endregion
 	}
 }
+
+
