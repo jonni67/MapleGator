@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MovementController.cs" />
     <Compile Include="Styling.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Primary.cs">

@@ -19,6 +19,18 @@ namespace MapleGatorBot
 			get { return processComboBox; }
 		}
 
+		public System.Windows.Forms.Label TimerLabel
+		{
+			get { return timerLabel; }
+			set { timerLabel = value; }
+		}
+
+		public System.Windows.Forms.Label StatusLabel
+		{
+			get { return statusLabel; }
+			set { statusLabel = value; }
+		}
+
 		MapleGator _parent;
 		Color _panelColor;
 
@@ -53,6 +65,7 @@ namespace MapleGatorBot
 			autoLoginPanel.BackColor = _panelColor;
 			topPanel.BackColor = _panelColor;
 			statPanel.BackColor = _panelColor;
+			statusPanel.BackColor = _panelColor;
 		}
 
 		#region Callbacks

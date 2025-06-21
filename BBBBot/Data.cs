@@ -9,4 +9,13 @@ namespace MapleGatorBot
 		Pathfinding,
 		Metrics,
 	}
+
+	public enum BotStates
+	{
+		Idle,
+		Waiting,
+		Navigating,
+		Moving,
+		Attacking,
+	}
 }

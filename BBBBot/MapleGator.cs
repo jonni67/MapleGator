@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace MapleGatorBot
 {
@@ -63,9 +65,16 @@ namespace MapleGatorBot
 
 		Primary _primary;
 		Pathfinding _pathfinding;
+		MovementController _moveController;
 		Form _shownComponent;
 
+		// settings //
+		int stateDelayMs = 50;
+
 		// states //
+		BotStates _state;
+		bool _running = false;
+		bool _hooked = false;
 		bool _autoLoginEnabled = false;
 
 		#endregion
@@ -144,6 +153,7 @@ namespace MapleGatorBot
 			}
 			else
 			{
+				_hooked = true;
 				MessageBox.Show("DLL injected successfully!");
 			}
 
@@ -164,6 +174,7 @@ namespace MapleGatorBot
 			// create form components
 			_primary = new Primary(this);
 			_pathfinding = new Pathfinding(this);
+			_moveController = new MovementController();
 
 			// add components to dict
 			_components.Add(ComponentIDs.Primary, _primary);
@@ -204,6 +215,110 @@ namespace MapleGatorBot
 			menuStrip.BackColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
 		}
 
+		private async void RunBot()
+		{
+			while (_running)
+			{
+				switch (_state)
+				{
+					case BotStates.Idle:
+						_primary.StatusLabel.Text = "Idle ...";
+						await DoIdle();
+						break;
+
+					case BotStates.Waiting:
+						_primary.StatusLabel.Text = "Waiting ...";
+						await DoWait();
+						_state = BotStates.Moving;
+						break;
+
+					case BotStates.Moving:
+						_primary.StatusLabel.Text = "Moving ...";
+						await DoMove();
+						_state = BotStates.Waiting;
+						break;
+
+					case BotStates.Attacking:
+						_primary.StatusLabel.Text = "Attacking ...";
+						await DoAttack();
+						_state = BotStates.Waiting;
+						break;
+				}
+
+				await Task.Delay(stateDelayMs);
+			}
+		}
+
+		private async Task DelayWithProgress(int totalDelayMs)
+		{
+			Stopwatch sw = Stopwatch.StartNew();
+
+			while (sw.ElapsedMilliseconds < totalDelayMs)
+			{
+				float remaining = totalDelayMs - (float)(sw.ElapsedMilliseconds);
+				string rs = (remaining / 1000).ToString("0.00");
+				_primary.TimerLabel.Text = $"{rs} Sec Left";
+				await Task.Delay(1); // Check every 100ms
+			}
+		}
+
+		private async Task DoIdle()
+		{
+			if(!_hooked)
+			{
+				await DelayWithProgress(1000);
+				_primary.StatusLabel.Text = "No Hook";
+				await DelayWithProgress(1000);
+				_state = BotStates.Idle;
+				return;
+			}
+
+			_state = BotStates.Waiting;
+		}
+
+		private async Task DoWait()
+		{
+			int delayMs = 800;
+			await DelayWithProgress(delayMs);
+		}
+
+		private async Task DoMove()
+		{
+			// 1. Initialize the DLL
+			if (_moveController.Initialize())
+			{
+				Console.WriteLine("✓ Hooks installed");
+
+				// 2. Start movement control
+				_moveController.Start();
+				Console.WriteLine("✓ Movement enabled");
+
+				// 3. Move the character
+				_moveController.MoveRight();
+				Thread.Sleep(1000);
+
+				_moveController.MoveUp();
+				Thread.Sleep(1000);
+
+				_moveController.StopMove();
+				Console.WriteLine("✓ Movement stopped");
+
+				// 4. Cleanup when done
+				_moveController.Cleanup();
+				Console.WriteLine("✓ Cleaned up");
+			}
+			else
+			{
+				Console.WriteLine("✗ Failed to initialize. Is MapleLegends running?");
+			}
+		}
+
+		private async Task DoAttack()
+		{
+			int delayMs = 800;
+			await DelayWithProgress(delayMs);
+		}
+
 		#endregion
 
 		#region Callbacks
@@ -211,6 +326,9 @@ namespace MapleGatorBot
 		private void MapleGator_Load(object sender, EventArgs e)
 		{
 			LoadComponents();
+			_state = BotStates.Idle;
+			_running = true;
+			RunBot();
 		}
 
 		private void MenuItem_Main_Click(object sender, EventArgs e)

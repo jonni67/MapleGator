@@ -55,11 +55,16 @@
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.statusPanel = new System.Windows.Forms.Panel();
+			this.label15 = new System.Windows.Forms.Label();
+			this.statusLabel = new System.Windows.Forms.Label();
+			this.timerLabel = new System.Windows.Forms.Label();
 			this.processPanel.SuspendLayout();
 			this.autoLoginPanel.SuspendLayout();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoImage)).BeginInit();
 			this.statPanel.SuspendLayout();
+			this.statusPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// processPanel
@@ -404,6 +409,55 @@
 			this.label9.TabIndex = 10;
 			this.label9.Text = "NONE";
 			// 
+			// statusPanel
+			// 
+			this.statusPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
+			this.statusPanel.Controls.Add(this.timerLabel);
+			this.statusPanel.Controls.Add(this.statusLabel);
+			this.statusPanel.Controls.Add(this.label15);
+			this.statusPanel.Location = new System.Drawing.Point(203, 262);
+			this.statusPanel.Name = "statusPanel";
+			this.statusPanel.Size = new System.Drawing.Size(209, 161);
+			this.statusPanel.TabIndex = 13;
+			// 
+			// label15
+			// 
+			this.label15.AutoSize = true;
+			this.label15.BackColor = System.Drawing.Color.Black;
+			this.label15.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+			this.label15.Location = new System.Drawing.Point(8, 8);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(68, 18);
+			this.label15.TabIndex = 10;
+			this.label15.Text = "STATUS";
+			// 
+			// statusLabel
+			// 
+			this.statusLabel.AutoSize = true;
+			this.statusLabel.BackColor = System.Drawing.Color.Black;
+			this.statusLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.statusLabel.Location = new System.Drawing.Point(8, 32);
+			this.statusLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.statusLabel.Name = "statusLabel";
+			this.statusLabel.Size = new System.Drawing.Size(49, 19);
+			this.statusLabel.TabIndex = 16;
+			this.statusLabel.Text = "NONE";
+			// 
+			// timerLabel
+			// 
+			this.timerLabel.AutoSize = true;
+			this.timerLabel.BackColor = System.Drawing.Color.Black;
+			this.timerLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.timerLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.timerLabel.Location = new System.Drawing.Point(8, 56);
+			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.timerLabel.Name = "timerLabel";
+			this.timerLabel.Size = new System.Drawing.Size(128, 18);
+			this.timerLabel.TabIndex = 17;
+			this.timerLabel.Text = "0.0 Sec Left";
+			// 
 			// Primary
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -411,6 +465,7 @@
 			this.BackColor = System.Drawing.Color.Black;
 			this.CausesValidation = false;
 			this.ClientSize = new System.Drawing.Size(929, 457);
+			this.Controls.Add(this.statusPanel);
 			this.Controls.Add(this.statPanel);
 			this.Controls.Add(this.logoImage);
 			this.Controls.Add(this.topPanel);
@@ -436,6 +491,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.logoImage)).EndInit();
 			this.statPanel.ResumeLayout(false);
 			this.statPanel.PerformLayout();
+			this.statusPanel.ResumeLayout(false);
+			this.statusPanel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -468,5 +525,9 @@
 		private System.Windows.Forms.Label label13;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.Panel statusPanel;
+		private System.Windows.Forms.Label statusLabel;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.Label timerLabel;
 	}
 }
