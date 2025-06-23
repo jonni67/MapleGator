@@ -38,12 +38,12 @@
 			this.autoLoginPanel = new System.Windows.Forms.Panel();
 			this.autoLoginToggleLabel = new System.Windows.Forms.Label();
 			this.buttonAutoLoginToggle = new System.Windows.Forms.Button();
-			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.autoLogPin = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
-			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.autoLogPw = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.autoLogUsername = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.topPanel = new System.Windows.Forms.Panel();
 			this.label1 = new System.Windows.Forms.Label();
@@ -59,12 +59,17 @@
 			this.timerLabel = new System.Windows.Forms.Label();
 			this.statusLabel = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
+			this.settingsPanel = new System.Windows.Forms.Panel();
+			this.label2 = new System.Windows.Forms.Label();
+			this.SettingsUpdateRate = new System.Windows.Forms.TextBox();
+			this.label16 = new System.Windows.Forms.Label();
 			this.processPanel.SuspendLayout();
 			this.autoLoginPanel.SuspendLayout();
 			this.topPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoImage)).BeginInit();
 			this.statPanel.SuspendLayout();
 			this.statusPanel.SuspendLayout();
+			this.settingsPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// processPanel
@@ -159,14 +164,14 @@
 			this.autoLoginPanel.CausesValidation = false;
 			this.autoLoginPanel.Controls.Add(this.autoLoginToggleLabel);
 			this.autoLoginPanel.Controls.Add(this.buttonAutoLoginToggle);
-			this.autoLoginPanel.Controls.Add(this.textBox3);
+			this.autoLoginPanel.Controls.Add(this.autoLogPin);
 			this.autoLoginPanel.Controls.Add(this.label8);
-			this.autoLoginPanel.Controls.Add(this.textBox2);
+			this.autoLoginPanel.Controls.Add(this.autoLogPw);
 			this.autoLoginPanel.Controls.Add(this.label7);
 			this.autoLoginPanel.Controls.Add(this.label6);
-			this.autoLoginPanel.Controls.Add(this.textBox1);
+			this.autoLoginPanel.Controls.Add(this.autoLogUsername);
 			this.autoLoginPanel.Controls.Add(this.label5);
-			this.autoLoginPanel.Location = new System.Drawing.Point(203, 54);
+			this.autoLoginPanel.Location = new System.Drawing.Point(421, 54);
 			this.autoLoginPanel.Margin = new System.Windows.Forms.Padding(0);
 			this.autoLoginPanel.Name = "autoLoginPanel";
 			this.autoLoginPanel.Size = new System.Drawing.Size(209, 196);
@@ -201,16 +206,16 @@
 			this.buttonAutoLoginToggle.UseVisualStyleBackColor = false;
 			this.buttonAutoLoginToggle.Click += new System.EventHandler(this.Btn_AutoLoginToggle_Click);
 			// 
-			// textBox3
+			// autoLogPin
 			// 
-			this.textBox3.BackColor = System.Drawing.Color.Black;
-			this.textBox3.ForeColor = System.Drawing.SystemColors.Control;
-			this.textBox3.Location = new System.Drawing.Point(8, 168);
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(69, 20);
-			this.textBox3.TabIndex = 7;
-			this.textBox3.UseSystemPasswordChar = true;
-			this.textBox3.WordWrap = false;
+			this.autoLogPin.BackColor = System.Drawing.Color.Black;
+			this.autoLogPin.ForeColor = System.Drawing.SystemColors.Control;
+			this.autoLogPin.Location = new System.Drawing.Point(8, 168);
+			this.autoLogPin.Name = "autoLogPin";
+			this.autoLogPin.Size = new System.Drawing.Size(69, 20);
+			this.autoLogPin.TabIndex = 7;
+			this.autoLogPin.UseSystemPasswordChar = true;
+			this.autoLogPin.WordWrap = false;
 			// 
 			// label8
 			// 
@@ -223,16 +228,16 @@
 			this.label8.TabIndex = 6;
 			this.label8.Text = "PIN";
 			// 
-			// textBox2
+			// autoLogPw
 			// 
-			this.textBox2.BackColor = System.Drawing.Color.Black;
-			this.textBox2.ForeColor = System.Drawing.SystemColors.Control;
-			this.textBox2.Location = new System.Drawing.Point(8, 112);
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(128, 20);
-			this.textBox2.TabIndex = 5;
-			this.textBox2.UseSystemPasswordChar = true;
-			this.textBox2.WordWrap = false;
+			this.autoLogPw.BackColor = System.Drawing.Color.Black;
+			this.autoLogPw.ForeColor = System.Drawing.SystemColors.Control;
+			this.autoLogPw.Location = new System.Drawing.Point(8, 112);
+			this.autoLogPw.Name = "autoLogPw";
+			this.autoLogPw.Size = new System.Drawing.Size(128, 20);
+			this.autoLogPw.TabIndex = 5;
+			this.autoLogPw.UseSystemPasswordChar = true;
+			this.autoLogPw.WordWrap = false;
 			// 
 			// label7
 			// 
@@ -256,15 +261,15 @@
 			this.label6.TabIndex = 3;
 			this.label6.Text = "USERNAME";
 			// 
-			// textBox1
+			// autoLogUsername
 			// 
-			this.textBox1.BackColor = System.Drawing.Color.Black;
-			this.textBox1.ForeColor = System.Drawing.SystemColors.Control;
-			this.textBox1.Location = new System.Drawing.Point(8, 56);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(128, 20);
-			this.textBox1.TabIndex = 2;
-			this.textBox1.WordWrap = false;
+			this.autoLogUsername.BackColor = System.Drawing.Color.Black;
+			this.autoLogUsername.ForeColor = System.Drawing.SystemColors.Control;
+			this.autoLogUsername.Location = new System.Drawing.Point(8, 56);
+			this.autoLogUsername.Name = "autoLogUsername";
+			this.autoLogUsername.Size = new System.Drawing.Size(128, 20);
+			this.autoLogUsername.TabIndex = 2;
+			this.autoLogUsername.WordWrap = false;
 			// 
 			// label5
 			// 
@@ -412,6 +417,7 @@
 			// statusPanel
 			// 
 			this.statusPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
+			this.statusPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.statusPanel.Controls.Add(this.timerLabel);
 			this.statusPanel.Controls.Add(this.statusLabel);
 			this.statusPanel.Controls.Add(this.label15);
@@ -424,25 +430,26 @@
 			// 
 			this.timerLabel.AutoSize = true;
 			this.timerLabel.BackColor = System.Drawing.Color.Black;
+			this.timerLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.timerLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.timerLabel.ForeColor = System.Drawing.SystemColors.Control;
-			this.timerLabel.Location = new System.Drawing.Point(8, 56);
+			this.timerLabel.Location = new System.Drawing.Point(8, 136);
 			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.timerLabel.Name = "timerLabel";
-			this.timerLabel.Size = new System.Drawing.Size(128, 18);
+			this.timerLabel.Size = new System.Drawing.Size(50, 20);
 			this.timerLabel.TabIndex = 17;
-			this.timerLabel.Text = "0.0 Sec Left";
+			this.timerLabel.Text = "0.0s";
 			// 
 			// statusLabel
 			// 
-			this.statusLabel.AutoSize = true;
 			this.statusLabel.BackColor = System.Drawing.Color.Black;
-			this.statusLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.statusLabel.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
 			this.statusLabel.Location = new System.Drawing.Point(8, 32);
 			this.statusLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.statusLabel.Name = "statusLabel";
-			this.statusLabel.Size = new System.Drawing.Size(49, 19);
+			this.statusLabel.Size = new System.Drawing.Size(191, 92);
 			this.statusLabel.TabIndex = 16;
 			this.statusLabel.Text = "NONE";
 			// 
@@ -458,6 +465,51 @@
 			this.label15.TabIndex = 10;
 			this.label15.Text = "STATUS";
 			// 
+			// settingsPanel
+			// 
+			this.settingsPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
+			this.settingsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.settingsPanel.Controls.Add(this.label16);
+			this.settingsPanel.Controls.Add(this.SettingsUpdateRate);
+			this.settingsPanel.Controls.Add(this.label2);
+			this.settingsPanel.Location = new System.Drawing.Point(203, 54);
+			this.settingsPanel.Name = "settingsPanel";
+			this.settingsPanel.Size = new System.Drawing.Size(209, 196);
+			this.settingsPanel.TabIndex = 14;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.BackColor = System.Drawing.Color.Black;
+			this.label2.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+			this.label2.Location = new System.Drawing.Point(8, 8);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(88, 18);
+			this.label2.TabIndex = 10;
+			this.label2.Text = "SETTINGS";
+			// 
+			// SettingsUpdateRate
+			// 
+			this.SettingsUpdateRate.BackColor = System.Drawing.Color.Black;
+			this.SettingsUpdateRate.ForeColor = System.Drawing.SystemColors.Control;
+			this.SettingsUpdateRate.Location = new System.Drawing.Point(11, 56);
+			this.SettingsUpdateRate.Name = "SettingsUpdateRate";
+			this.SettingsUpdateRate.Size = new System.Drawing.Size(100, 20);
+			this.SettingsUpdateRate.TabIndex = 11;
+			this.SettingsUpdateRate.TextChanged += new System.EventHandler(this.SettingsUpdateRate_TextChanged);
+			// 
+			// label16
+			// 
+			this.label16.AutoSize = true;
+			this.label16.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label16.ForeColor = System.Drawing.SystemColors.Control;
+			this.label16.Location = new System.Drawing.Point(8, 32);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(168, 18);
+			this.label16.TabIndex = 10;
+			this.label16.Text = "UPDATE RATE (ms)";
+			// 
 			// Primary
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -465,6 +517,7 @@
 			this.BackColor = System.Drawing.Color.Black;
 			this.CausesValidation = false;
 			this.ClientSize = new System.Drawing.Size(929, 457);
+			this.Controls.Add(this.settingsPanel);
 			this.Controls.Add(this.statusPanel);
 			this.Controls.Add(this.statPanel);
 			this.Controls.Add(this.logoImage);
@@ -493,6 +546,8 @@
 			this.statPanel.PerformLayout();
 			this.statusPanel.ResumeLayout(false);
 			this.statusPanel.PerformLayout();
+			this.settingsPanel.ResumeLayout(false);
+			this.settingsPanel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -509,10 +564,10 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.TextBox textBox3;
+		private System.Windows.Forms.TextBox autoLogUsername;
+		private System.Windows.Forms.TextBox autoLogPin;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox autoLogPw;
 		private System.Windows.Forms.Button buttonAutoLoginToggle;
 		private System.Windows.Forms.Label autoLoginToggleLabel;
 		private System.Windows.Forms.Panel topPanel;
@@ -529,5 +584,9 @@
 		private System.Windows.Forms.Label statusLabel;
 		private System.Windows.Forms.Label label15;
 		private System.Windows.Forms.Label timerLabel;
+		private System.Windows.Forms.Panel settingsPanel;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label16;
+		private System.Windows.Forms.TextBox SettingsUpdateRate;
 	}
 }

@@ -48,6 +48,10 @@ namespace MapleGatorBot
 		[DllImport("kernel32.dll", SetLastError = true)]
 		private static extern bool GetExitCodeThread(IntPtr hThread, out uint lpExitCode);
 
+		[DllImport("kernel32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
+
 		#endregion
 
 		#region Public Fields
@@ -58,9 +62,17 @@ namespace MapleGatorBot
 			set { _autoLoginEnabled = value; }
 		}
 
+		public int StateDelayMs
+		{
+			get { return _stateDelayMs; }
+		}
+
 		#endregion
 
 		#region Private Members
+
+		// events
+		event Action OnStopWatchTimeComplete;
 
 		// memory hex //
 		const int PROCESS_ALL_ACCESS = 0x1F0FFF;
@@ -69,6 +81,8 @@ namespace MapleGatorBot
 		const uint PAGE_READWRITE = 0x04;
 		const uint WAIT_OBJECT_0 = 0x00000000;
 		const uint WAIT_TIMEOUT = 0x00000102;
+		const int PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
+		const uint STILL_ACTIVE = 259;
 
 		// components //
 		Dictionary<ComponentIDs, Form> _components;
@@ -79,15 +93,27 @@ namespace MapleGatorBot
 		Form _shownComponent;
 
 		// settings //
-		int stateDelayMs = 50;
+		int _stateDelayMs = 50;
+		int _processListRefreshRate = 1000;
 
 		// states //
 		BotStates _state;
-		bool _running = false;
+		WaitingStates _waitingState;
+
+		Dictionary<BotStates, Action> _stateCallbacks;
+
+		bool _hooking = false;
 		bool _hooked = false;
 		bool _autoLoginEnabled = false;
 
         int _currPID = -1;
+
+		// timers //
+		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
+		System.Windows.Forms.Timer _sysTimer = new System.Windows.Forms.Timer();
+		Stopwatch _stopWatch = Stopwatch.StartNew();
+		float _stopWatchTime = 100f;
+		bool _timerActive = false;
 
 		#endregion
 
@@ -106,139 +132,35 @@ namespace MapleGatorBot
 			SetStyling();
 		}
 
-        /// <summary>
-        /// Hooks to process writing bytes.
-        /// </summary>
-        /// <param name="process">The full name of the process.</param>
-        public void HookProcess(string process)
-        {
-            // Extract PID
-            int pidStart = process.IndexOf("PID: ") + 5;
-            int pidEnd = process.IndexOf(")", pidStart);
-            string pidStr = process.Substring(pidStart, pidEnd - pidStart);
-            if (!int.TryParse(pidStr, out int pid))
-            {
-                MessageBox.Show("Invalid PID.");
-                return;
-            }
+		public void HookProcess(string process)
+		{
+			if (_hooked)
+				return;
 
-            _currPID = pid;
+			if(TryHookProcess(process))
+			{
+				_hooked = true;
+				_hooking = false;
+				_primary.HookedLabel.Text = "HOOKED";
+				_primary.HookedLabel.ForeColor = Styling.COLOR_ON;
+				_primary.HookedButton.Enabled = false;
+				_primary.HookedButton.Visible = false;
+				MessageBox.Show("DLL injected successfully!");
+				return;
+			}
 
-			string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
-            if (!File.Exists(dllPath))
-            {
-                MessageBox.Show("backend.dll not found in application directory.");
-                return;
-            }
+			_hooked = false;
+			_hooking = false;
+			MessageBox.Show("DLL Failed to Inject :(");
+		}
 
-            IntPtr hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
-            if (hProcess == IntPtr.Zero)
-            {
-                MessageBox.Show("Failed to open target process.");
-                return;
-            }
-
-            try
-            {
-                IntPtr allocMemAddress = VirtualAllocEx(hProcess, IntPtr.Zero,
-                    (uint)((dllPath.Length + 1) * Marshal.SizeOf(typeof(char))),
-                    MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
-
-                if (allocMemAddress == IntPtr.Zero)
-                {
-                    MessageBox.Show("Failed to allocate memory in target process.");
-                    return;
-                }
-
-                byte[] dllBytes = Encoding.ASCII.GetBytes(dllPath + "\0");
-                if (!WriteProcessMemory(hProcess, allocMemAddress, dllBytes, (uint)dllBytes.Length, out _))
-                {
-                    MessageBox.Show("Failed to write DLL path to target process.");
-                    return;
-                }
-
-                IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-                if (loadLibraryAddr == IntPtr.Zero)
-                {
-                    MessageBox.Show("Failed to get address of LoadLibraryA.");
-                    return;
-                }
-
-                IntPtr remoteThread = CreateRemoteThread(hProcess, IntPtr.Zero, 0, loadLibraryAddr,
-                    allocMemAddress, 0, IntPtr.Zero);
-
-                if (remoteThread == IntPtr.Zero)
-                {
-                    MessageBox.Show("Failed to create remote thread.");
-                    return;
-                }
-
-                // Wait for the remote thread to complete
-                uint waitResult = WaitForSingleObject(remoteThread, 10000); // 10 second timeout
-                if (waitResult != WAIT_OBJECT_0)
-                {
-                    MessageBox.Show("DLL injection thread did not complete in time.");
-                    CloseHandle(remoteThread);
-                    return;
-                }
-
-                // Get the exit code to verify LoadLibrary succeeded
-                if (GetExitCodeThread(remoteThread, out uint exitCode))
-                {
-                    if (exitCode == 0) // LoadLibrary returns NULL on failure
-                    {
-                        MessageBox.Show("LoadLibrary failed in target process.");
-                        CloseHandle(remoteThread);
-                        return;
-                    }
-                }
-
-                CloseHandle(remoteThread);
-                _hooked = true;
-                _primary.HookedLabel.Text = "HOOKED";
-                _primary.HookedLabel.ForeColor = Styling.COLOR_ON;
-                MessageBox.Show("DLL injected successfully! Movement will be tested when bot runs.");
-
-                // Wait for DLL to initialize its shared memory
-                Thread.Sleep(1000);
-
-                // Don't initialize or test here - let the bot state machine handle it
-            }
-            finally
-            {
-                CloseHandle(hProcess);
-            }
-        }
-
-        // **NEW METHOD**: Initialize with retry logic
-        private bool InitializeWithRetry(int maxAttempts = 5, int delayMs = 1000)
-        {
-            for (int attempt = 1; attempt <= maxAttempts; attempt++)
-            {
-                try
-                {
-                    Console.WriteLine($"Initialization attempt {attempt}/{maxAttempts}...");
-
-                    if (_moveController.Initialize())
-                    {
-                        Console.WriteLine("✓ MovementController initialized successfully");
-                        return true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
-
-                    if (attempt < maxAttempts)
-                    {
-                        Console.WriteLine($"Waiting {delayMs}ms before retry...");
-                        Thread.Sleep(delayMs);
-                    }
-                }
-            }
-
-            return false;
-        }
+		public void SetUpdateRate(int val)
+		{
+			_tickTimer.Stop();
+			_stateDelayMs = val;
+			_tickTimer.Interval = _stateDelayMs;
+			_tickTimer.Start();
+		}
 
         #endregion
 
@@ -295,278 +217,177 @@ namespace MapleGatorBot
 			menuStrip.BackColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
 		}
 
-        private void CheckProcessAvailable()
-        {
+		private bool IsProcessRunning(int pid)
+		{
+			IntPtr hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+			if (hProcess == IntPtr.Zero)
+				return false;
+
+			bool result = GetExitCodeProcess(hProcess, out uint exitCode);
+			CloseHandle(hProcess);
+
+			return result && exitCode == STILL_ACTIVE;
+		}
+
+		/// <summary>
+		/// Injects to process via RemoteThread and LoadLibraryA
+		/// </summary>
+		/// <param name="process">The full name of the process.</param>
+		private bool TryHookProcess(string process)
+		{
+			_hooking = true;
+			_primary.StatusLabel.Text = "Hooking ...";
+
+			// Extract PID
+			int pidStart = process.IndexOf("PID: ") + 5;
+			int pidEnd = process.IndexOf(")", pidStart);
+			string pidStr = process.Substring(pidStart, pidEnd - pidStart);
+			if (!int.TryParse(pidStr, out int pid))
+			{
+				MessageBox.Show("Invalid PID.");
+				return false;
+			}
+
+			_currPID = pid;
+
+			string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backend.dll");
+			if (!File.Exists(dllPath))
+			{
+				MessageBox.Show("backend.dll not found in application directory.");
+				return false;
+			}
+
+			IntPtr hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, pid);
+			if (hProcess == IntPtr.Zero)
+			{
+				MessageBox.Show("Failed to open target process.");
+				return false;
+			}
+
 			try
 			{
-				Process localById = Process.GetProcessById(_currPID);
+				IntPtr allocMemAddress = VirtualAllocEx(hProcess, IntPtr.Zero,
+					(uint)((dllPath.Length + 1) * Marshal.SizeOf(typeof(char))),
+					MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+
+				if (allocMemAddress == IntPtr.Zero)
+				{
+					MessageBox.Show("Failed to allocate memory in target process.");
+					return false;
+				}
+
+				byte[] dllBytes = Encoding.ASCII.GetBytes(dllPath + "\0");
+				if (!WriteProcessMemory(hProcess, allocMemAddress, dllBytes, (uint)dllBytes.Length, out _))
+				{
+					MessageBox.Show("Failed to write DLL path to target process.");
+					return false;
+				}
+
+				IntPtr loadLibraryAddr = GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+				if (loadLibraryAddr == IntPtr.Zero)
+				{
+					MessageBox.Show("Failed to get address of LoadLibraryA.");
+					return false;
+				}
+
+				IntPtr remoteThread = CreateRemoteThread(hProcess, IntPtr.Zero, 0, loadLibraryAddr,
+					allocMemAddress, 0, IntPtr.Zero);
+
+				if (remoteThread == IntPtr.Zero)
+				{
+					MessageBox.Show("Failed to create remote thread.");
+					return false;
+				}
+
+				// Wait for the remote thread to complete
+				uint waitResult = WaitForSingleObject(remoteThread, 10000); // 10 second timeout
+				if (waitResult != WAIT_OBJECT_0)
+				{
+					MessageBox.Show("DLL injection thread did not complete in time.");
+					CloseHandle(remoteThread);
+					return false;
+				}
+
+				// Get the exit code to verify LoadLibrary succeeded
+				if (GetExitCodeThread(remoteThread, out uint exitCode))
+				{
+					if (exitCode == 0) // LoadLibrary returns NULL on failure
+					{
+						MessageBox.Show("LoadLibrary failed in target process.");
+						CloseHandle(remoteThread);
+						return false;
+					}
+				}
+
+				CloseHandle(remoteThread);
+				// Wait for DLL to initialize its shared memory
+				Thread.Sleep(1000);
+				return true;
 			}
-			catch (Exception ex)
+			finally
 			{
-                Console.WriteLine(ex);
-                ResetHook();
+				CloseHandle(hProcess);
 			}
 		}
 
-        private void ResetHook()
+		// **NEW METHOD**: Initialize with retry logic
+		private bool InitializeWithRetry(int maxAttempts = 5, int delayMs = 1000)
+		{
+			for (int attempt = 1; attempt <= maxAttempts; attempt++)
+			{
+				try
+				{
+					Console.WriteLine($"Initialization attempt {attempt}/{maxAttempts}...");
+
+					if (_moveController.Initialize())
+					{
+						Console.WriteLine("✓ MovementController initialized successfully");
+						return true;
+					}
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
+
+					if (attempt < maxAttempts)
+					{
+						Console.WriteLine($"Waiting {delayMs}ms before retry...");
+						Thread.Sleep(delayMs);
+					}
+				}
+			}
+
+			return false;
+		}
+
+		private void ResetHook()
         {
 			_currPID = -1;
 			_moveController.Stop();
 			_moveController.Cleanup();
+			_stopWatch.Stop();
 			_hooked = false;
+			_primary.HookedButton.Enabled = true;
+			_primary.HookedButton.Visible = true;
+			_state = BotStates.Idle;
+
 			_primary.HookedLabel.Text = "NOT HOOKED";
 			_primary.HookedLabel.ForeColor = Styling.COLOR_OFF;
-		}
-
-		private async void RunBot()
-		{
-			while (_running)
-			{
-				if (_hooked)
-				{
-                    CheckProcessAvailable();
-				}
-
-				switch (_state)
-				{
-					case BotStates.Idle:
-						_primary.StatusLabel.Text = "Idle ...";
-						await DoIdle();
-						break;
-
-					case BotStates.Waiting:
-						_primary.StatusLabel.Text = "Waiting ...";
-						await DoWait();
-						break;
-
-					case BotStates.Moving:
-						_primary.StatusLabel.Text = "Moving ...";
-						await DelayWithProgress(1000);
-						await DoMove();
-						break;
-
-					case BotStates.Attacking:
-						_primary.StatusLabel.Text = "Attacking ...";
-						await DoAttack();
-						_state = BotStates.Waiting;
-						break;
-				}
-
-				await Task.Delay(stateDelayMs);
-			}
-		}
-
-		private async Task DelayWithProgress(int totalDelayMs)
-		{
-			Stopwatch sw = Stopwatch.StartNew();
-
-			while (sw.ElapsedMilliseconds < totalDelayMs)
-			{
-				float remaining = totalDelayMs - (float)(sw.ElapsedMilliseconds);
-				string rs = (remaining / 1000).ToString("0.00");
-				_primary.TimerLabel.Text = $"{rs} Sec Left";
-				await Task.Delay(1); // Check every 100ms
-			}
-		}
-
-		private async Task DoIdle()
-		{
-			if(!_hooked)
-			{
-				await DelayWithProgress(1000);
-				_primary.StatusLabel.Text = "No Hook";
-				_primary.LoadProcessList();
-				await DelayWithProgress(1000);
-				_state = BotStates.Idle;
-				return;
-			}
-
-			_state = BotStates.Waiting;
-		}
-
-		private async Task DoWait()
-		{
-			if (!_hooked)
-			{
-				_state = BotStates.Idle;
-				return;
-			}
-
-			int delayMs = 800;
-			await DelayWithProgress(delayMs);
-			_state = BotStates.Moving;
-		}
-
-        private async Task DoMove()
-        {
-            if(!_hooked)
-            {
-                _state = BotStates.Idle;
-                return;
-            }
-
-            try
-            {
-                // Check if we're connected and initialized
-                if (!_moveController.IsConnected())
-                {
-                    Console.WriteLine("Movement controller not connected. Reinitializing...");
-
-                    if (!_moveController.Initialize())
-                    {
-                        Console.WriteLine("✗ Failed to initialize movement controller");
-                        return;
-                    }
-                    Console.WriteLine("✓ Movement controller initialized");
-                }
-
-                // Check if hooks are active
-                if (!_moveController.IsHookActive())
-                {
-                    Console.WriteLine("✗ Hooks not active");
-                    return;
-                }
-
-                // Enable movement if not already enabled
-                if (!_moveController.IsMovementEnabled())
-                {
-                    Console.WriteLine("Enabling movement...");
-                    if (!_moveController.Start())
-                    {
-                        Console.WriteLine("✗ Failed to enable movement");
-                        return;
-                    }
-                    Console.WriteLine("✓ Movement enabled");
-                }
-
-                // Perform movement test sequence
-                Console.WriteLine("=== Starting Movement Test Sequence ===");
-
-                // 1. Basic directional movement
-                Console.WriteLine("Test 1: Basic Directions");
-
-                _moveController.MoveRight();
-                Console.WriteLine("→ Moving right");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveLeft();
-                Console.WriteLine("← Moving left");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveUp();
-                Console.WriteLine("↑ Moving up");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveDown();
-                Console.WriteLine("↓ Moving down");
-                await DelayWithProgress(1000);
-
-                _moveController.StopMove();
-                Console.WriteLine("✓ Stopped");
-                await DelayWithProgress(500);
-
-                // 2. Diagonal movement (key combos)
-                Console.WriteLine("\nTest 2: Diagonal Movement (Key Combos)");
-
-                _moveController.MoveUpRight();
-                Console.WriteLine("↗ Moving up-right");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveUpLeft();
-                Console.WriteLine("↖ Moving up-left");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveDownRight();
-                Console.WriteLine("↘ Moving down-right");
-                await DelayWithProgress(1000);
-
-                _moveController.MoveDownLeft();
-                Console.WriteLine("↙ Moving down-left");
-                await DelayWithProgress(1000);
-
-                _moveController.StopMove();
-                Console.WriteLine("✓ Stopped");
-                await DelayWithProgress(500);
-
-                // 3. Rapid direction changes
-                Console.WriteLine("\nTest 3: Rapid Direction Changes");
-
-                for (int i = 0; i < 5; i++)
-                {
-                    _moveController.MoveRight();
-                    await Task.Delay(200);
-                    _moveController.MoveLeft();
-                    await Task.Delay(200);
-                }
-
-                _moveController.StopMove();
-                Console.WriteLine("✓ Rapid changes complete");
-                await DelayWithProgress(500);
-
-                // 4. Complex movement pattern (simulate real gameplay)
-                Console.WriteLine("\nTest 4: Complex Movement Pattern");
-
-                // Move right while jumping (up+right)
-                _moveController.MoveUpRight();
-                Console.WriteLine("Jump right");
-                await Task.Delay(300);
-
-                // Land and continue right
-                _moveController.MoveRight();
-                Console.WriteLine("Continue right");
-                await Task.Delay(500);
-
-                // Jump left
-                _moveController.MoveUpLeft();
-                Console.WriteLine("Jump left");
-                await Task.Delay(300);
-
-                // Drop down
-                _moveController.MoveDown();
-                Console.WriteLine("Drop down");
-                await Task.Delay(500);
-
-                _moveController.StopMove();
-                Console.WriteLine("✓ Complex pattern complete");
-
-                Console.WriteLine("\n=== Movement Test Sequence Complete ===");
-
-                // Keep movement enabled but stop moving
-                _moveController.StopMove();
-				_state = BotStates.Waiting;
-
-				// Note: We're NOT calling Cleanup() here anymore
-				// The movement controller stays connected for the next cycle
-			}
-            catch (Exception ex)
-            {
-                Console.WriteLine($"✗ Error during movement test: {ex.Message}");
-                _moveController.StopMove();
-            }
-        }
-
-        private async Task DoAttack()
-		{
-			int delayMs = 800;
-			await DelayWithProgress(delayMs);
-		}
+		}	
 
 		#endregion
 
-		#region Callbacks
+		#region Form Callbacks
 
 		private void MapleGator_Load(object sender, EventArgs e)
 		{
 			LoadComponents();
-			_state = BotStates.Idle;
-			_running = true;
-			RunBot();
+			LoadStates();
+			StartBot();
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			_running = false;
-
 			if (_moveController != null && _moveController.IsConnected())
 			{
 				_moveController.Stop();

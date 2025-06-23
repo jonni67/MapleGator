@@ -16,6 +16,7 @@ namespace MapleGatorBot
 		public static byte STYLING_ALPHA = 24;
 		public static Color COLOR_ON = Color.FromArgb(128, 255, 128);
 		public static Color COLOR_OFF = Color.FromArgb(255, 128, 128);
+		public static Color ALPHA_PANEL_COLOR = Color.FromArgb(PANEL_ALPHA, PANEL_COLOR);
 
 		public static void SetAcrylicStyling(IntPtr handle)
 		{

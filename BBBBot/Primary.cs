@@ -14,6 +14,8 @@ namespace MapleGatorBot
 {
 	public partial class Primary : Form
 	{
+		#region Public Fields
+
 		public System.Windows.Forms.ComboBox ProcessComboBox 
 		{ 
 			get { return processComboBox; }
@@ -37,8 +39,18 @@ namespace MapleGatorBot
 			set { hookedLabel = value; }
 		}
 
+		public System.Windows.Forms.Button HookedButton
+		{
+			get { return buttonHook; }
+		}
+
+		#endregion
+
+		#region Private Members
+
 		MapleGator _parent;
-		Color _panelColor;
+
+		#endregion
 
 		public Primary(MapleGator parent)
 		{
@@ -46,8 +58,10 @@ namespace MapleGatorBot
 			_parent = parent;
 
 			LoadProcessList();
-			SetDesignParams();
+			SetDesign();
 		}
+
+		#region Public Methods
 
 		/// <summary>
 		/// Loads processes into the UI combo box.
@@ -64,19 +78,28 @@ namespace MapleGatorBot
 			if (processComboBox.Items.Count > 0)
 				processComboBox.SelectedIndex = 0;
 		}
-		
-		private void SetDesignParams()
+
+		#endregion
+
+		#region Private Methods
+
+		private void SetDesign()
 		{
-			_panelColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
-			processPanel.BackColor = _panelColor;
-			autoLoginPanel.BackColor = _panelColor;
-			topPanel.BackColor = _panelColor;
-			statPanel.BackColor = _panelColor;
-			statusPanel.BackColor = _panelColor;
+			SettingsUpdateRate.Text = _parent.StateDelayMs.ToString();
+
+			processPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			autoLoginPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			topPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			statPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			statusPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			settingsPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+
 			hookedLabel.ForeColor = Styling.COLOR_OFF;
 		}
 
-		#region Callbacks
+		#endregion
+
+		#region Form Callbacks
 
 		private void Btn_Hook_Click(object sender, EventArgs e)
 		{
@@ -98,5 +121,20 @@ namespace MapleGatorBot
 		}
 
 		#endregion
+
+		private void SettingsUpdateRate_TextChanged(object sender, EventArgs e)
+		{
+			string v = SettingsUpdateRate.Text;
+			int rate = 0;
+			bool isValid = int.TryParse(v, out rate);
+			Console.WriteLine(isValid);
+			if(!isValid || rate <= 0 || rate > 1000000)
+			{
+				SettingsUpdateRate.Text = _parent.StateDelayMs.ToString();
+				return;
+			}
+
+			_parent.SetUpdateRate(rate);
+		}
 	}
 }

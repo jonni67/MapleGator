@@ -18,4 +18,23 @@ namespace MapleGatorBot
 		Moving,
 		Attacking,
 	}
+
+	public enum WaitingStates
+	{
+		Initial,
+		Waiting,
+	}
+
+	public enum MovingStates
+	{
+		MovingRight,
+		MovingLeft,
+		MovingUp,
+		MovingDown,
+		StopMove,
+		MovingUpRight,
+		MovingUpLeft,
+		MovingDownLeft,
+		MovingDownRight,
+	}
 }
