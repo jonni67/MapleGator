@@ -35,7 +35,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(14, 13);
+			this.button1.Location = new System.Drawing.Point(9, 63);
 			this.button1.Margin = new System.Windows.Forms.Padding(0);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(173, 152);
@@ -46,7 +46,7 @@
 			// pictureBox1
 			// 
 			this.pictureBox1.Image = global::MapleGatorBot.Properties.Resources.ms_gator;
-			this.pictureBox1.Location = new System.Drawing.Point(187, 13);
+			this.pictureBox1.Location = new System.Drawing.Point(9, 9);
 			this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(117, 54);
@@ -59,7 +59,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
 			this.CausesValidation = false;
-			this.ClientSize = new System.Drawing.Size(929, 457);
+			this.ClientSize = new System.Drawing.Size(748, 445);
 			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.button1);
 			this.DoubleBuffered = true;

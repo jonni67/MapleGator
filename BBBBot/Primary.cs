@@ -59,6 +59,7 @@ namespace MapleGatorBot
 
 			LoadProcessList();
 			SetDesign();
+
 		}
 
 		#region Public Methods
@@ -88,8 +89,7 @@ namespace MapleGatorBot
 			SettingsUpdateRate.Text = _parent.StateDelayMs.ToString();
 
 			processPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
-			autoLoginPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
-			topPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			//topPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
 			statPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
 			statusPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
 			settingsPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
@@ -113,22 +113,13 @@ namespace MapleGatorBot
 			_parent.HookProcess(selected);
 		}
 
-		private void Btn_AutoLoginToggle_Click(object sender, EventArgs e)
-		{
-			_parent.AutoLoginEnabled = !_parent.AutoLoginEnabled;
-			Styling.ToggleLabel(_parent.AutoLoginEnabled, autoLoginToggleLabel);
-			Styling.ToggleButton(_parent.AutoLoginEnabled, buttonAutoLoginToggle);
-		}
-
-		#endregion
-
 		private void SettingsUpdateRate_TextChanged(object sender, EventArgs e)
 		{
 			string v = SettingsUpdateRate.Text;
 			int rate = 0;
 			bool isValid = int.TryParse(v, out rate);
 			Console.WriteLine(isValid);
-			if(!isValid || rate <= 0 || rate > 1000000)
+			if (!isValid || rate <= 0 || rate > 1000000)
 			{
 				SettingsUpdateRate.Text = _parent.StateDelayMs.ToString();
 				return;
@@ -136,5 +127,9 @@ namespace MapleGatorBot
 
 			_parent.SetUpdateRate(rate);
 		}
+
+		#endregion
+
+
 	}
 }

@@ -67,6 +67,12 @@ namespace MapleGatorBot
 			get { return _stateDelayMs; }
 		}
 
+		public bool IMapOpen
+		{
+			get { return _iMapOpen; }
+			set { _iMapOpen = value; }
+		}
+
 		#endregion
 
 		#region Private Members
@@ -90,7 +96,11 @@ namespace MapleGatorBot
 		Primary _primary;
 		Pathfinding _pathfinding;
 		MovementController _moveController;
+		AutoLogin _autoLogin;
 		Form _shownComponent;
+
+		// interactive map //
+		InteractiveMap _iMap;
 
 		// settings //
 		int _stateDelayMs = 50;
@@ -105,8 +115,9 @@ namespace MapleGatorBot
 		bool _hooking = false;
 		bool _hooked = false;
 		bool _autoLoginEnabled = false;
+		bool _iMapOpen = false;
 
-        int _currPID = -1;
+		int _currPID = -1;
 
 		// timers //
 		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
@@ -130,6 +141,8 @@ namespace MapleGatorBot
 			}
 
 			SetStyling();
+
+			Console.WriteLine(this.ClientSize);
 		}
 
 		public void HookProcess(string process)
@@ -177,9 +190,11 @@ namespace MapleGatorBot
 			_primary = new Primary(this);
 			_pathfinding = new Pathfinding(this);
 			_moveController = new MovementController();
+			_autoLogin = new AutoLogin(this);
 
 			// add components to dict
 			_components.Add(ComponentIDs.Primary, _primary);
+			_components.Add(ComponentIDs.AutoLogin, _autoLogin);
 			_components.Add(ComponentIDs.Pathfinding, _pathfinding);
 
 			// set all components in dict
@@ -191,8 +206,11 @@ namespace MapleGatorBot
 			}
 			
 			_pathfinding.Show();
+			_autoLogin.Show();
 			_primary.Show(); // primary is first component shown on load
 			_shownComponent = _components[ComponentIDs.Primary];
+
+			_iMap = new InteractiveMap(this);
 			Console.WriteLine("Loaded Form Components");
 		}
 
@@ -215,6 +233,13 @@ namespace MapleGatorBot
 		{
 			BackColor = Color.Black;
 			menuStrip.BackColor = Color.FromArgb(Styling.PANEL_ALPHA, Styling.PANEL_COLOR);
+
+			/* determines the ACTUAL 
+			 * usable client size of this MDI parent container
+			Size t = Controls
+			.OfType<MdiClient>()
+			.FirstOrDefault().ClientSize;
+			Console.WriteLine(t); */
 		}
 
 		private bool IsProcessRunning(int pid)
@@ -402,9 +427,23 @@ namespace MapleGatorBot
 			SwitchComponent(ComponentIDs.Primary);
 		}
 
+		private void MenuItem_AutoLogin_Click(object snder, EventArgs e)
+		{
+			SwitchComponent(ComponentIDs.AutoLogin);
+		}
+
 		private void MenuItem_Pathfinding_Click(object sender, EventArgs e)
 		{
 			SwitchComponent(ComponentIDs.Pathfinding);
+		}
+
+		private void MenuItem_IMap_Click(object sender, EventArgs e)
+		{
+			if(!_iMapOpen)
+			{
+				_iMap.Show();
+				_iMapOpen = true;
+			}
 		}
 
 		#endregion

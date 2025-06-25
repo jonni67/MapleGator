@@ -28,26 +28,14 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Primary));
 			this.processPanel = new System.Windows.Forms.Panel();
 			this.hookedLabel = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.buttonHook = new System.Windows.Forms.Button();
 			this.processComboBox = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.autoLoginPanel = new System.Windows.Forms.Panel();
-			this.autoLoginToggleLabel = new System.Windows.Forms.Label();
-			this.buttonAutoLoginToggle = new System.Windows.Forms.Button();
-			this.autoLogPin = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.autoLogPw = new System.Windows.Forms.TextBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.autoLogUsername = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
 			this.topPanel = new System.Windows.Forms.Panel();
 			this.label1 = new System.Windows.Forms.Label();
-			this.logoImage = new System.Windows.Forms.PictureBox();
 			this.statPanel = new System.Windows.Forms.Panel();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
@@ -60,16 +48,16 @@
 			this.statusLabel = new System.Windows.Forms.Label();
 			this.label15 = new System.Windows.Forms.Label();
 			this.settingsPanel = new System.Windows.Forms.Panel();
-			this.label2 = new System.Windows.Forms.Label();
-			this.SettingsUpdateRate = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
+			this.SettingsUpdateRate = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.logoImage = new System.Windows.Forms.PictureBox();
 			this.processPanel.SuspendLayout();
-			this.autoLoginPanel.SuspendLayout();
 			this.topPanel.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.logoImage)).BeginInit();
 			this.statPanel.SuspendLayout();
 			this.statusPanel.SuspendLayout();
 			this.settingsPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.logoImage)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// processPanel
@@ -77,9 +65,9 @@
 			this.processPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
 			this.processPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.processPanel.CausesValidation = false;
+			this.processPanel.Controls.Add(this.buttonHook);
 			this.processPanel.Controls.Add(this.hookedLabel);
 			this.processPanel.Controls.Add(this.label4);
-			this.processPanel.Controls.Add(this.buttonHook);
 			this.processPanel.Controls.Add(this.processComboBox);
 			this.processPanel.Location = new System.Drawing.Point(16, 54);
 			this.processPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -90,26 +78,26 @@
 			// hookedLabel
 			// 
 			this.hookedLabel.AutoSize = true;
-			this.hookedLabel.BackColor = System.Drawing.Color.Black;
-			this.hookedLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.hookedLabel.BackColor = System.Drawing.Color.Transparent;
+			this.hookedLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.hookedLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-			this.hookedLabel.Location = new System.Drawing.Point(8, 103);
+			this.hookedLabel.Location = new System.Drawing.Point(4, 104);
 			this.hookedLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.hookedLabel.Name = "hookedLabel";
-			this.hookedLabel.Size = new System.Drawing.Size(108, 18);
+			this.hookedLabel.Size = new System.Drawing.Size(73, 19);
 			this.hookedLabel.TabIndex = 13;
 			this.hookedLabel.Text = "NOT HOOKED";
 			// 
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.BackColor = System.Drawing.Color.Black;
-			this.label4.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label4.BackColor = System.Drawing.Color.Transparent;
+			this.label4.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label4.Location = new System.Drawing.Point(8, 8);
 			this.label4.Margin = new System.Windows.Forms.Padding(8);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(128, 18);
+			this.label4.Size = new System.Drawing.Size(105, 23);
 			this.label4.TabIndex = 2;
 			this.label4.Text = "PROCESS HOOK";
 			// 
@@ -118,16 +106,16 @@
 			this.buttonHook.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.buttonHook.FlatAppearance.BorderColor = System.Drawing.Color.White;
 			this.buttonHook.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonHook.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonHook.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonHook.ForeColor = System.Drawing.Color.White;
+			this.buttonHook.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.buttonHook.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.buttonHook.Location = new System.Drawing.Point(8, 32);
+			this.buttonHook.Location = new System.Drawing.Point(9, 41);
 			this.buttonHook.Margin = new System.Windows.Forms.Padding(8);
 			this.buttonHook.Name = "buttonHook";
-			this.buttonHook.Size = new System.Drawing.Size(149, 25);
+			this.buttonHook.Size = new System.Drawing.Size(149, 35);
 			this.buttonHook.TabIndex = 0;
 			this.buttonHook.Text = "HOOK";
-			this.buttonHook.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.buttonHook.UseVisualStyleBackColor = true;
 			this.buttonHook.Click += new System.EventHandler(this.Btn_Hook_Click);
 			// 
@@ -138,7 +126,7 @@
 			this.processComboBox.ForeColor = System.Drawing.Color.Cyan;
 			this.processComboBox.FormattingEnabled = true;
 			this.processComboBox.ItemHeight = 14;
-			this.processComboBox.Location = new System.Drawing.Point(8, 64);
+			this.processComboBox.Location = new System.Drawing.Point(8, 83);
 			this.processComboBox.Margin = new System.Windows.Forms.Padding(8);
 			this.processComboBox.Name = "processComboBox";
 			this.processComboBox.Size = new System.Drawing.Size(150, 22);
@@ -147,145 +135,19 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.BackColor = System.Drawing.Color.Black;
-			this.label3.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.BackColor = System.Drawing.Color.Transparent;
+			this.label3.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label3.Location = new System.Drawing.Point(8, 8);
 			this.label3.Margin = new System.Windows.Forms.Padding(8);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(98, 18);
+			this.label3.Size = new System.Drawing.Size(63, 19);
 			this.label3.TabIndex = 9;
 			this.label3.Text = "Character";
 			// 
-			// autoLoginPanel
-			// 
-			this.autoLoginPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
-			this.autoLoginPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.autoLoginPanel.CausesValidation = false;
-			this.autoLoginPanel.Controls.Add(this.autoLoginToggleLabel);
-			this.autoLoginPanel.Controls.Add(this.buttonAutoLoginToggle);
-			this.autoLoginPanel.Controls.Add(this.autoLogPin);
-			this.autoLoginPanel.Controls.Add(this.label8);
-			this.autoLoginPanel.Controls.Add(this.autoLogPw);
-			this.autoLoginPanel.Controls.Add(this.label7);
-			this.autoLoginPanel.Controls.Add(this.label6);
-			this.autoLoginPanel.Controls.Add(this.autoLogUsername);
-			this.autoLoginPanel.Controls.Add(this.label5);
-			this.autoLoginPanel.Location = new System.Drawing.Point(421, 54);
-			this.autoLoginPanel.Margin = new System.Windows.Forms.Padding(0);
-			this.autoLoginPanel.Name = "autoLoginPanel";
-			this.autoLoginPanel.Size = new System.Drawing.Size(209, 196);
-			this.autoLoginPanel.TabIndex = 10;
-			// 
-			// autoLoginToggleLabel
-			// 
-			this.autoLoginToggleLabel.AutoSize = true;
-			this.autoLoginToggleLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.autoLoginToggleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-			this.autoLoginToggleLabel.Location = new System.Drawing.Point(164, 48);
-			this.autoLoginToggleLabel.Name = "autoLoginToggleLabel";
-			this.autoLoginToggleLabel.Size = new System.Drawing.Size(38, 18);
-			this.autoLoginToggleLabel.TabIndex = 9;
-			this.autoLoginToggleLabel.Text = "OFF";
-			// 
-			// buttonAutoLoginToggle
-			// 
-			this.buttonAutoLoginToggle.BackColor = System.Drawing.Color.Black;
-			this.buttonAutoLoginToggle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.buttonAutoLoginToggle.Cursor = System.Windows.Forms.Cursors.Default;
-			this.buttonAutoLoginToggle.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-			this.buttonAutoLoginToggle.FlatAppearance.BorderSize = 2;
-			this.buttonAutoLoginToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonAutoLoginToggle.ForeColor = System.Drawing.Color.Black;
-			this.buttonAutoLoginToggle.Image = ((System.Drawing.Image)(resources.GetObject("buttonAutoLoginToggle.Image")));
-			this.buttonAutoLoginToggle.Location = new System.Drawing.Point(167, 8);
-			this.buttonAutoLoginToggle.Margin = new System.Windows.Forms.Padding(8);
-			this.buttonAutoLoginToggle.Name = "buttonAutoLoginToggle";
-			this.buttonAutoLoginToggle.Size = new System.Drawing.Size(32, 32);
-			this.buttonAutoLoginToggle.TabIndex = 8;
-			this.buttonAutoLoginToggle.UseVisualStyleBackColor = false;
-			this.buttonAutoLoginToggle.Click += new System.EventHandler(this.Btn_AutoLoginToggle_Click);
-			// 
-			// autoLogPin
-			// 
-			this.autoLogPin.BackColor = System.Drawing.Color.Black;
-			this.autoLogPin.ForeColor = System.Drawing.SystemColors.Control;
-			this.autoLogPin.Location = new System.Drawing.Point(8, 168);
-			this.autoLogPin.Name = "autoLogPin";
-			this.autoLogPin.Size = new System.Drawing.Size(69, 20);
-			this.autoLogPin.TabIndex = 7;
-			this.autoLogPin.UseSystemPasswordChar = true;
-			this.autoLogPin.WordWrap = false;
-			// 
-			// label8
-			// 
-			this.label8.AutoSize = true;
-			this.label8.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label8.ForeColor = System.Drawing.SystemColors.Control;
-			this.label8.Location = new System.Drawing.Point(8, 144);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(38, 18);
-			this.label8.TabIndex = 6;
-			this.label8.Text = "PIN";
-			// 
-			// autoLogPw
-			// 
-			this.autoLogPw.BackColor = System.Drawing.Color.Black;
-			this.autoLogPw.ForeColor = System.Drawing.SystemColors.Control;
-			this.autoLogPw.Location = new System.Drawing.Point(8, 112);
-			this.autoLogPw.Name = "autoLogPw";
-			this.autoLogPw.Size = new System.Drawing.Size(128, 20);
-			this.autoLogPw.TabIndex = 5;
-			this.autoLogPw.UseSystemPasswordChar = true;
-			this.autoLogPw.WordWrap = false;
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label7.ForeColor = System.Drawing.SystemColors.Control;
-			this.label7.Location = new System.Drawing.Point(8, 88);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(88, 18);
-			this.label7.TabIndex = 4;
-			this.label7.Text = "PASSWORD";
-			// 
-			// label6
-			// 
-			this.label6.AutoSize = true;
-			this.label6.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label6.ForeColor = System.Drawing.SystemColors.Control;
-			this.label6.Location = new System.Drawing.Point(8, 32);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(88, 18);
-			this.label6.TabIndex = 3;
-			this.label6.Text = "USERNAME";
-			// 
-			// autoLogUsername
-			// 
-			this.autoLogUsername.BackColor = System.Drawing.Color.Black;
-			this.autoLogUsername.ForeColor = System.Drawing.SystemColors.Control;
-			this.autoLogUsername.Location = new System.Drawing.Point(8, 56);
-			this.autoLogUsername.Name = "autoLogUsername";
-			this.autoLogUsername.Size = new System.Drawing.Size(128, 20);
-			this.autoLogUsername.TabIndex = 2;
-			this.autoLogUsername.WordWrap = false;
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.BackColor = System.Drawing.Color.Black;
-			this.label5.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-			this.label5.Location = new System.Drawing.Point(8, 8);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(108, 18);
-			this.label5.TabIndex = 0;
-			this.label5.Text = "AUTO LOGIN";
-			// 
 			// topPanel
 			// 
-			this.topPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
+			this.topPanel.BackColor = System.Drawing.Color.Transparent;
 			this.topPanel.Controls.Add(this.label1);
 			this.topPanel.Location = new System.Drawing.Point(120, 12);
 			this.topPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -296,27 +158,15 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.BackColor = System.Drawing.Color.Black;
-			this.label1.Font = new System.Drawing.Font("Taurus Mono Outline", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.BackColor = System.Drawing.Color.Transparent;
+			this.label1.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label1.Location = new System.Drawing.Point(5, 5);
 			this.label1.Margin = new System.Windows.Forms.Padding(8);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(172, 28);
+			this.label1.Size = new System.Drawing.Size(91, 23);
 			this.label1.TabIndex = 12;
 			this.label1.Text = "MAPLEGATOR";
-			// 
-			// logoImage
-			// 
-			this.logoImage.Image = global::MapleGatorBot.Properties.Resources.ms_gator;
-			this.logoImage.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.logoImage.Location = new System.Drawing.Point(13, 12);
-			this.logoImage.Margin = new System.Windows.Forms.Padding(0);
-			this.logoImage.Name = "logoImage";
-			this.logoImage.Size = new System.Drawing.Size(100, 31);
-			this.logoImage.TabIndex = 0;
-			this.logoImage.TabStop = false;
-			this.logoImage.WaitOnLoad = true;
 			// 
 			// statPanel
 			// 
@@ -339,78 +189,78 @@
 			// label14
 			// 
 			this.label14.AutoSize = true;
-			this.label14.BackColor = System.Drawing.Color.Black;
-			this.label14.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label14.BackColor = System.Drawing.Color.Transparent;
+			this.label14.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label14.ForeColor = System.Drawing.SystemColors.Control;
 			this.label14.Location = new System.Drawing.Point(8, 168);
 			this.label14.Margin = new System.Windows.Forms.Padding(8);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(49, 19);
+			this.label14.Size = new System.Drawing.Size(36, 19);
 			this.label14.TabIndex = 15;
 			this.label14.Text = "NONE";
 			// 
 			// label13
 			// 
 			this.label13.AutoSize = true;
-			this.label13.BackColor = System.Drawing.Color.Black;
-			this.label13.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label13.BackColor = System.Drawing.Color.Transparent;
+			this.label13.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label13.Location = new System.Drawing.Point(8, 144);
 			this.label13.Margin = new System.Windows.Forms.Padding(8);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(38, 18);
+			this.label13.Size = new System.Drawing.Size(32, 19);
 			this.label13.TabIndex = 14;
 			this.label13.Text = "MAP";
 			// 
 			// label12
 			// 
 			this.label12.AutoSize = true;
-			this.label12.BackColor = System.Drawing.Color.Black;
-			this.label12.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label12.BackColor = System.Drawing.Color.Transparent;
+			this.label12.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label12.ForeColor = System.Drawing.SystemColors.Control;
 			this.label12.Location = new System.Drawing.Point(8, 112);
 			this.label12.Margin = new System.Windows.Forms.Padding(8);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(49, 19);
+			this.label12.Size = new System.Drawing.Size(27, 19);
 			this.label12.TabIndex = 13;
 			this.label12.Text = "Y: 0";
 			// 
 			// label11
 			// 
 			this.label11.AutoSize = true;
-			this.label11.BackColor = System.Drawing.Color.Black;
-			this.label11.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label11.BackColor = System.Drawing.Color.Transparent;
+			this.label11.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label11.ForeColor = System.Drawing.SystemColors.Control;
 			this.label11.Location = new System.Drawing.Point(8, 88);
 			this.label11.Margin = new System.Windows.Forms.Padding(8);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(49, 19);
+			this.label11.Size = new System.Drawing.Size(29, 19);
 			this.label11.TabIndex = 12;
 			this.label11.Text = "X: 0";
 			// 
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.BackColor = System.Drawing.Color.Black;
-			this.label10.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label10.BackColor = System.Drawing.Color.Transparent;
+			this.label10.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label10.Location = new System.Drawing.Point(8, 64);
 			this.label10.Margin = new System.Windows.Forms.Padding(8);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(88, 18);
+			this.label10.Size = new System.Drawing.Size(50, 19);
 			this.label10.TabIndex = 11;
 			this.label10.Text = "Position";
 			// 
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.BackColor = System.Drawing.Color.Black;
-			this.label9.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label9.BackColor = System.Drawing.Color.Transparent;
+			this.label9.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label9.ForeColor = System.Drawing.SystemColors.Control;
 			this.label9.Location = new System.Drawing.Point(8, 32);
 			this.label9.Margin = new System.Windows.Forms.Padding(8);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(49, 19);
+			this.label9.Size = new System.Drawing.Size(36, 19);
 			this.label9.TabIndex = 10;
 			this.label9.Text = "NONE";
 			// 
@@ -431,12 +281,12 @@
 			this.timerLabel.AutoSize = true;
 			this.timerLabel.BackColor = System.Drawing.Color.Black;
 			this.timerLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.timerLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.timerLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.timerLabel.ForeColor = System.Drawing.SystemColors.Control;
 			this.timerLabel.Location = new System.Drawing.Point(8, 136);
 			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.timerLabel.Name = "timerLabel";
-			this.timerLabel.Size = new System.Drawing.Size(50, 20);
+			this.timerLabel.Size = new System.Drawing.Size(34, 21);
 			this.timerLabel.TabIndex = 17;
 			this.timerLabel.Text = "0.0s";
 			// 
@@ -444,7 +294,7 @@
 			// 
 			this.statusLabel.BackColor = System.Drawing.Color.Black;
 			this.statusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.statusLabel.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statusLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
 			this.statusLabel.Location = new System.Drawing.Point(8, 32);
 			this.statusLabel.Margin = new System.Windows.Forms.Padding(8);
@@ -456,12 +306,12 @@
 			// label15
 			// 
 			this.label15.AutoSize = true;
-			this.label15.BackColor = System.Drawing.Color.Black;
-			this.label15.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label15.BackColor = System.Drawing.Color.Transparent;
+			this.label15.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
 			this.label15.Location = new System.Drawing.Point(8, 8);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(68, 18);
+			this.label15.Size = new System.Drawing.Size(56, 23);
 			this.label15.TabIndex = 10;
 			this.label15.Text = "STATUS";
 			// 
@@ -477,17 +327,16 @@
 			this.settingsPanel.Size = new System.Drawing.Size(209, 196);
 			this.settingsPanel.TabIndex = 14;
 			// 
-			// label2
+			// label16
 			// 
-			this.label2.AutoSize = true;
-			this.label2.BackColor = System.Drawing.Color.Black;
-			this.label2.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-			this.label2.Location = new System.Drawing.Point(8, 8);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(88, 18);
-			this.label2.TabIndex = 10;
-			this.label2.Text = "SETTINGS";
+			this.label16.AutoSize = true;
+			this.label16.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label16.ForeColor = System.Drawing.SystemColors.Control;
+			this.label16.Location = new System.Drawing.Point(8, 32);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(105, 19);
+			this.label16.TabIndex = 10;
+			this.label16.Text = "UPDATE RATE (ms)";
 			// 
 			// SettingsUpdateRate
 			// 
@@ -499,30 +348,41 @@
 			this.SettingsUpdateRate.TabIndex = 11;
 			this.SettingsUpdateRate.TextChanged += new System.EventHandler(this.SettingsUpdateRate_TextChanged);
 			// 
-			// label16
+			// label2
 			// 
-			this.label16.AutoSize = true;
-			this.label16.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label16.ForeColor = System.Drawing.SystemColors.Control;
-			this.label16.Location = new System.Drawing.Point(8, 32);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(168, 18);
-			this.label16.TabIndex = 10;
-			this.label16.Text = "UPDATE RATE (ms)";
+			this.label2.AutoSize = true;
+			this.label2.BackColor = System.Drawing.Color.Transparent;
+			this.label2.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+			this.label2.Location = new System.Drawing.Point(8, 8);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(68, 23);
+			this.label2.TabIndex = 10;
+			this.label2.Text = "SETTINGS";
+			// 
+			// logoImage
+			// 
+			this.logoImage.Image = global::MapleGatorBot.Properties.Resources.ms_gator;
+			this.logoImage.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.logoImage.Location = new System.Drawing.Point(13, 12);
+			this.logoImage.Margin = new System.Windows.Forms.Padding(0);
+			this.logoImage.Name = "logoImage";
+			this.logoImage.Size = new System.Drawing.Size(100, 31);
+			this.logoImage.TabIndex = 0;
+			this.logoImage.TabStop = false;
+			this.logoImage.WaitOnLoad = true;
 			// 
 			// Primary
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.BackColor = System.Drawing.Color.Black;
 			this.CausesValidation = false;
-			this.ClientSize = new System.Drawing.Size(929, 457);
+			this.ClientSize = new System.Drawing.Size(748, 445);
 			this.Controls.Add(this.settingsPanel);
 			this.Controls.Add(this.statusPanel);
 			this.Controls.Add(this.statPanel);
 			this.Controls.Add(this.logoImage);
 			this.Controls.Add(this.topPanel);
-			this.Controls.Add(this.autoLoginPanel);
 			this.Controls.Add(this.processPanel);
 			this.DoubleBuffered = true;
 			this.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -537,17 +397,15 @@
 			this.Text = "Primary";
 			this.processPanel.ResumeLayout(false);
 			this.processPanel.PerformLayout();
-			this.autoLoginPanel.ResumeLayout(false);
-			this.autoLoginPanel.PerformLayout();
 			this.topPanel.ResumeLayout(false);
 			this.topPanel.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.logoImage)).EndInit();
 			this.statPanel.ResumeLayout(false);
 			this.statPanel.PerformLayout();
 			this.statusPanel.ResumeLayout(false);
 			this.statusPanel.PerformLayout();
 			this.settingsPanel.ResumeLayout(false);
 			this.settingsPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.logoImage)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -560,16 +418,6 @@
 		private System.Windows.Forms.ComboBox processComboBox;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Panel autoLoginPanel;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.TextBox autoLogUsername;
-		private System.Windows.Forms.TextBox autoLogPin;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox autoLogPw;
-		private System.Windows.Forms.Button buttonAutoLoginToggle;
-		private System.Windows.Forms.Label autoLoginToggleLabel;
 		private System.Windows.Forms.Panel topPanel;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label hookedLabel;

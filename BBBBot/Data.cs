@@ -6,6 +6,7 @@ namespace MapleGatorBot
 	public enum ComponentIDs
 	{
 		Primary,
+		AutoLogin,
 		Pathfinding,
 		Metrics,
 	}
@@ -36,5 +37,11 @@ namespace MapleGatorBot
 		MovingUpLeft,
 		MovingDownLeft,
 		MovingDownRight,
+	}
+
+	public enum IMapDrawModes
+	{
+		HuntRectangle,
+		DeadZone,
 	}
 }

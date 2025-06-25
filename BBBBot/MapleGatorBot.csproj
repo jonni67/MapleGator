@@ -48,6 +48,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoLogin.Designer.cs">
+      <DependentUpon>AutoLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InteractiveMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="InteractiveMap.Designer.cs">
+      <DependentUpon>InteractiveMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapleGatorBehavior.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +86,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AutoLogin.resx">
+      <DependentUpon>AutoLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InteractiveMap.resx">
+      <DependentUpon>InteractiveMap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Pathfinding.resx">
       <DependentUpon>Pathfinding.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,6 +141,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gator-toggle-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\panel-176x133.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\panel-176x1331.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\panel-176x1332.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\panel-176x1333.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
