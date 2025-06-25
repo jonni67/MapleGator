@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			this.processPanel = new System.Windows.Forms.Panel();
+			this.buttonHook = new System.Windows.Forms.Button();
 			this.hookedLabel = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.buttonHook = new System.Windows.Forms.Button();
 			this.processComboBox = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.topPanel = new System.Windows.Forms.Panel();
@@ -75,6 +75,24 @@
 			this.processPanel.Size = new System.Drawing.Size(176, 133);
 			this.processPanel.TabIndex = 7;
 			// 
+			// buttonHook
+			// 
+			this.buttonHook.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.buttonHook.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.buttonHook.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonHook.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.buttonHook.ForeColor = System.Drawing.Color.White;
+			this.buttonHook.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.buttonHook.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.buttonHook.Location = new System.Drawing.Point(9, 41);
+			this.buttonHook.Margin = new System.Windows.Forms.Padding(8);
+			this.buttonHook.Name = "buttonHook";
+			this.buttonHook.Size = new System.Drawing.Size(149, 35);
+			this.buttonHook.TabIndex = 0;
+			this.buttonHook.Text = "HOOK";
+			this.buttonHook.UseVisualStyleBackColor = true;
+			this.buttonHook.Click += new System.EventHandler(this.Btn_Hook_Click);
+			// 
 			// hookedLabel
 			// 
 			this.hookedLabel.AutoSize = true;
@@ -100,24 +118,6 @@
 			this.label4.Size = new System.Drawing.Size(105, 23);
 			this.label4.TabIndex = 2;
 			this.label4.Text = "PROCESS HOOK";
-			// 
-			// buttonHook
-			// 
-			this.buttonHook.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.buttonHook.FlatAppearance.BorderColor = System.Drawing.Color.White;
-			this.buttonHook.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonHook.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonHook.ForeColor = System.Drawing.Color.White;
-			this.buttonHook.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.buttonHook.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.buttonHook.Location = new System.Drawing.Point(9, 41);
-			this.buttonHook.Margin = new System.Windows.Forms.Padding(8);
-			this.buttonHook.Name = "buttonHook";
-			this.buttonHook.Size = new System.Drawing.Size(149, 35);
-			this.buttonHook.TabIndex = 0;
-			this.buttonHook.Text = "HOOK";
-			this.buttonHook.UseVisualStyleBackColor = true;
-			this.buttonHook.Click += new System.EventHandler(this.Btn_Hook_Click);
 			// 
 			// processComboBox
 			// 
@@ -341,10 +341,11 @@
 			// SettingsUpdateRate
 			// 
 			this.SettingsUpdateRate.BackColor = System.Drawing.Color.Black;
+			this.SettingsUpdateRate.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.SettingsUpdateRate.ForeColor = System.Drawing.SystemColors.Control;
 			this.SettingsUpdateRate.Location = new System.Drawing.Point(11, 56);
 			this.SettingsUpdateRate.Name = "SettingsUpdateRate";
-			this.SettingsUpdateRate.Size = new System.Drawing.Size(100, 20);
+			this.SettingsUpdateRate.Size = new System.Drawing.Size(100, 27);
 			this.SettingsUpdateRate.TabIndex = 11;
 			this.SettingsUpdateRate.TextChanged += new System.EventHandler(this.SettingsUpdateRate_TextChanged);
 			// 

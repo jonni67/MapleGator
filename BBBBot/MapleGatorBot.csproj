@@ -131,9 +131,6 @@
     <None Include="Resources\ms-gator.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\box-140x25.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ms-slime-green.png" />
   </ItemGroup>
   <ItemGroup>
@@ -141,18 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gator-toggle-off.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\panel-176x133.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\panel-176x1331.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\panel-176x1332.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\panel-176x1333.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

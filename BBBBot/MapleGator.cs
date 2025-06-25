@@ -205,9 +205,18 @@ namespace MapleGatorBot
 				_components[id].MdiParent = this;
 			}
 			
+			// show all forms //
 			_pathfinding.Show();
 			_autoLogin.Show();
-			_primary.Show(); // primary is first component shown on load
+			_primary.Show();
+
+			// then must hide all forms then show primary //
+			// weird stuff happens otherwise when navigating //
+			Styling.HideFormWithoutFlicker(_pathfinding);
+			Styling.HideFormWithoutFlicker(_autoLogin);
+			Styling.HideFormWithoutFlicker(_primary);
+			Styling.ShowFormWithoutFlicker(_primary);
+
 			_shownComponent = _components[ComponentIDs.Primary];
 
 			_iMap = new InteractiveMap(this);
@@ -221,6 +230,9 @@ namespace MapleGatorBot
 		{
 			if (_shownComponent.Name == _components[id].Name)
 				return;
+
+			Console.WriteLine(id.ToString());
+			Console.WriteLine(_shownComponent.Name);
 
 			SuspendLayout();
 			Styling.ShowFormWithoutFlicker(_components[id]);
