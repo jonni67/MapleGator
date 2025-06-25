@@ -35,7 +35,6 @@
 			this.autoLogCh = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.autoLoginToggleLabel = new System.Windows.Forms.Label();
-			this.buttonAutoLoginToggle = new System.Windows.Forms.Button();
 			this.autoLogPin = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.autoLogPw = new System.Windows.Forms.TextBox();
@@ -47,8 +46,21 @@
 			this.label3 = new System.Windows.Forms.Label();
 			this.buttonHook = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
+			this.buttonAutoLoginToggle = new System.Windows.Forms.Button();
+			this.spoofPanel = new System.Windows.Forms.Panel();
+			this.button2 = new System.Windows.Forms.Button();
+			this.macField = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.hwidField = new System.Windows.Forms.TextBox();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
+			this.button6 = new System.Windows.Forms.Button();
+			this.button7 = new System.Windows.Forms.Button();
 			this.autoLoginPanel.SuspendLayout();
 			this.accountsPanel.SuspendLayout();
+			this.spoofPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// autoLoginPanel
@@ -88,6 +100,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
+			this.label2.BackColor = System.Drawing.Color.Transparent;
 			this.label2.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label2.ForeColor = System.Drawing.SystemColors.Control;
 			this.label2.Location = new System.Drawing.Point(8, 258);
@@ -109,6 +122,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
+			this.label1.BackColor = System.Drawing.Color.Transparent;
 			this.label1.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.ForeColor = System.Drawing.SystemColors.Control;
 			this.label1.Location = new System.Drawing.Point(8, 204);
@@ -120,31 +134,14 @@
 			// autoLoginToggleLabel
 			// 
 			this.autoLoginToggleLabel.AutoSize = true;
-			this.autoLoginToggleLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.autoLoginToggleLabel.BackColor = System.Drawing.Color.Transparent;
+			this.autoLoginToggleLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.autoLoginToggleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
 			this.autoLoginToggleLabel.Location = new System.Drawing.Point(164, 48);
 			this.autoLoginToggleLabel.Name = "autoLoginToggleLabel";
-			this.autoLoginToggleLabel.Size = new System.Drawing.Size(38, 18);
+			this.autoLoginToggleLabel.Size = new System.Drawing.Size(28, 19);
 			this.autoLoginToggleLabel.TabIndex = 9;
 			this.autoLoginToggleLabel.Text = "OFF";
-			// 
-			// buttonAutoLoginToggle
-			// 
-			this.buttonAutoLoginToggle.BackColor = System.Drawing.Color.Black;
-			this.buttonAutoLoginToggle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.buttonAutoLoginToggle.Cursor = System.Windows.Forms.Cursors.Default;
-			this.buttonAutoLoginToggle.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-			this.buttonAutoLoginToggle.FlatAppearance.BorderSize = 2;
-			this.buttonAutoLoginToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonAutoLoginToggle.ForeColor = System.Drawing.Color.Black;
-			this.buttonAutoLoginToggle.Image = ((System.Drawing.Image)(resources.GetObject("buttonAutoLoginToggle.Image")));
-			this.buttonAutoLoginToggle.Location = new System.Drawing.Point(167, 8);
-			this.buttonAutoLoginToggle.Margin = new System.Windows.Forms.Padding(8);
-			this.buttonAutoLoginToggle.Name = "buttonAutoLoginToggle";
-			this.buttonAutoLoginToggle.Size = new System.Drawing.Size(32, 32);
-			this.buttonAutoLoginToggle.TabIndex = 8;
-			this.buttonAutoLoginToggle.UseVisualStyleBackColor = false;
-			this.buttonAutoLoginToggle.Click += new System.EventHandler(this.Btn_AutoLoginToggle_Click);
 			// 
 			// autoLogPin
 			// 
@@ -160,6 +157,7 @@
 			// label8
 			// 
 			this.label8.AutoSize = true;
+			this.label8.BackColor = System.Drawing.Color.Transparent;
 			this.label8.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label8.ForeColor = System.Drawing.SystemColors.Control;
 			this.label8.Location = new System.Drawing.Point(8, 144);
@@ -182,6 +180,7 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
+			this.label7.BackColor = System.Drawing.Color.Transparent;
 			this.label7.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label7.ForeColor = System.Drawing.SystemColors.Control;
 			this.label7.Location = new System.Drawing.Point(8, 88);
@@ -193,6 +192,7 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
+			this.label6.BackColor = System.Drawing.Color.Transparent;
 			this.label6.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label6.ForeColor = System.Drawing.SystemColors.Control;
 			this.label6.Location = new System.Drawing.Point(8, 32);
@@ -285,6 +285,198 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.Btn_LoadAccount_Click);
 			// 
+			// buttonAutoLoginToggle
+			// 
+			this.buttonAutoLoginToggle.BackColor = System.Drawing.Color.Black;
+			this.buttonAutoLoginToggle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.buttonAutoLoginToggle.Cursor = System.Windows.Forms.Cursors.Default;
+			this.buttonAutoLoginToggle.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+			this.buttonAutoLoginToggle.FlatAppearance.BorderSize = 2;
+			this.buttonAutoLoginToggle.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonAutoLoginToggle.ForeColor = System.Drawing.Color.Black;
+			this.buttonAutoLoginToggle.Image = ((System.Drawing.Image)(resources.GetObject("buttonAutoLoginToggle.Image")));
+			this.buttonAutoLoginToggle.Location = new System.Drawing.Point(167, 8);
+			this.buttonAutoLoginToggle.Margin = new System.Windows.Forms.Padding(8);
+			this.buttonAutoLoginToggle.Name = "buttonAutoLoginToggle";
+			this.buttonAutoLoginToggle.Size = new System.Drawing.Size(32, 32);
+			this.buttonAutoLoginToggle.TabIndex = 8;
+			this.buttonAutoLoginToggle.UseVisualStyleBackColor = false;
+			this.buttonAutoLoginToggle.Click += new System.EventHandler(this.Btn_AutoLoginToggle_Click);
+			// 
+			// spoofPanel
+			// 
+			this.spoofPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(144)))), ((int)(((byte)(99)))));
+			this.spoofPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.spoofPanel.Controls.Add(this.button7);
+			this.spoofPanel.Controls.Add(this.button6);
+			this.spoofPanel.Controls.Add(this.button5);
+			this.spoofPanel.Controls.Add(this.button4);
+			this.spoofPanel.Controls.Add(this.button3);
+			this.spoofPanel.Controls.Add(this.hwidField);
+			this.spoofPanel.Controls.Add(this.label10);
+			this.spoofPanel.Controls.Add(this.label9);
+			this.spoofPanel.Controls.Add(this.macField);
+			this.spoofPanel.Controls.Add(this.button2);
+			this.spoofPanel.Location = new System.Drawing.Point(365, 8);
+			this.spoofPanel.Margin = new System.Windows.Forms.Padding(8);
+			this.spoofPanel.Name = "spoofPanel";
+			this.spoofPanel.Size = new System.Drawing.Size(366, 133);
+			this.spoofPanel.TabIndex = 13;
+			// 
+			// button2
+			// 
+			this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button2.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button2.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button2.ForeColor = System.Drawing.Color.White;
+			this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button2.Location = new System.Drawing.Point(208, 8);
+			this.button2.Margin = new System.Windows.Forms.Padding(8);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(86, 32);
+			this.button2.TabIndex = 4;
+			this.button2.Text = "SPOOF MAC";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.Btn_SpoofMac_Click);
+			// 
+			// macField
+			// 
+			this.macField.BackColor = System.Drawing.Color.Black;
+			this.macField.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.macField.ForeColor = System.Drawing.SystemColors.Control;
+			this.macField.Location = new System.Drawing.Point(14, 31);
+			this.macField.Name = "macField";
+			this.macField.ReadOnly = true;
+			this.macField.Size = new System.Drawing.Size(183, 27);
+			this.macField.TabIndex = 14;
+			this.macField.WordWrap = false;
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.BackColor = System.Drawing.Color.Transparent;
+			this.label9.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label9.ForeColor = System.Drawing.SystemColors.Control;
+			this.label9.Location = new System.Drawing.Point(9, 8);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(31, 19);
+			this.label9.TabIndex = 14;
+			this.label9.Text = "MAC";
+			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.BackColor = System.Drawing.Color.Transparent;
+			this.label10.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label10.ForeColor = System.Drawing.SystemColors.Control;
+			this.label10.Location = new System.Drawing.Point(10, 59);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(35, 19);
+			this.label10.TabIndex = 15;
+			this.label10.Text = "HWID";
+			// 
+			// hwidField
+			// 
+			this.hwidField.BackColor = System.Drawing.Color.Black;
+			this.hwidField.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.hwidField.ForeColor = System.Drawing.SystemColors.Control;
+			this.hwidField.Location = new System.Drawing.Point(13, 81);
+			this.hwidField.Name = "hwidField";
+			this.hwidField.ReadOnly = true;
+			this.hwidField.Size = new System.Drawing.Size(183, 27);
+			this.hwidField.TabIndex = 16;
+			this.hwidField.WordWrap = false;
+			// 
+			// button3
+			// 
+			this.button3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button3.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button3.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button3.ForeColor = System.Drawing.Color.White;
+			this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button3.Location = new System.Drawing.Point(208, 46);
+			this.button3.Margin = new System.Windows.Forms.Padding(8);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(86, 32);
+			this.button3.TabIndex = 17;
+			this.button3.Text = "SPOOF HWID";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.Btn_SpoofHWID_Click);
+			// 
+			// button4
+			// 
+			this.button4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button4.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button4.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button4.ForeColor = System.Drawing.Color.White;
+			this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button4.Location = new System.Drawing.Point(208, 94);
+			this.button4.Margin = new System.Windows.Forms.Padding(8);
+			this.button4.Name = "button4";
+			this.button4.Size = new System.Drawing.Size(86, 32);
+			this.button4.TabIndex = 18;
+			this.button4.Text = "SAVE";
+			this.button4.UseVisualStyleBackColor = true;
+			// 
+			// button5
+			// 
+			this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button5.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button5.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button5.ForeColor = System.Drawing.Color.White;
+			this.button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button5.Location = new System.Drawing.Point(300, 94);
+			this.button5.Margin = new System.Windows.Forms.Padding(8);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(60, 32);
+			this.button5.TabIndex = 19;
+			this.button5.Text = "LOAD";
+			this.button5.UseVisualStyleBackColor = true;
+			// 
+			// button6
+			// 
+			this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button6.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button6.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button6.ForeColor = System.Drawing.Color.White;
+			this.button6.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button6.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button6.Location = new System.Drawing.Point(300, 8);
+			this.button6.Margin = new System.Windows.Forms.Padding(8);
+			this.button6.Name = "button6";
+			this.button6.Size = new System.Drawing.Size(60, 32);
+			this.button6.TabIndex = 20;
+			this.button6.Text = "RESET";
+			this.button6.UseVisualStyleBackColor = true;
+			this.button6.Click += new System.EventHandler(this.Btn_ResetMac_Click);
+			// 
+			// button7
+			// 
+			this.button7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.button7.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button7.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.button7.ForeColor = System.Drawing.Color.White;
+			this.button7.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.button7.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.button7.Location = new System.Drawing.Point(300, 46);
+			this.button7.Margin = new System.Windows.Forms.Padding(8);
+			this.button7.Name = "button7";
+			this.button7.Size = new System.Drawing.Size(60, 32);
+			this.button7.TabIndex = 21;
+			this.button7.Text = "RESET";
+			this.button7.UseVisualStyleBackColor = true;
+			this.button7.Click += new System.EventHandler(this.Btn_ResetHWID_Click);
+			// 
 			// AutoLogin
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -292,6 +484,7 @@
 			this.BackColor = System.Drawing.Color.Black;
 			this.CausesValidation = false;
 			this.ClientSize = new System.Drawing.Size(748, 445);
+			this.Controls.Add(this.spoofPanel);
 			this.Controls.Add(this.accountsPanel);
 			this.Controls.Add(this.autoLoginPanel);
 			this.DoubleBuffered = true;
@@ -308,6 +501,8 @@
 			this.autoLoginPanel.PerformLayout();
 			this.accountsPanel.ResumeLayout(false);
 			this.accountsPanel.PerformLayout();
+			this.spoofPanel.ResumeLayout(false);
+			this.spoofPanel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -332,5 +527,16 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button buttonHook;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Panel spoofPanel;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.TextBox hwidField;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.TextBox macField;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button button7;
+		private System.Windows.Forms.Button button6;
+		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Button button4;
 	}
 }

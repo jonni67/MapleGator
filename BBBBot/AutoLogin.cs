@@ -22,6 +22,7 @@ namespace MapleGatorBot
 			_parent = parent;
 
 			SetDesign();
+			SetDefaultMacHWID();
 		}
 
 		#region Private Methods
@@ -30,6 +31,13 @@ namespace MapleGatorBot
 		{
 			autoLoginPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
 			accountsPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+			spoofPanel.BackColor = Styling.ALPHA_PANEL_COLOR;
+		}
+
+		private void SetDefaultMacHWID()
+		{
+			macField.Text = MacHWID.GetMacAddress();
+			hwidField.Text = MacHWID.GetHardwareId();
 		}
 
 		#endregion
@@ -127,6 +135,26 @@ namespace MapleGatorBot
 					MessageBox.Show("Failed to load XML: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
+		}
+
+		private void Btn_SpoofMac_Click(object sender, EventArgs e)
+		{
+			macField.Text = MacHWID.GenerateRandomMac();
+		}
+
+		private void Btn_SpoofHWID_Click(object sender, EventArgs e)
+		{
+			hwidField.Text = MacHWID.GenerateRandomHwid();
+		}
+
+		private void Btn_ResetMac_Click(object sender, EventArgs e)
+		{
+			macField.Text = MacHWID.GetMacAddress();
+		}
+
+		private void Btn_ResetHWID_Click(object sender, EventArgs e)
+		{
+			hwidField.Text = MacHWID.GetHardwareId();
 		}
 
 		#endregion

@@ -278,7 +278,6 @@
 			// 
 			// timerLabel
 			// 
-			this.timerLabel.AutoSize = true;
 			this.timerLabel.BackColor = System.Drawing.Color.Black;
 			this.timerLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.timerLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -286,7 +285,7 @@
 			this.timerLabel.Location = new System.Drawing.Point(8, 136);
 			this.timerLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.timerLabel.Name = "timerLabel";
-			this.timerLabel.Size = new System.Drawing.Size(34, 21);
+			this.timerLabel.Size = new System.Drawing.Size(191, 21);
 			this.timerLabel.TabIndex = 17;
 			this.timerLabel.Text = "0.0s";
 			// 
@@ -294,9 +293,9 @@
 			// 
 			this.statusLabel.BackColor = System.Drawing.Color.Black;
 			this.statusLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.statusLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.statusLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
-			this.statusLabel.Location = new System.Drawing.Point(8, 32);
+			this.statusLabel.Location = new System.Drawing.Point(8, 39);
 			this.statusLabel.Margin = new System.Windows.Forms.Padding(8);
 			this.statusLabel.Name = "statusLabel";
 			this.statusLabel.Size = new System.Drawing.Size(191, 92);
@@ -330,6 +329,7 @@
 			// label16
 			// 
 			this.label16.AutoSize = true;
+			this.label16.BackColor = System.Drawing.Color.Transparent;
 			this.label16.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label16.ForeColor = System.Drawing.SystemColors.Control;
 			this.label16.Location = new System.Drawing.Point(8, 32);

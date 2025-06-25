@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Net.NetworkInformation;
+using System.Management;
 
 namespace MapleGatorBot
 {
@@ -173,16 +174,16 @@ namespace MapleGatorBot
 			_stateDelayMs = val;
 			_tickTimer.Interval = _stateDelayMs;
 			_tickTimer.Start();
-		}
+		}	
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        /// <summary>
-        /// Loads forms as indentifiable components.
-        /// </summary>
-        private void LoadComponents()
+		/// <summary>
+		/// Loads forms as indentifiable components.
+		/// </summary>
+		private void LoadComponents()
 		{
 			_components = new Dictionary<ComponentIDs, Form>();
 
@@ -365,36 +366,6 @@ namespace MapleGatorBot
 			{
 				CloseHandle(hProcess);
 			}
-		}
-
-		// **NEW METHOD**: Initialize with retry logic
-		private bool InitializeWithRetry(int maxAttempts = 5, int delayMs = 1000)
-		{
-			for (int attempt = 1; attempt <= maxAttempts; attempt++)
-			{
-				try
-				{
-					Console.WriteLine($"Initialization attempt {attempt}/{maxAttempts}...");
-
-					if (_moveController.Initialize())
-					{
-						Console.WriteLine("✓ MovementController initialized successfully");
-						return true;
-					}
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
-
-					if (attempt < maxAttempts)
-					{
-						Console.WriteLine($"Waiting {delayMs}ms before retry...");
-						Thread.Sleep(delayMs);
-					}
-				}
-			}
-
-			return false;
 		}
 
 		private void ResetHook()

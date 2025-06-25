@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,7 @@
     <Compile Include="InteractiveMap.Designer.cs">
       <DependentUpon>InteractiveMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="MacHWID.cs" />
     <Compile Include="MapleGatorBehavior.cs">
       <SubType>Form</SubType>
     </Compile>
