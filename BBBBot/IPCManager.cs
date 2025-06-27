@@ -21,10 +21,6 @@ namespace MapleGatorBot
 		static MemoryMappedFile arrayDataFile;
 		static MemoryMappedViewAccessor arrayDataAccessor;
 
-		static MemoryMappedViewStream arrayViewStream;
-
-		static BinaryReader _reader;
-
 		static bool isMonitoring = false;
 		static Thread monitorThread;
 
@@ -64,24 +60,6 @@ namespace MapleGatorBot
 
 			IS_IPC_VALID = success;
 
-
-			/*
-			using (var accessor = arrayDataFile.CreateViewStream())
-			{
-				accessor.Position = 0;
-				_reader = new BinaryReader(accessor);
-				DATA_ARRAYS = IPCSerializer.Deserialize(_reader); // read from memory
-			}
-			*/
-
-
-			arrayViewStream = arrayDataFile.CreateViewStream();
-			arrayViewStream.Position = 0;
-			_reader = new BinaryReader(arrayViewStream);
-
-			// read from array memory stream for first time to test //
-			DATA_ARRAYS = IPCSerializer.Deserialize(_reader); 
-			
 		}
 
 		public static void SendCommand(string cmd)
@@ -303,7 +281,6 @@ namespace MapleGatorBot
 			gameDataFile?.Dispose();
 			arrayDataAccessor?.Dispose();
 			arrayDataFile?.Dispose();
-			arrayViewStream?.Dispose();
 		}
 
 		public static IPCGameData ReadGameData()
@@ -311,12 +288,6 @@ namespace MapleGatorBot
 			IPCGameData data;
 			gameDataAccessor.Read(0, out data);
 			return data;
-		}
-
-		public static void ReadArrayData()
-		{
-			//arrayViewStream.Position = 0;
-			DATA_ARRAYS = IPCSerializer.Deserialize(_reader); // read from memory
 		}
 
 		public static void ReplaceGameData(ref IPCGameData s)
@@ -580,66 +551,6 @@ namespace MapleGatorBot
 				case NavigationStatus.Stopped: return "Stop";
 				default: return "?";
 			}
-		}
-	}
-
-	public static class IPCSerializer
-	{
-		public static void Write<T>(BinaryWriter writer, T[] data) where T : struct
-		{
-			int size = Marshal.SizeOf<T>();
-			foreach (var item in data)
-			{
-				byte[] buffer = new byte[size];
-				IntPtr ptr = Marshal.AllocHGlobal(size);
-				try
-				{
-					Marshal.StructureToPtr(item, ptr, false);
-					Marshal.Copy(ptr, buffer, 0, size);
-					writer.Write(buffer);
-				}
-				finally
-				{
-					Marshal.FreeHGlobal(ptr);
-				}
-			}
-		}
-
-		public static T[] Read<T>(BinaryReader reader, int count) where T : struct
-		{
-			int size = Marshal.SizeOf<T>();
-			T[] result = new T[count];
-			byte[] buffer = new byte[size];
-
-			for (int i = 0; i < count; i++)
-			{
-				reader.Read(buffer, 0, size);
-				IntPtr ptr = Marshal.AllocHGlobal(size);
-				try
-				{
-					Marshal.Copy(buffer, 0, ptr, size);
-					result[i] = Marshal.PtrToStructure<T>(ptr);
-				}
-				finally
-				{
-					Marshal.FreeHGlobal(ptr);
-				}
-			}
-
-			return result;
-		}
-
-		public static IPCDataArrays Deserialize(BinaryReader reader)
-		{
-			IPCDataArrays data = new IPCDataArrays
-			{
-				mobs = IPCSerializer.Read<IPCMobData>(reader, 500),
-				drops = IPCSerializer.Read<IPCDropData>(reader, 300),
-				portals = IPCSerializer.Read<IPCPortalData>(reader, 20),
-				footholds = IPCSerializer.Read<IPCFootholdData>(reader, 1000)
-			};
-
-			return data;
 		}
 	}
 }

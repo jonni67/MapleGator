@@ -120,7 +120,6 @@ namespace MapleGatorBot
 		Stopped = 7
 	}
 
-	/*
 	// Array data structure for mob/drop/portal data
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct IPCDataArrays
@@ -136,17 +135,9 @@ namespace MapleGatorBot
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public IPCFootholdData[] footholds;
-	}*/
-
-	public struct IPCDataArrays
-	{
-		public IPCMobData[] mobs;     // size 500
-		public IPCDropData[] drops;   // size 300
-		public IPCPortalData[] portals; // size 20
-		public IPCFootholdData[] footholds; // size 1000
 	}
 
-	/*
+	// Use regular structs with MarshalAs for arrays instead of unsafe fixed arrays
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct IPCMobData
 	{
@@ -158,19 +149,6 @@ namespace MapleGatorBot
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 		public byte[] padding;
 	}
-	*/
-
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public unsafe struct IPCMobData
-	{
-		public int objectId;
-		public int templateId;
-		public int x, y;
-		public int hp, maxHp;
-		public byte level;
-
-		public fixed byte padding[3]; // ✅ Replaces byte[] with a fixed-size buffer
-	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct IPCDropData
@@ -181,7 +159,6 @@ namespace MapleGatorBot
 		public int quantity;
 	}
 
-	/*
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct IPCPortalData
 	{
@@ -192,17 +169,6 @@ namespace MapleGatorBot
 		public byte portalType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 		public byte[] padding;
-	}
-	*/
-
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public unsafe struct IPCPortalData
-	{
-		public fixed byte name[64];    // replaces byte[] name
-		public int x, y;
-		public int targetMapId;
-		public byte portalType;
-		public fixed byte padding[3];  // replaces byte[] padding
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]

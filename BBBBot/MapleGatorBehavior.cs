@@ -90,9 +90,6 @@ namespace MapleGatorBot
 				else if(IPCManager.IS_IPC_VALID)
 				{
 					IPCManager.ReplaceGameData(ref _currGameData);
-					//IPCManager.ReplaceArrayData(ref _currArrayData);
-					IPCManager.ReadArrayData();
-
 					UpdateGameData();
 				}
 			}
