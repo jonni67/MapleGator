@@ -39,8 +39,8 @@
 			this.statPanel = new System.Windows.Forms.Panel();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
-			this.label12 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
+			this.yPosLabel = new System.Windows.Forms.Label();
+			this.xPosLabel = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.statusPanel = new System.Windows.Forms.Panel();
@@ -175,8 +175,8 @@
 			this.statPanel.CausesValidation = false;
 			this.statPanel.Controls.Add(this.label14);
 			this.statPanel.Controls.Add(this.label13);
-			this.statPanel.Controls.Add(this.label12);
-			this.statPanel.Controls.Add(this.label11);
+			this.statPanel.Controls.Add(this.yPosLabel);
+			this.statPanel.Controls.Add(this.xPosLabel);
 			this.statPanel.Controls.Add(this.label10);
 			this.statPanel.Controls.Add(this.label9);
 			this.statPanel.Controls.Add(this.label3);
@@ -212,31 +212,31 @@
 			this.label13.TabIndex = 14;
 			this.label13.Text = "MAP";
 			// 
-			// label12
+			// yPosLabel
 			// 
-			this.label12.AutoSize = true;
-			this.label12.BackColor = System.Drawing.Color.Transparent;
-			this.label12.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label12.ForeColor = System.Drawing.SystemColors.Control;
-			this.label12.Location = new System.Drawing.Point(8, 112);
-			this.label12.Margin = new System.Windows.Forms.Padding(8);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(27, 19);
-			this.label12.TabIndex = 13;
-			this.label12.Text = "Y: 0";
+			this.yPosLabel.AutoSize = true;
+			this.yPosLabel.BackColor = System.Drawing.Color.Transparent;
+			this.yPosLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.yPosLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.yPosLabel.Location = new System.Drawing.Point(8, 112);
+			this.yPosLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.yPosLabel.Name = "yPosLabel";
+			this.yPosLabel.Size = new System.Drawing.Size(27, 19);
+			this.yPosLabel.TabIndex = 13;
+			this.yPosLabel.Text = "Y: 0";
 			// 
-			// label11
+			// xPosLabel
 			// 
-			this.label11.AutoSize = true;
-			this.label11.BackColor = System.Drawing.Color.Transparent;
-			this.label11.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label11.ForeColor = System.Drawing.SystemColors.Control;
-			this.label11.Location = new System.Drawing.Point(8, 88);
-			this.label11.Margin = new System.Windows.Forms.Padding(8);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(29, 19);
-			this.label11.TabIndex = 12;
-			this.label11.Text = "X: 0";
+			this.xPosLabel.AutoSize = true;
+			this.xPosLabel.BackColor = System.Drawing.Color.Transparent;
+			this.xPosLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.xPosLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.xPosLabel.Location = new System.Drawing.Point(8, 88);
+			this.xPosLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.xPosLabel.Name = "xPosLabel";
+			this.xPosLabel.Size = new System.Drawing.Size(29, 19);
+			this.xPosLabel.TabIndex = 12;
+			this.xPosLabel.Text = "X: 0";
 			// 
 			// label10
 			// 
@@ -425,9 +425,9 @@
 		private System.Windows.Forms.Panel statPanel;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label xPosLabel;
 		private System.Windows.Forms.Label label13;
-		private System.Windows.Forms.Label label12;
+		private System.Windows.Forms.Label yPosLabel;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Panel statusPanel;
 		private System.Windows.Forms.Label statusLabel;

@@ -71,13 +71,29 @@ namespace MapleGatorBot
 			if (_hooking)
 				return;
 
-			// if hooked check if process still even exists
 			if(_hooked)
 			{
+				// if hooked check if process still even exists
 				if (!IsProcessRunning(_currPID))
 				{
 					ResetHook();
 					return;
+				}
+				else if(!_ipcInitiated)
+				{
+					// init the IPC after injection success
+					IPCManager.InitIPC();
+					_currGameData = new IPCGameData();
+					_currArrayData = new IPCDataArrays();
+					_ipcInitiated = true;
+				}
+				else if(IPCManager.IS_IPC_VALID)
+				{
+					IPCManager.ReplaceGameData(ref _currGameData);
+					//IPCManager.ReplaceArrayData(ref _currArrayData);
+					IPCManager.ReadArrayData();
+
+					UpdateGameData();
 				}
 			}
 

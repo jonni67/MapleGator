@@ -44,6 +44,16 @@ namespace MapleGatorBot
 			get { return buttonHook; }
 		}
 
+		public System.Windows.Forms.Label XPosLabel
+		{
+			get { return xPosLabel; }
+		}
+
+		public System.Windows.Forms.Label YPosLabel
+		{
+			get { return yPosLabel; }
+		}
+
 		#endregion
 
 		#region Private Members
@@ -78,6 +88,12 @@ namespace MapleGatorBot
 
 			if (processComboBox.Items.Count > 0)
 				processComboBox.SelectedIndex = 0;
+		}
+
+		public void UpdatePositionLabel(int x, int y)
+		{
+			xPosLabel.Text = $"X: {x}";
+			yPosLabel.Text = $"Y: {y}";
 		}
 
 		#endregion

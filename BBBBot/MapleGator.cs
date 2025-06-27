@@ -96,7 +96,6 @@ namespace MapleGatorBot
 
 		Primary _primary;
 		Pathfinding _pathfinding;
-		MovementController _moveController;
 		AutoLogin _autoLogin;
 		Form _shownComponent;
 
@@ -117,8 +116,10 @@ namespace MapleGatorBot
 		bool _hooked = false;
 		bool _autoLoginEnabled = false;
 		bool _iMapOpen = false;
+		bool _ipcInitiated = false;
 
 		int _currPID = -1;
+		int _currMapID = 0;
 
 		// timers //
 		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
@@ -126,6 +127,10 @@ namespace MapleGatorBot
 		Stopwatch _stopWatch = Stopwatch.StartNew();
 		float _stopWatchTime = 100f;
 		bool _timerActive = false;
+
+		// data //
+		IPCGameData _currGameData;
+		IPCDataArrays _currArrayData;
 
 		#endregion
 
@@ -190,7 +195,6 @@ namespace MapleGatorBot
 			// create form components
 			_primary = new Primary(this);
 			_pathfinding = new Pathfinding(this);
-			_moveController = new MovementController();
 			_autoLogin = new AutoLogin(this);
 
 			// add components to dict
@@ -371,8 +375,6 @@ namespace MapleGatorBot
 		private void ResetHook()
         {
 			_currPID = -1;
-			_moveController.Stop();
-			_moveController.Cleanup();
 			_stopWatch.Stop();
 			_hooked = false;
 			_primary.HookedButton.Enabled = true;
@@ -381,7 +383,17 @@ namespace MapleGatorBot
 
 			_primary.HookedLabel.Text = "NOT HOOKED";
 			_primary.HookedLabel.ForeColor = Styling.COLOR_OFF;
-		}	
+		}
+		
+		private void UpdateGameData()
+		{
+			_primary.UpdatePositionLabel(_currGameData.playerX, _currGameData.playerY);
+			for(int i = 0; i < _currGameData.totalMobs; i++)
+			{
+				Console.WriteLine($"Mob {i} X Pos: {IPCManager.DATA_ARRAYS.mobs[i].x}");
+			}
+
+		}
 
 		#endregion
 
@@ -396,12 +408,7 @@ namespace MapleGatorBot
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			if (_moveController != null && _moveController.IsConnected())
-			{
-				_moveController.Stop();
-				_moveController.Cleanup();
-			}
-
+			//IPCManager.DisposeAll();
 			base.OnFormClosing(e);
 		}
 
