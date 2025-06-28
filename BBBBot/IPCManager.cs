@@ -13,6 +13,8 @@ namespace MapleGatorBot
 {
 	public static class IPCManager
 	{
+		public static event Action OnIPCSuccess;
+
 		public static bool IS_IPC_VALID = false;
 		public static IPCGameData GAME_DATA;
 		public static IPCDataArrays ARRAY_DATA;
@@ -63,6 +65,10 @@ namespace MapleGatorBot
 			ARRAY_DATA = new IPCDataArrays();
 			GAME_DATA = new IPCGameData();
 
+			UpdateGameData();
+			UpdateArrayData();
+
+			OnIPCSuccess();
 		}
 
 		public static void SendCommand(string cmd)
@@ -310,13 +316,18 @@ namespace MapleGatorBot
 
 		public static void UpdateArrayData()
 		{
+			RequestAllGameData();
+			ReadValidArrayData(ref ARRAY_DATA);
+		}
+
+		public static void RequestAllGameData()
+		{
 			GAME_DATA.requestMobData = 1;
 			GAME_DATA.requestDropData = 1;
 			GAME_DATA.requestPortalData = 1;
 			GAME_DATA.requestPathData = 1;
+			GAME_DATA.requestMapData = 1;
 			WriteGameData(ref GAME_DATA);
-
-			ReadValidArrayData(ref ARRAY_DATA);
 		}
 
 		private static IPCMobData ReadMobData(int offset)

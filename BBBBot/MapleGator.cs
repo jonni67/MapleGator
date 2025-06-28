@@ -124,6 +124,8 @@ namespace MapleGatorBot
 		// timers //
 		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
 		System.Windows.Forms.Timer _sysTimer = new System.Windows.Forms.Timer();
+		System.Windows.Forms.Timer _ipcTimer = new System.Windows.Forms.Timer();
+
 		Stopwatch _stopWatch = Stopwatch.StartNew();
 		float _stopWatchTime = 100f;
 		bool _timerActive = false;
@@ -221,6 +223,8 @@ namespace MapleGatorBot
 			_shownComponent = _components[ComponentIDs.Primary];
 
 			_iMap = new InteractiveMap(this);
+			IPCManager.OnIPCSuccess += _iMap.UpdateMapSize;
+
 			Console.WriteLine("Loaded Form Components");
 		}
 

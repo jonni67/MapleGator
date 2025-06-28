@@ -37,6 +37,11 @@ namespace MapleGatorBot
 			_sysTimer.Interval = 1;
 			_sysTimer.Tick += new EventHandler(Tick_StopWatch);
 			_sysTimer.Start();
+
+			_ipcTimer = new Timer();
+			_ipcTimer.Interval = 16;
+			_ipcTimer.Tick += new EventHandler(Tick_IPC);
+			_ipcTimer.Start();
 		}
 
 		/// <summary>
@@ -65,6 +70,17 @@ namespace MapleGatorBot
 			return (!_hooking && !_timerActive);
 		}
 
+		private void Tick_IPC(object sender, EventArgs e)
+		{
+			if (!_hooked || !IPCManager.IS_IPC_VALID)
+			{
+				return;
+			}
+
+			IPCManager.UpdateGameData();
+			IPCManager.UpdateArrayData();
+		}
+
 		private void Tick_Bot(object sender, EventArgs e)
 		{
 			// if still hooking return
@@ -87,8 +103,6 @@ namespace MapleGatorBot
 				}
 				else if(IPCManager.IS_IPC_VALID)
 				{
-					IPCManager.UpdateGameData();
-					IPCManager.UpdateArrayData();
 					UpdateGameData();
 				}
 			}
