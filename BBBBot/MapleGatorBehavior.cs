@@ -83,13 +83,12 @@ namespace MapleGatorBot
 				{
 					// init the IPC after injection success
 					IPCManager.InitIPC();
-					_currGameData = new IPCGameData();
-					_currArrayData = new IPCDataArrays();
 					_ipcInitiated = true;
 				}
 				else if(IPCManager.IS_IPC_VALID)
 				{
-					IPCManager.ReplaceGameData(ref _currGameData);
+					IPCManager.UpdateGameData();
+					IPCManager.UpdateArrayData();
 					UpdateGameData();
 				}
 			}

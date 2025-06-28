@@ -128,10 +128,6 @@ namespace MapleGatorBot
 		float _stopWatchTime = 100f;
 		bool _timerActive = false;
 
-		// data //
-		IPCGameData _currGameData;
-		IPCDataArrays _currArrayData;
-
 		#endregion
 
 		#region Public Methods
@@ -387,12 +383,7 @@ namespace MapleGatorBot
 		
 		private void UpdateGameData()
 		{
-			_primary.UpdatePositionLabel(_currGameData.playerX, _currGameData.playerY);
-			for(int i = 0; i < _currGameData.totalMobs; i++)
-			{
-				Console.WriteLine($"Mob {i} X Pos: {IPCManager.DATA_ARRAYS.mobs[i].x}");
-			}
-
+			_primary.UpdatePositionLabel(IPCManager.GAME_DATA.playerX, IPCManager.GAME_DATA.playerY);
 		}
 
 		#endregion

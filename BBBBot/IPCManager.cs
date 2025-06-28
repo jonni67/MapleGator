@@ -14,7 +14,8 @@ namespace MapleGatorBot
 	public static class IPCManager
 	{
 		public static bool IS_IPC_VALID = false;
-		public static IPCDataArrays DATA_ARRAYS;
+		public static IPCGameData GAME_DATA;
+		public static IPCDataArrays ARRAY_DATA;
 
 		static MemoryMappedFile gameDataFile;
 		static MemoryMappedViewAccessor gameDataAccessor;
@@ -59,6 +60,8 @@ namespace MapleGatorBot
 			}
 
 			IS_IPC_VALID = success;
+			ARRAY_DATA = new IPCDataArrays();
+			GAME_DATA = new IPCGameData();
 
 		}
 
@@ -290,19 +293,229 @@ namespace MapleGatorBot
 			return data;
 		}
 
-		public static void ReplaceGameData(ref IPCGameData s)
-		{
-			gameDataAccessor.Read(0, out s);
-		}
-
-		public static void ReplaceArrayData(ref IPCDataArrays s)
-		{
-			arrayDataAccessor.Read(0, out s);
-		}
-
 		static void WriteGameData(IPCGameData data)
 		{
 			gameDataAccessor.Write(0, ref data);
+		}
+
+		static void WriteGameData(ref IPCGameData data)
+		{
+			gameDataAccessor.Write(0, ref data);
+		}
+
+		public static void UpdateGameData()
+		{
+			gameDataAccessor.Read(0, out GAME_DATA);
+		}
+
+		public static void UpdateArrayData()
+		{
+			GAME_DATA.requestMobData = 1;
+			GAME_DATA.requestDropData = 1;
+			GAME_DATA.requestPortalData = 1;
+			GAME_DATA.requestPathData = 1;
+			WriteGameData(ref GAME_DATA);
+
+			ReadValidArrayData(ref ARRAY_DATA);
+		}
+
+		private static IPCMobData ReadMobData(int offset)
+		{
+			IPCMobData mob = new IPCMobData();
+
+			mob.mobUID = arrayDataAccessor.ReadInt32(offset);
+			mob.x = arrayDataAccessor.ReadInt32(offset + 4);
+			mob.y = arrayDataAccessor.ReadInt32(offset + 8);
+			mob.modelNumber = arrayDataAccessor.ReadInt32(offset + 12);
+			mob.level = arrayDataAccessor.ReadInt32(offset + 16);
+			mob.maxHP = arrayDataAccessor.ReadInt32(offset + 20);
+			mob.currentHP = arrayDataAccessor.ReadInt32(offset + 24);
+			mob.hpPercent = arrayDataAccessor.ReadInt32(offset + 28);
+			mob.isValid = arrayDataAccessor.ReadByte(offset + 32);
+
+			// Read name array (32 bytes)
+			mob.name = new byte[32];
+			for (int i = 0; i < 32; i++)
+			{
+				mob.name[i] = arrayDataAccessor.ReadByte(offset + 33 + i);
+			}
+
+			return mob;
+		}
+
+		private static IPCDropData ReadDropData(int offset)
+		{
+			IPCDropData drop = new IPCDropData();
+
+			drop.dropUID = arrayDataAccessor.ReadInt32(offset);
+			drop.itemID = arrayDataAccessor.ReadInt32(offset + 4);
+			drop.x = arrayDataAccessor.ReadInt32(offset + 8);
+			drop.y = arrayDataAccessor.ReadInt32(offset + 12);
+			drop.isValid = arrayDataAccessor.ReadByte(offset + 16);
+
+			// Read itemName array (32 bytes)
+			drop.itemName = new byte[32];
+			for (int i = 0; i < 32; i++)
+			{
+				drop.itemName[i] = arrayDataAccessor.ReadByte(offset + 17 + i);
+			}
+
+			return drop;
+		}
+
+		private static IPCPortalData ReadPortalData(int offset)
+		{
+			IPCPortalData portal = new IPCPortalData();
+
+			portal.portalID = arrayDataAccessor.ReadInt32(offset);
+			portal.x = arrayDataAccessor.ReadInt32(offset + 4);
+			portal.y = arrayDataAccessor.ReadInt32(offset + 8);
+			portal.toMapID = arrayDataAccessor.ReadInt32(offset + 12);
+			portal.isValid = arrayDataAccessor.ReadByte(offset + 16);
+
+			// Read portalName array (32 bytes)
+			portal.portalName = new byte[32];
+			for (int i = 0; i < 32; i++)
+			{
+				portal.portalName[i] = arrayDataAccessor.ReadByte(offset + 17 + i);
+			}
+
+			// Read destinationName array (32 bytes)
+			portal.destinationName = new byte[32];
+			for (int i = 0; i < 32; i++)
+			{
+				portal.destinationName[i] = arrayDataAccessor.ReadByte(offset + 49 + i);
+			}
+
+			return portal;
+		}
+
+		private static IPCFootholdData ReadFootholdData(int offset)
+		{
+			IPCFootholdData foothold = new IPCFootholdData();
+
+			foothold.footholdID = arrayDataAccessor.ReadInt32(offset);
+			foothold.x1 = arrayDataAccessor.ReadInt32(offset + 4);
+			foothold.y1 = arrayDataAccessor.ReadInt32(offset + 8);
+			foothold.x2 = arrayDataAccessor.ReadInt32(offset + 12);
+			foothold.y2 = arrayDataAccessor.ReadInt32(offset + 16);
+			foothold.prev = arrayDataAccessor.ReadInt32(offset + 20);
+			foothold.next = arrayDataAccessor.ReadInt32(offset + 24);
+			foothold.isValid = arrayDataAccessor.ReadByte(offset + 28);
+
+			return foothold;
+		}
+
+		public static IPCDataArrays ReadArrayData()
+		{
+			IPCDataArrays arrays = new IPCDataArrays();
+
+			// Initialize arrays
+			arrays.mobs = new IPCMobData[100];
+			arrays.drops = new IPCDropData[50];
+			arrays.portals = new IPCPortalData[20];
+			arrays.footholds = new IPCFootholdData[200];
+
+			int offset = 0;
+
+			// Read mob data (100 * 65 bytes each)
+			for (int i = 0; i < 100; i++)
+			{
+				arrays.mobs[i] = ReadMobData(offset);
+				offset += 65; // Size of IPCMobData
+			}
+
+			// Read drop data (50 * 49 bytes each)
+			for (int i = 0; i < 50; i++)
+			{
+				arrays.drops[i] = ReadDropData(offset);
+				offset += 49; // Size of IPCDropData
+			}
+
+			// Read portal data (20 * 81 bytes each)
+			for (int i = 0; i < 20; i++)
+			{
+				arrays.portals[i] = ReadPortalData(offset);
+				offset += 81; // Size of IPCPortalData
+			}
+
+			// Read foothold data (200 * 29 bytes each)
+			for (int i = 0; i < 200; i++)
+			{
+				arrays.footholds[i] = ReadFootholdData(offset);
+				offset += 29; // Size of IPCFootholdData
+			}
+
+			// Read counts at the end (offset should be 16370 at this point)
+			arrays.mobCount = arrayDataAccessor.ReadInt32(offset);
+			arrays.dropCount = arrayDataAccessor.ReadInt32(offset + 4);
+			arrays.portalCount = arrayDataAccessor.ReadInt32(offset + 8);
+			arrays.footholdCount = arrayDataAccessor.ReadInt32(offset + 12);
+
+			return arrays;
+		}
+
+		// Alternative: Read only valid entities based on counts
+		public static void ReadValidArrayData(ref IPCDataArrays arr)
+		{
+			//IPCDataArrays arrays = new IPCDataArrays();
+
+			// First read the counts from the end
+			int countsOffset = 16370; // 100*65 + 50*49 + 20*81 + 200*29
+			int mobCount = arrayDataAccessor.ReadInt32(countsOffset);
+			int dropCount = arrayDataAccessor.ReadInt32(countsOffset + 4);
+			int portalCount = arrayDataAccessor.ReadInt32(countsOffset + 8);
+			int footholdCount = arrayDataAccessor.ReadInt32(countsOffset + 12);
+
+			// Initialize arrays with full size
+			arr.mobs = new IPCMobData[100];
+			arr.drops = new IPCDropData[50];
+			arr.portals = new IPCPortalData[20];
+			arr.footholds = new IPCFootholdData[200];
+
+			int offset = 0;
+
+			// Read only valid mobs
+			for (int i = 0; i < Math.Min(100, mobCount); i++)
+			{
+				arr.mobs[i] = ReadMobData(offset);
+				offset += 65;
+			}
+
+			// Skip remaining mob slots
+			offset = 100 * 65;
+
+			// Read only valid drops
+			for (int i = 0; i < Math.Min(50, dropCount); i++)
+			{
+				arr.drops[i] = ReadDropData(offset);
+				offset += 49;
+			}
+			// Skip remaining drop slots
+			offset = 100 * 65 + 50 * 49;
+
+			// Read only valid portals
+			for (int i = 0; i < Math.Min(20, portalCount); i++)
+			{
+				arr.portals[i] = ReadPortalData(offset);
+				offset += 81;
+			}
+			// Skip remaining portal slots
+			offset = 100 * 65 + 50 * 49 + 20 * 81;
+
+			// Read only valid footholds
+			for (int i = 0; i < Math.Min(200, footholdCount); i++)
+			{
+				arr.footholds[i] = ReadFootholdData(offset);
+				offset += 29;
+			}
+
+			arr.mobCount = mobCount;
+			arr.dropCount = dropCount;
+			arr.portalCount = portalCount;
+			arr.footholdCount = footholdCount;
+
+			// return arrays;
 		}
 
 		static void SendInitialize()

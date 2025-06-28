@@ -120,62 +120,120 @@ namespace MapleGatorBot
 		Stopped = 7
 	}
 
-	// Array data structure for mob/drop/portal data
+	// Complete IPC data arrays structure - IMPORTANT: counts are at the END
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct IPCDataArrays
 	{
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 500)]
-		public IPCMobData[] mobs;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
+		public IPCMobData[] mobs;           // 100 * 65 = 6500 bytes
 
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 300)]
-		public IPCDropData[] drops;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+		public IPCDropData[] drops;         // 50 * 49 = 2450 bytes
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-		public IPCPortalData[] portals;
+		public IPCPortalData[] portals;     // 20 * 81 = 1620 bytes
 
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
-		public IPCFootholdData[] footholds;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 200)]
+		public IPCFootholdData[] footholds; // 200 * 29 = 5800 bytes
+
+		// These counts come AFTER all the arrays
+		public int mobCount;         // offset 16370
+		public int dropCount;        // offset 16374
+		public int portalCount;      // offset 16378
+		public int footholdCount;    // offset 16382
 	}
 
-	// Use regular structs with MarshalAs for arrays instead of unsafe fixed arrays
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+
+	// Enhanced mob data structure matching C++ IPCMobData (65 bytes)
+	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 65)]
 	public struct IPCMobData
 	{
-		public int objectId;
-		public int templateId;
-		public int x, y;
-		public int hp, maxHp;
-		public byte level;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-		public byte[] padding;
+		public int mobUID;           // offset 0-3
+		public int x;                // offset 4-7
+		public int y;                // offset 8-11
+		public int modelNumber;      // offset 12-15
+		public int level;            // offset 16-19
+		public int maxHP;            // offset 20-23
+		public int currentHP;        // offset 24-27
+		public int hpPercent;        // offset 28-31
+		public byte isValid;         // offset 32
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] name;          // offset 33-64
+
+		public string GetName()
+		{
+			if (name == null) return "Unknown";
+			int nullIndex = Array.IndexOf(name, (byte)0);
+			if (nullIndex == -1) nullIndex = name.Length;
+			return Encoding.ASCII.GetString(name, 0, nullIndex);
+		}
 	}
 
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+
+	// Enhanced drop data structure (49 bytes)
+	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 49)]
 	public struct IPCDropData
 	{
-		public int objectId;
-		public int itemId;
-		public int x, y;
-		public int quantity;
+		public int dropUID;          // offset 0-3
+		public int itemID;           // offset 4-7
+		public int x;                // offset 8-11
+		public int y;                // offset 12-15
+		public byte isValid;         // offset 16
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] itemName;      // offset 17-48
+
+		public string GetItemName()
+		{
+			if (itemName == null) return "Unknown";
+			int nullIndex = Array.IndexOf(itemName, (byte)0);
+			if (nullIndex == -1) nullIndex = itemName.Length;
+			return Encoding.ASCII.GetString(itemName, 0, nullIndex);
+		}
 	}
 
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	// Enhanced portal data structure (81 bytes)
+	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 81)]
 	public struct IPCPortalData
 	{
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-		public byte[] name;
-		public int x, y;
-		public int targetMapId;
-		public byte portalType;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-		public byte[] padding;
+		public int portalID;         // offset 0-3
+		public int x;                // offset 4-7
+		public int y;                // offset 8-11
+		public int toMapID;          // offset 12-15
+		public byte isValid;         // offset 16
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] portalName;    // offset 17-48
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+		public byte[] destinationName; // offset 49-80
+
+		public string GetPortalName()
+		{
+			if (portalName == null) return "";
+			int nullIndex = Array.IndexOf(portalName, (byte)0);
+			if (nullIndex == -1) nullIndex = portalName.Length;
+			return Encoding.ASCII.GetString(portalName, 0, nullIndex);
+		}
+
+		public string GetDestinationName()
+		{
+			if (destinationName == null) return "";
+			int nullIndex = Array.IndexOf(destinationName, (byte)0);
+			if (nullIndex == -1) nullIndex = destinationName.Length;
+			return Encoding.ASCII.GetString(destinationName, 0, nullIndex);
+		}
 	}
 
-	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	// Foothold data structure (29 bytes)
+	[StructLayout(LayoutKind.Sequential, Pack = 1, Size = 29)]
 	public struct IPCFootholdData
 	{
-		public int id;
-		public int x1, y1, x2, y2;
-		public int layer;
+		public int footholdID;       // offset 0-3
+		public int x1;               // offset 4-7
+		public int y1;               // offset 8-11
+		public int x2;               // offset 12-15
+		public int y2;               // offset 16-19
+		public int prev;             // offset 20-23
+		public int next;             // offset 24-27
+		public byte isValid;         // offset 28
 	}
+
 }

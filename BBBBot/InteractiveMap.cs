@@ -21,6 +21,10 @@ namespace MapleGatorBot
 		Point _huntZoneStart = new Point();
 		Rectangle _currHuntZoneDraw = new Rectangle();
 
+		float scalar = 0.5f;
+		int xOff = 0;
+		int yOff = -512;
+
 		IMapDrawModes _drawMode;
 
 		public InteractiveMap(MapleGator parent)
@@ -28,30 +32,19 @@ namespace MapleGatorBot
 			_parent = parent;
 			InitializeComponent();
 
-			_drawPoints.Add(new Point(0, 64));
-			_drawPoints.Add(new Point(128, 64));
-			_drawPoints.Add(new Point(128, 128));
-
-			_drawPoints.Add(new Point(256, 128));
-
 			this.MouseDown += StartDragDraw;
-
 			this.MouseUp += FinishDragDraw;
-
 			this.MouseMove += UpdateDragDraw;
-
-			/*
-			this.MouseMove += (s, e) =>
-			{
-				if (isDrawing)
-				{
-					drawPoints.Add(e.Location);
-					this.Invalidate();
-				}
-			};
-			*/
-
 			this.Paint += IPaint;
+
+			Timer timer = new Timer();
+			timer.Interval = 100;
+			timer.Tick += (s, e) =>
+			{
+				this.Invalidate(); // Marks it for repaint
+				this.Update();     // Forces the repaint now
+			};
+			timer.Start();
 
 			_drawMode = IMapDrawModes.HuntRectangle;
 		}
@@ -102,10 +95,6 @@ namespace MapleGatorBot
 		private void IPaint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
-			if (_drawPoints.Count > 1)
-			{
-				g.DrawLines(Pens.White, _drawPoints.ToArray());
-			}
 
 			g.DrawRectangle(Pens.Green, _currHuntZoneDraw);
 
@@ -114,7 +103,27 @@ namespace MapleGatorBot
 				g.DrawRectangle(Pens.Green, _huntZones[i]);
 			}
 
-			this.Invalidate();
+			
+			for (int i = 0; i < IPCManager.GAME_DATA.totalMobs; i++)
+			{
+				//Console.WriteLine($"[Mob {i}] (X: {_currArrayData.mobs[i].x}, Y: {_currArrayData.mobs[i].y})");
+				//Console.WriteLine($"[Mob {i}] (X: {IPCManager.ARRAY_DATA.mobs[i].x}, Y: {IPCManager.ARRAY_DATA.mobs[i].y})");
+				int x = (int)((IPCManager.ARRAY_DATA.mobs[i].x - xOff) * scalar) + 16;
+				int y = (int)((IPCManager.ARRAY_DATA.mobs[i].y - yOff) * scalar) - 16;
+				g.DrawRectangle(Pens.Red, new Rectangle(x, y, 32, 32));
+			}
+			
+
+			for(int i = 0; i < IPCManager.GAME_DATA.totalFootholds; i++)
+			{
+				IPCFootholdData d = IPCManager.ARRAY_DATA.footholds[i];
+				int x1 = (int)((d.x1 - xOff) * scalar);
+				int y1 = (int)((d.y1 - yOff) * scalar);
+				int x2 = (int)((d.x2 - xOff) * scalar);
+				int y2 = (int)((d.y2 - yOff) * scalar);
+
+				g.DrawLine(Pens.White, x1, y1, x2, y2);
+			}
 		}
 	}
 }
