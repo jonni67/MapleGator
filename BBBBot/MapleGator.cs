@@ -95,7 +95,7 @@ namespace MapleGatorBot
 		Dictionary<ComponentIDs, Form> _components;
 
 		Primary _primary;
-		Pathfinding _pathfinding;
+		Planner _planner;
 		AutoLogin _autoLogin;
 		Form _shownComponent;
 
@@ -192,13 +192,13 @@ namespace MapleGatorBot
 
 			// create form components
 			_primary = new Primary(this);
-			_pathfinding = new Pathfinding(this);
+			_planner = new Planner(this);
 			_autoLogin = new AutoLogin(this);
 
 			// add components to dict
 			_components.Add(ComponentIDs.Primary, _primary);
 			_components.Add(ComponentIDs.AutoLogin, _autoLogin);
-			_components.Add(ComponentIDs.Pathfinding, _pathfinding);
+			_components.Add(ComponentIDs.Planner, _planner);
 
 			// set all components in dict
 			foreach (ComponentIDs id in Enum.GetValues(typeof(ComponentIDs)))
@@ -209,13 +209,13 @@ namespace MapleGatorBot
 			}
 			
 			// show all forms //
-			_pathfinding.Show();
+			_planner.Show();
 			_autoLogin.Show();
 			_primary.Show();
 
 			// then must hide all forms then show primary //
 			// weird stuff happens otherwise when navigating //
-			Styling.HideFormWithoutFlicker(_pathfinding);
+			Styling.HideFormWithoutFlicker(_planner);
 			Styling.HideFormWithoutFlicker(_autoLogin);
 			Styling.HideFormWithoutFlicker(_primary);
 			Styling.ShowFormWithoutFlicker(_primary);
@@ -419,7 +419,7 @@ namespace MapleGatorBot
 
 		private void MenuItem_Pathfinding_Click(object sender, EventArgs e)
 		{
-			SwitchComponent(ComponentIDs.Pathfinding);
+			SwitchComponent(ComponentIDs.Planner);
 		}
 
 		private void MenuItem_IMap_Click(object sender, EventArgs e)

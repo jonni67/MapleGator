@@ -34,8 +34,8 @@
 			this.autoLoginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pathfindingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.panel1 = new System.Windows.Forms.Panel();
 			this.interactiveMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -48,8 +48,8 @@
             this.mainMenuItem,
             this.autoLoginMenuItem,
             this.pathfindingMenuItem,
-            this.propertiesToolStripMenuItem,
-            this.interactiveMapToolStripMenuItem});
+            this.interactiveMapToolStripMenuItem,
+            this.propertiesToolStripMenuItem});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.Name = "menuStrip";
 			this.menuStrip.Padding = new System.Windows.Forms.Padding(0);
@@ -77,8 +77,8 @@
 			// 
 			this.pathfindingMenuItem.ForeColor = System.Drawing.SystemColors.Control;
 			this.pathfindingMenuItem.Name = "pathfindingMenuItem";
-			this.pathfindingMenuItem.Size = new System.Drawing.Size(82, 24);
-			this.pathfindingMenuItem.Text = "Pathfinding";
+			this.pathfindingMenuItem.Size = new System.Drawing.Size(64, 24);
+			this.pathfindingMenuItem.Text = "Planner";
 			this.pathfindingMenuItem.Click += new System.EventHandler(this.MenuItem_Pathfinding_Click);
 			// 
 			// propertiesToolStripMenuItem
@@ -88,6 +88,14 @@
 			this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(60, 24);
 			this.propertiesToolStripMenuItem.Text = "Metrics";
 			// 
+			// interactiveMapToolStripMenuItem
+			// 
+			this.interactiveMapToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+			this.interactiveMapToolStripMenuItem.Name = "interactiveMapToolStripMenuItem";
+			this.interactiveMapToolStripMenuItem.Size = new System.Drawing.Size(103, 24);
+			this.interactiveMapToolStripMenuItem.Text = "Interactive Map";
+			this.interactiveMapToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_IMap_Click);
+			// 
 			// panel1
 			// 
 			this.panel1.Location = new System.Drawing.Point(0, 24);
@@ -96,14 +104,6 @@
 			this.panel1.Size = new System.Drawing.Size(752, 450);
 			this.panel1.TabIndex = 4;
 			this.panel1.Visible = false;
-			// 
-			// interactiveMapToolStripMenuItem
-			// 
-			this.interactiveMapToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
-			this.interactiveMapToolStripMenuItem.Name = "interactiveMapToolStripMenuItem";
-			this.interactiveMapToolStripMenuItem.Size = new System.Drawing.Size(103, 24);
-			this.interactiveMapToolStripMenuItem.Text = "Interactive Map";
-			this.interactiveMapToolStripMenuItem.Click += new System.EventHandler(this.MenuItem_IMap_Click);
 			// 
 			// MapleGator
 			// 

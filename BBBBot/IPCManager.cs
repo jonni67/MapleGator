@@ -19,6 +19,18 @@ namespace MapleGatorBot
 		public static IPCGameData GAME_DATA;
 		public static IPCDataArrays ARRAY_DATA;
 
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
+		public static IPCMobData[] MOBS;           // 100 * 65 = 6500 bytes
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+		public static IPCDropData[] DROPS;         // 50 * 49 = 2450 bytes
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+		public static IPCPortalData[] PORTALS;     // 20 * 81 = 1620 bytes
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 200)]
+		public static IPCFootholdData[] FOOTHOLDS; // 200 * 29 = 5800 bytes
+
 		static MemoryMappedFile gameDataFile;
 		static MemoryMappedViewAccessor gameDataAccessor;
 		static MemoryMappedFile arrayDataFile;
@@ -330,9 +342,9 @@ namespace MapleGatorBot
 			WriteGameData(ref GAME_DATA);
 		}
 
-		private static IPCMobData ReadMobData(int offset)
+		private static void ReadMobData(int offset, ref IPCMobData mob)
 		{
-			IPCMobData mob = new IPCMobData();
+			//IPCMobData mob = new IPCMobData();
 
 			mob.mobUID = arrayDataAccessor.ReadInt32(offset);
 			mob.x = arrayDataAccessor.ReadInt32(offset + 4);
@@ -351,12 +363,12 @@ namespace MapleGatorBot
 				mob.name[i] = arrayDataAccessor.ReadByte(offset + 33 + i);
 			}
 
-			return mob;
+			// return mob;
 		}
 
-		private static IPCDropData ReadDropData(int offset)
+		private static void ReadDropData(int offset, ref IPCDropData drop)
 		{
-			IPCDropData drop = new IPCDropData();
+			//IPCDropData drop = new IPCDropData();
 
 			drop.dropUID = arrayDataAccessor.ReadInt32(offset);
 			drop.itemID = arrayDataAccessor.ReadInt32(offset + 4);
@@ -371,12 +383,12 @@ namespace MapleGatorBot
 				drop.itemName[i] = arrayDataAccessor.ReadByte(offset + 17 + i);
 			}
 
-			return drop;
+			//return drop;
 		}
 
-		private static IPCPortalData ReadPortalData(int offset)
+		private static void ReadPortalData(int offset, ref IPCPortalData portal)
 		{
-			IPCPortalData portal = new IPCPortalData();
+			//IPCPortalData portal = new IPCPortalData();
 
 			portal.portalID = arrayDataAccessor.ReadInt32(offset);
 			portal.x = arrayDataAccessor.ReadInt32(offset + 4);
@@ -398,12 +410,12 @@ namespace MapleGatorBot
 				portal.destinationName[i] = arrayDataAccessor.ReadByte(offset + 49 + i);
 			}
 
-			return portal;
+			//return portal;
 		}
 
-		private static IPCFootholdData ReadFootholdData(int offset)
+		private static void ReadFootholdData(int offset, ref IPCFootholdData foothold)
 		{
-			IPCFootholdData foothold = new IPCFootholdData();
+			//IPCFootholdData foothold = new IPCFootholdData();
 
 			foothold.footholdID = arrayDataAccessor.ReadInt32(offset);
 			foothold.x1 = arrayDataAccessor.ReadInt32(offset + 4);
@@ -413,8 +425,8 @@ namespace MapleGatorBot
 			foothold.prev = arrayDataAccessor.ReadInt32(offset + 20);
 			foothold.next = arrayDataAccessor.ReadInt32(offset + 24);
 			foothold.isValid = arrayDataAccessor.ReadByte(offset + 28);
-
-			return foothold;
+			
+			//return foothold;
 		}
 
 		public static IPCDataArrays ReadArrayData()
@@ -432,28 +444,28 @@ namespace MapleGatorBot
 			// Read mob data (100 * 65 bytes each)
 			for (int i = 0; i < 100; i++)
 			{
-				arrays.mobs[i] = ReadMobData(offset);
+				ReadMobData(offset, ref arrays.mobs[i]);
 				offset += 65; // Size of IPCMobData
 			}
 
 			// Read drop data (50 * 49 bytes each)
 			for (int i = 0; i < 50; i++)
 			{
-				arrays.drops[i] = ReadDropData(offset);
+				ReadDropData(offset, ref arrays.drops[i]);
 				offset += 49; // Size of IPCDropData
 			}
 
 			// Read portal data (20 * 81 bytes each)
 			for (int i = 0; i < 20; i++)
 			{
-				arrays.portals[i] = ReadPortalData(offset);
+				ReadPortalData(offset, ref arrays.portals[i]);
 				offset += 81; // Size of IPCPortalData
 			}
 
 			// Read foothold data (200 * 29 bytes each)
 			for (int i = 0; i < 200; i++)
 			{
-				arrays.footholds[i] = ReadFootholdData(offset);
+				ReadFootholdData(offset, ref arrays.footholds[i]);
 				offset += 29; // Size of IPCFootholdData
 			}
 
@@ -489,7 +501,7 @@ namespace MapleGatorBot
 			// Read only valid mobs
 			for (int i = 0; i < Math.Min(100, mobCount); i++)
 			{
-				arr.mobs[i] = ReadMobData(offset);
+				ReadMobData(offset, ref arr.mobs[i]);
 				offset += 65;
 			}
 
@@ -499,7 +511,7 @@ namespace MapleGatorBot
 			// Read only valid drops
 			for (int i = 0; i < Math.Min(50, dropCount); i++)
 			{
-				arr.drops[i] = ReadDropData(offset);
+				ReadDropData(offset, ref arr.drops[i]);
 				offset += 49;
 			}
 			// Skip remaining drop slots
@@ -508,7 +520,7 @@ namespace MapleGatorBot
 			// Read only valid portals
 			for (int i = 0; i < Math.Min(20, portalCount); i++)
 			{
-				arr.portals[i] = ReadPortalData(offset);
+				ReadPortalData(offset, ref arr.portals[i]);
 				offset += 81;
 			}
 			// Skip remaining portal slots
@@ -517,7 +529,7 @@ namespace MapleGatorBot
 			// Read only valid footholds
 			for (int i = 0; i < Math.Min(200, footholdCount); i++)
 			{
-				arr.footholds[i] = ReadFootholdData(offset);
+				ReadFootholdData(offset, ref arr.footholds[i]);
 				offset += 29;
 			}
 

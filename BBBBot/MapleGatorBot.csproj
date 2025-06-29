@@ -139,6 +139,12 @@
     <Compile Include="MapleGatorBehavior.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PlannerChoiceBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlannerChoiceBox.Designer.cs">
+      <DependentUpon>PlannerChoiceBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Styling.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Primary.cs">
@@ -147,11 +153,11 @@
     <Compile Include="Primary.Designer.cs">
       <DependentUpon>Primary.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pathfinding.cs">
+    <Compile Include="Planner.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Pathfinding.Designer.cs">
-      <DependentUpon>Pathfinding.cs</DependentUpon>
+    <Compile Include="Planner.Designer.cs">
+      <DependentUpon>Planner.cs</DependentUpon>
     </Compile>
     <Compile Include="MapleGator.cs">
       <SubType>Form</SubType>
@@ -167,14 +173,17 @@
     <EmbeddedResource Include="InteractiveMap.resx">
       <DependentUpon>InteractiveMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pathfinding.resx">
-      <DependentUpon>Pathfinding.cs</DependentUpon>
+    <EmbeddedResource Include="Planner.resx">
+      <DependentUpon>Planner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapleGator.aa.resx">
       <DependentUpon>MapleGator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapleGator.resx">
       <DependentUpon>MapleGator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlannerChoiceBox.resx">
+      <DependentUpon>PlannerChoiceBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Primary.resx">
       <DependentUpon>Primary.cs</DependentUpon>
@@ -215,6 +224,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gator-toggle-off.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trash-mob.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.3.119.0\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />

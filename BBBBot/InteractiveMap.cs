@@ -14,11 +14,12 @@ namespace MapleGatorBot
 		private SKControl skControl;
 
 		bool _isDrawing = false;
-		List<Point> _drawPoints = new List<Point>();
-		List<SKRect> _huntZones = new List<SKRect>();
+		List<HuntZone> _huntZones = new List<HuntZone>();
 
-		Point _huntZoneStart = new Point();
 		SKRect _currHuntZoneDraw = new SKRect();
+		IPCFootholdData _currHoveredFoothold = new IPCFootholdData();
+
+		List<PointF> _huntZonePoints = new List<PointF>();
 
 		float mapLeft = -250;
 		float mapRight = 1690;
@@ -36,12 +37,39 @@ namespace MapleGatorBot
 		float testY = 128;
 		int testDir = 1;
 
-		bool scaled = false;
-
 		List<PointF> _screenHuntPoints = new List<PointF>();
-		List<PointF> _worldHuntPoints = new List<PointF>();
+
+		bool _isCreatingHuntZone = false;
+		byte _huntZoneCreationState = 0;
 
 		IMapDrawModes _drawMode;
+
+		float _footHoldPointRadi = 6;
+		SKPaint _paint_footHoldPoint = new SKPaint {
+			Color = SKColors.Aqua,
+			IsAntialias = true,
+		};
+
+		float _footHoldSelectRadi = 8;
+		SKPaint _paint_footHoldSelectPoint = new SKPaint
+		{
+			Color = SKColors.Honeydew,
+			IsAntialias = true,
+		};
+
+		SKPaint _paint_footHoldHoverPoint = new SKPaint
+		{
+			Color = SKColors.Magenta,
+			IsAntialias = true,
+		};
+
+		SKPaint _paint_HuntZoneText = new SKPaint
+        {
+            Color = SKColors.DarkBlue,
+			TextSize = 18,
+            IsAntialias = true,
+            Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold)
+        };
 
 		public InteractiveMap(MapleGator parent)
 		{
@@ -54,9 +82,8 @@ namespace MapleGatorBot
 			};
 
 			skControl.PaintSurface += SkControl_PaintSurface;
-			this.Controls.Add(skControl);
+			Controls.Add(skControl);
 
-			// Optional: timer to refresh
 			var timer = new Timer { Interval = 1 };
 			timer.Tick += (s, e) => skControl.Invalidate();
 			timer.Tick += (s, e) => 
@@ -74,28 +101,9 @@ namespace MapleGatorBot
 
 			timer.Start();
 
-			this.SetStyle(ControlStyles.AllPaintingInWmPaint |
-				  ControlStyles.OptimizedDoubleBuffer |
-				  ControlStyles.UserPaint, true);
-			this.DoubleBuffered = true;
-			this.UpdateStyles();
-
-			skControl.MouseDown += StartDragDraw;
-			skControl.MouseUp += FinishDragDraw;
-			skControl.MouseMove += UpdateDragDraw;
-
-			//this.Paint += IPaint;
-
-			/*
-			Timer timer = new Timer();
-			timer.Interval = 1;
-			timer.Tick += (s, e) =>
-			{
-				//this.Invalidate(); // Marks it for repaint
-				//this.Update();     // Forces the repaint now
-			};
-			timer.Start();
-			*/
+			skControl.MouseDown += DoMouseClick;
+			skControl.MouseUp += DoMouseUp;
+			skControl.MouseMove += DoMouseMove;
 
 			_drawMode = IMapDrawModes.HuntRectangle;
 		}
@@ -135,61 +143,61 @@ namespace MapleGatorBot
 			this.Hide();
 		}
 
-		private void StartDragDraw(object snder, MouseEventArgs e)
+		private void DoMouseClick(object snder, MouseEventArgs e)
 		{
-			if (_isDrawing)
-				return;
-
-			if(_drawMode == IMapDrawModes.HuntRectangle)
+			if(_isCreatingHuntZone)
 			{
-				_isDrawing = true;
-				_huntZoneStart = e.Location;
+				PointF converted = ConvertScreenToMap(new Point(e.Location.X, e.Location.Y), scale, mapLeft, mapTop);
+				IPCFootholdData closest = FindClosestFootholdToPoint(converted);
+				_huntZonePoints.Add(new PointF(closest.x1, closest.y1));
+				if(_huntZoneCreationState == 0)
+				{
+					_huntZoneCreationState = 1;
+				}
+				else if(_huntZoneCreationState == 1)
+				{
+					_isCreatingHuntZone = false;
+					_huntZones.Add(new HuntZone(_huntZonePoints[0], _huntZonePoints[1], $"HUNT ZONE {_huntZones.Count}"));
+					infoLabel.Text = "Use the menu to add new zones.";
+				}
 			}
 		}
 
-		private void UpdateDragDraw(object snder, MouseEventArgs e)
+		private void DoMouseUp(object snder, MouseEventArgs e)
 		{
 			if (!_isDrawing)
 				return;
+		}
 
+		private void DoMouseMove(object snder, MouseEventArgs e)
+		{
+			/*
+			if (!_isDrawing)
+				return;
+
+			
 			int xDiff = Math.Abs(_huntZoneStart.X - e.Location.X);
 			int yDiff = Math.Abs(_huntZoneStart.Y - e.Location.Y);
 
 			PointF converted = ConvertScreenToMap(new Point(_huntZoneStart.X, _huntZoneStart.Y), scale, mapLeft, mapTop);
-			Console.WriteLine(converted);
+			//_currHuntZoneDraw = CreateRect((int)converted.X, (int)converted.Y, xDiff, yDiff);
+			*/
 
-			_currHuntZoneDraw = CreateRect((int)converted.X, (int)converted.Y, xDiff, yDiff);
-		}
-
-		private void FinishDragDraw(object snder, MouseEventArgs e)
-		{
-			if (!_isDrawing)
-				return;
-
-			if (_drawMode == IMapDrawModes.HuntRectangle)
+			if (_isCreatingHuntZone)
 			{
-				float centerX = _currHuntZoneDraw.Left + (_currHuntZoneDraw.Width / 2);
-				float centerY = _currHuntZoneDraw.Top + (_currHuntZoneDraw.Height / 2);
-				_screenHuntPoints.Add(new PointF(centerX, centerY));
-				_huntZones.Add(_currHuntZoneDraw);
-				_isDrawing = false;
+				PointF converted = ConvertScreenToMap(new Point(e.Location.X, e.Location.Y), scale, mapLeft, mapTop);
+				IPCFootholdData closest = FindClosestFootholdToPoint(converted);
+				_currHoveredFoothold = closest;
 			}
 		}
 
 		private void SkControl_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
 		{
 			var canvas = e.Surface.Canvas;
-			canvas.Clear(SKColors.Black);
+			canvas.Clear(SKColors.SlateGray);
 
 			canvas.Scale(scale);
 			canvas.Translate(-mapLeft, -mapTop);
-
-			canvas.DrawRect(_currHuntZoneDraw, new SKPaint { Color = SKColors.Green });
-
-			for (int i = 0; i < _huntZones.Count; i++)
-			{
-				canvas.DrawRect(_huntZones[i], new SKPaint { Color = SKColors.Green });
-			}
 
 			//canvas.DrawRect(CreateRect(testX, testY, 32, 32), new SKPaint { Color = SKColors.Red });
 
@@ -206,45 +214,64 @@ namespace MapleGatorBot
 			{
 				IPCFootholdData d = IPCManager.ARRAY_DATA.footholds[i];
 				canvas.DrawLine(d.x1, d.y1, d.x2, d.y2, new SKPaint { Color = SKColors.White });
+
+				if(_isCreatingHuntZone)
+				{
+					if(_currHoveredFoothold.x1 == d.x1 && _currHoveredFoothold.y1 == d.y1)
+					{
+						canvas.DrawCircle(new SKPoint(d.x1, d.y1), _footHoldSelectRadi, _paint_footHoldHoverPoint);
+					}
+					else if(_huntZonePoints.Contains(new PointF(d.x1, d.y1)))
+					{
+						canvas.DrawCircle(new SKPoint(d.x1, d.y1), _footHoldSelectRadi, _paint_footHoldSelectPoint);
+					}
+					else
+					{
+						canvas.DrawCircle(new SKPoint(d.x1, d.y1), _footHoldPointRadi, _paint_footHoldPoint);
+					}
+				}
 			}
-
-			// You'd compute this from your map logic
-			//canvas.DrawCircle(200, 200, 10, entityPaint);
-		}
-
-		/*
-		private void IPaint(object sender, PaintEventArgs e)
-		{
-			Graphics g = e.Graphics;
-			
-			//g.ScaleTransform(scale, scale);
-			//g.TranslateTransform(-mapLeft, -mapTop);
-		
-			g.Transform = _screenMatrix;
-
-			g.DrawRectangle(Pens.Green, _currHuntZoneDraw);
 
 			for (int i = 0; i < _huntZones.Count; i++)
 			{
-				g.DrawRectangle(Pens.Green, _huntZones[i]);
-			}
-
-			for (int i = 0; i < IPCManager.GAME_DATA.totalMobs; i++)
-			{
-				//Console.WriteLine($"[Mob {i}] (X: {_currArrayData.mobs[i].x}, Y: {_currArrayData.mobs[i].y})");
-				//Console.WriteLine($"[Mob {i}] (X: {IPCManager.ARRAY_DATA.mobs[i].x}, Y: {IPCManager.ARRAY_DATA.mobs[i].y})");
-				int x = (IPCManager.ARRAY_DATA.mobs[i].x) - 32;
-				int y = (IPCManager.ARRAY_DATA.mobs[i].y) - 32;
-				g.DrawRectangle(Pens.Red, new Rectangle(x, y, 32, 32));
-			}
-			
-			for(int i = 0; i < IPCManager.GAME_DATA.totalFootholds; i++)
-			{
-				IPCFootholdData d = IPCManager.ARRAY_DATA.footholds[i];
-				g.DrawLine(Pens.White, d.x1, d.y1, d.x2, d.y2);
+				canvas.DrawCircle(new SKPoint(_huntZones[i].Start.X, _huntZones[i].Start.Y), _footHoldSelectRadi, _paint_footHoldSelectPoint);
+				canvas.DrawCircle(new SKPoint(_huntZones[i].End.X, _huntZones[i].End.Y), _footHoldSelectRadi, _paint_footHoldSelectPoint);
+				canvas.DrawText(_huntZones[i].Name, _huntZones[i].MidPoint.X, _huntZones[i].MidPoint.Y - 32, _paint_HuntZoneText);
+				canvas.DrawRect(_huntZones[i].Rect, new SKPaint { Color = SKColors.Green });
 			}
 		}
-		*/
+
+		public IPCFootholdData FindClosestFootholdToPoint(PointF point)
+		{
+			float smallestDist = 1000000f;
+			IPCFootholdData closest = new IPCFootholdData();
+
+			for (int i = 0; i < IPCManager.GAME_DATA.totalFootholds; i++)
+			{
+				float x1 = IPCManager.ARRAY_DATA.footholds[i].x1;
+				float x2 = point.X;
+
+				float y1 = IPCManager.ARRAY_DATA.footholds[i].y1;
+				float y2 = point.Y;
+
+				float dx = x2 - x1;
+				float dy = y2 - y1;
+				
+				// finding squared distance is a bit more efficient and works fine
+				float dist = dx * dx + dy * dy;
+
+				if (dist >= 256)
+					continue;
+
+				if(dist < smallestDist)
+				{
+					smallestDist = dist;
+					closest = IPCManager.ARRAY_DATA.footholds[i];
+				}
+			}
+
+			return closest;
+		}
 
 		public static SKRect CreateRect(float x, float y, float width, float height)
 		{
@@ -257,6 +284,14 @@ namespace MapleGatorBot
 			int x = (int)huntPoint.X;
 			int y = (int)huntPoint.Y;
 			IPCManager.SendCommand($"m {x} {y}");
+		}
+
+		private void huntZoneToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			_isCreatingHuntZone = true;
+			_huntZonePoints.Clear();
+			_huntZoneCreationState = 0;
+			infoLabel.Text = "Use Left Mouse to select two points on the map. Right Mouse to cancel placement.";
 		}
 	}
 }
