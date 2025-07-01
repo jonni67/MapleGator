@@ -49,6 +49,7 @@ namespace MapleGatorBot
 		};
 
 		List<string> _actionList = new List<string>();
+		Dictionary<string, Action> _onActionDragCallbacks = new Dictionary<string, Action>();
 
 		public Planner(MapleGator parent)
 		{
@@ -88,8 +89,12 @@ namespace MapleGatorBot
 				_actionList.Add(t);
 			}
 
+			// trigger drag callbacks
 			_onTriggerDragCallbacks[_triggerList[0]] = OpenChoiceBoxHPBelow;
 			_onTriggerDragCallbacks[_triggerList[2]] = OpenChoiceBoxLevelRange;
+
+			// action drag callbacks
+			_onActionDragCallbacks[_actionList[4]] = OpenChoiceBoxGoMap;
 		}
 
 		public void SuspendAll()
@@ -134,6 +139,15 @@ namespace MapleGatorBot
 			f.OnSuccess += SuccessfulLevelRangeChoice;
 		}
 
+		private void OpenChoiceBoxGoMap()
+		{
+			_parent.BotPaused = true;
+			_choiceBox = new GoMapChoiceForm(this);
+			GoMapChoiceForm f = ((GoMapChoiceForm)_choiceBox);
+			f.Initialize();
+			f.OnSuccess += SuccessfulMapGoChoice;
+		}
+
 		private void SuccessfulHPBelowChoice(HPBelowChoiceForm sender, int val)
 		{
 			sender.OnSuccess -= SuccessfulHPBelowChoice;
@@ -165,6 +179,23 @@ namespace MapleGatorBot
 			_dragCallbackNode = null;
 			_parent.BotPaused = false;
 		}
+
+		private void SuccessfulMapGoChoice(GoMapChoiceForm sender, int val1)
+		{
+			sender.OnSuccess -= SuccessfulMapGoChoice;
+
+			if (_dragCallbackNode != null)
+			{
+				StringBuilder s = new StringBuilder(_dragCallbackNode.Text);
+				s.Replace("X", $"{val1}");
+				_dragCallbackNode.Text = s.ToString();
+				Console.WriteLine(_dragCallbackNode.Text);
+			}
+
+			_dragCallbackNode = null;
+			_parent.BotPaused = false;
+		}
+
 
 		private void TreeView_ItemDrag(object sender, ItemDragEventArgs e)
 		{
@@ -221,6 +252,14 @@ namespace MapleGatorBot
 					{
 						if (_actionList.Contains(targetNode.Text))
 							return;
+
+						// execute drag callback for that action
+						if(_onActionDragCallbacks.ContainsKey(draggedNode.Text))
+						{
+							_dragCallbackNode = clonedNode;
+							_onActionDragCallbacks[draggedNode.Text]();
+						}
+
 						targetNode.Nodes.Add(clonedNode);
 						targetNode.Expand();
 					}
@@ -249,6 +288,13 @@ namespace MapleGatorBot
 
 				// clone that node
 				TreeNode clonedNode = (TreeNode)draggedNode.Clone();
+
+				// execute drag callback for that action
+				if (_onActionDragCallbacks.ContainsKey(draggedNode.Text))
+				{
+					_dragCallbackNode = clonedNode;
+					_onActionDragCallbacks[draggedNode.Text]();
+				}
 
 				// add that cloned node to the parent routine node
 				targetNode.Nodes.Add(clonedNode);

@@ -127,6 +127,12 @@
     <Compile Include="AutoLogin.Designer.cs">
       <DependentUpon>AutoLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChoiceForms\GoMapChoiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChoiceForms\GoMapChoiceForm.Designer.cs">
+      <DependentUpon>GoMapChoiceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ChoiceForms\LevelRangeChoiceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,6 +181,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AutoLogin.resx">
       <DependentUpon>AutoLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChoiceForms\GoMapChoiceForm.resx">
+      <DependentUpon>GoMapChoiceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ChoiceForms\LevelRangeChoiceForm.resx">
       <DependentUpon>LevelRangeChoiceForm.cs</DependentUpon>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using TreeNode = System.Windows.Forms.TreeNode;
 using OpenTK.Audio.OpenAL;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace MapleGatorBot
 {
@@ -49,7 +50,7 @@ namespace MapleGatorBot
 			_sysTimer.Start();
 
 			_ipcTimer = new Timer();
-			_ipcTimer.Interval = 16;
+			_ipcTimer.Interval = 1;
 			_ipcTimer.Tick += new EventHandler(Tick_IPC);
 			_ipcTimer.Start();
 		}
@@ -292,18 +293,48 @@ namespace MapleGatorBot
 			}
 			else if(tag == PlannerActionTypes.GotoMap)
 			{
+				string t = tn.Text;
 				string[] split = tn.Text.Split(':');
+				
 				int val = int.Parse(split[1]);
 				if (_currMapID != val)
 				{
-					Simulate_GotoMap(val);
-					Console.WriteLine($"Executing Action: Goto Map: {val}");
+					// Simulate_GotoMap(val); // for simulation
+					IPC_GotoMap(val);
 				}
+				
 			}
 			else if(tag == PlannerActionTypes.HuntInMap)
 			{
 				SimulateHunting();
 			}
+		}
+
+		private void IPC_GotoMap(int id)
+		{
+			if (!_hooked)
+				return;
+
+			if (IPCManager.GAME_DATA.isNavigating == 1)
+			{
+				Console.WriteLine($"Action Execute: Goto Map: {id} : ALREADY NAVIGATING");
+				return;
+			}
+
+			if (IPCManager.GAME_DATA.currentMapID == id)
+			{
+				Console.WriteLine($"Action Execute: Goto Map: {id} : ALREADY IN MAP");
+				return;
+			}
+
+
+			// starting test = 40000 -> 40001
+			// Usage: navigate<mapId>
+			Console.WriteLine($"Executing Action: Goto Map: {id}");
+			Console.WriteLine("Sending Navigate Command to IPC");
+			Console.WriteLine($"Nav Status: {IPCManager.GAME_DATA.navigationStatus}");
+
+			IPCManager.SendCommand($"navigate {id}");
 		}
 
 		private void SimulateHunting()
