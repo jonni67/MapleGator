@@ -1,6 +1,6 @@
 ﻿namespace MapleGatorBot
 {
-	partial class PlannerChoiceBox
+	partial class HPBelowChoiceForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PlannerChoiceBox));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HPBelowChoiceForm));
 			this.mainLabel = new System.Windows.Forms.Label();
 			this.valueTextBox = new System.Windows.Forms.TextBox();
 			this.okBtn = new System.Windows.Forms.Button();
@@ -90,12 +90,12 @@
 			this.cancelBtn.UseVisualStyleBackColor = false;
 			this.cancelBtn.Click += new System.EventHandler(this.Btn_Cancel_Click);
 			// 
-			// PlannerChoiceBox
+			// HPBelowChoiceForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(321, 178);
+			this.ClientSize = new System.Drawing.Size(212, 163);
 			this.ControlBox = false;
 			this.Controls.Add(this.cancelBtn);
 			this.Controls.Add(this.okBtn);
@@ -103,7 +103,7 @@
 			this.Controls.Add(this.mainLabel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "PlannerChoiceBox";
+			this.Name = "HPBelowChoiceForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Choose an option";
 			this.ResumeLayout(false);

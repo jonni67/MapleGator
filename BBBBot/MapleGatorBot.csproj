@@ -127,6 +127,12 @@
     <Compile Include="AutoLogin.Designer.cs">
       <DependentUpon>AutoLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChoiceForms\LevelRangeChoiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChoiceForms\LevelRangeChoiceForm.Designer.cs">
+      <DependentUpon>LevelRangeChoiceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InteractiveMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,11 +145,11 @@
     <Compile Include="MapleGatorBehavior.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlannerChoiceBox.cs">
+    <Compile Include="ChoiceForms\HPBelowChoiceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PlannerChoiceBox.Designer.cs">
-      <DependentUpon>PlannerChoiceBox.cs</DependentUpon>
+    <Compile Include="ChoiceForms\HPBelowChoiceForm.Designer.cs">
+      <DependentUpon>HPBelowChoiceForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Styling.cs" />
     <Compile Include="Data.cs" />
@@ -170,6 +176,9 @@
     <EmbeddedResource Include="AutoLogin.resx">
       <DependentUpon>AutoLogin.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ChoiceForms\LevelRangeChoiceForm.resx">
+      <DependentUpon>LevelRangeChoiceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InteractiveMap.resx">
       <DependentUpon>InteractiveMap.cs</DependentUpon>
     </EmbeddedResource>
@@ -182,8 +191,8 @@
     <EmbeddedResource Include="MapleGator.resx">
       <DependentUpon>MapleGator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PlannerChoiceBox.resx">
-      <DependentUpon>PlannerChoiceBox.cs</DependentUpon>
+    <EmbeddedResource Include="ChoiceForms\HPBelowChoiceForm.resx">
+      <DependentUpon>HPBelowChoiceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Primary.resx">
       <DependentUpon>Primary.cs</DependentUpon>

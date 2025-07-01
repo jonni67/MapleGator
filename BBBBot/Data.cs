@@ -49,9 +49,25 @@ namespace MapleGatorBot
 
 	public enum PlannerElementTypes
 	{
-		Routine,
 		Trigger,
 		Action,
+	}
+
+	public enum PlannerTriggerTypes
+	{
+		HPBelow,
+		MPBelow,
+		LevelRange,
+	}
+
+	public enum PlannerActionTypes
+	{
+		FollowRoutine,
+		UseConsumable,
+		WaitMS,
+		WaitRandomMS,
+		GotoMap,
+		HuntInMap,
 	}
 
 	public struct HuntZone

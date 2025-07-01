@@ -28,20 +28,12 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Hunt In Zone 1");
-			System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Hunt In Map", new System.Windows.Forms.TreeNode[] {
-            treeNode6});
-			System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Routine 1", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
-			System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Use Consumable (Red Potion)");
-			System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("HP Below 25%", new System.Windows.Forms.TreeNode[] {
-            treeNode9});
 			this.label1 = new System.Windows.Forms.Label();
 			this.routineTree = new System.Windows.Forms.TreeView();
 			this.label2 = new System.Windows.Forms.Label();
 			this.triggerTree = new System.Windows.Forms.TreeView();
 			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.categoryLabel = new System.Windows.Forms.Label();
 			this.planTriggerBtn = new System.Windows.Forms.Button();
 			this.planNewRoutineBtn = new System.Windows.Forms.Button();
 			this.planActionBtn = new System.Windows.Forms.Button();
@@ -69,23 +61,11 @@
 			// 
 			this.routineTree.BackColor = System.Drawing.Color.Black;
 			this.routineTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.routineTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.routineTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.routineTree.ForeColor = System.Drawing.SystemColors.Control;
 			this.routineTree.Location = new System.Drawing.Point(12, 136);
 			this.routineTree.Margin = new System.Windows.Forms.Padding(8);
 			this.routineTree.Name = "routineTree";
-			treeNode6.Name = "Node2";
-			treeNode6.NodeFont = new System.Drawing.Font("Bahnschrift Condensed", 12F);
-			treeNode6.Text = "Hunt In Zone 1";
-			treeNode7.Name = "Node1";
-			treeNode7.NodeFont = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			treeNode7.Text = "Hunt In Map";
-			treeNode8.ForeColor = System.Drawing.Color.White;
-			treeNode8.Name = "Node0";
-			treeNode8.NodeFont = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			treeNode8.Text = "Routine 1";
-			this.routineTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode8});
 			this.routineTree.Size = new System.Drawing.Size(256, 297);
 			this.routineTree.TabIndex = 3;
 			// 
@@ -106,20 +86,11 @@
 			// 
 			this.triggerTree.BackColor = System.Drawing.Color.Black;
 			this.triggerTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.triggerTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.triggerTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.triggerTree.ForeColor = System.Drawing.SystemColors.Control;
 			this.triggerTree.Location = new System.Drawing.Point(284, 136);
 			this.triggerTree.Margin = new System.Windows.Forms.Padding(8);
 			this.triggerTree.Name = "triggerTree";
-			treeNode9.Name = "Node1";
-			treeNode9.NodeFont = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			treeNode9.Text = "Use Consumable (Red Potion)";
-			treeNode10.ForeColor = System.Drawing.Color.White;
-			treeNode10.Name = "Node0";
-			treeNode10.NodeFont = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			treeNode10.Text = "HP Below 25%";
-			this.triggerTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode10});
 			this.triggerTree.Size = new System.Drawing.Size(256, 297);
 			this.triggerTree.TabIndex = 5;
 			// 
@@ -136,18 +107,18 @@
 			this.label3.TabIndex = 6;
 			this.label3.Text = "TRIGGERS";
 			// 
-			// label4
+			// categoryLabel
 			// 
-			this.label4.AutoSize = true;
-			this.label4.BackColor = System.Drawing.Color.Transparent;
-			this.label4.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label4.ForeColor = System.Drawing.SystemColors.Control;
-			this.label4.Location = new System.Drawing.Point(548, 97);
-			this.label4.Margin = new System.Windows.Forms.Padding(8);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(137, 23);
-			this.label4.TabIndex = 8;
-			this.label4.Text = "CHOOSE A CATEGORY";
+			this.categoryLabel.AutoSize = true;
+			this.categoryLabel.BackColor = System.Drawing.Color.Transparent;
+			this.categoryLabel.Font = new System.Drawing.Font("Bahnschrift Condensed", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.categoryLabel.ForeColor = System.Drawing.SystemColors.Control;
+			this.categoryLabel.Location = new System.Drawing.Point(548, 97);
+			this.categoryLabel.Margin = new System.Windows.Forms.Padding(8);
+			this.categoryLabel.Name = "categoryLabel";
+			this.categoryLabel.Size = new System.Drawing.Size(137, 23);
+			this.categoryLabel.TabIndex = 8;
+			this.categoryLabel.Text = "CHOOSE A CATEGORY";
 			// 
 			// planTriggerBtn
 			// 
@@ -177,6 +148,7 @@
 			this.planNewRoutineBtn.TabIndex = 10;
 			this.planNewRoutineBtn.Text = "New Routine";
 			this.planNewRoutineBtn.UseVisualStyleBackColor = false;
+			this.planNewRoutineBtn.Click += new System.EventHandler(this.Btn_NewRoutine_Click);
 			// 
 			// planActionBtn
 			// 
@@ -197,7 +169,7 @@
 			// 
 			this.elementsTree.BackColor = System.Drawing.Color.Black;
 			this.elementsTree.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.elementsTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.elementsTree.Font = new System.Drawing.Font("Bahnschrift Condensed", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.elementsTree.ForeColor = System.Drawing.SystemColors.Control;
 			this.elementsTree.Location = new System.Drawing.Point(552, 136);
 			this.elementsTree.Margin = new System.Windows.Forms.Padding(8);
@@ -250,7 +222,7 @@
 			this.Controls.Add(this.planActionBtn);
 			this.Controls.Add(this.planNewRoutineBtn);
 			this.Controls.Add(this.planTriggerBtn);
-			this.Controls.Add(this.label4);
+			this.Controls.Add(this.categoryLabel);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.triggerTree);
 			this.Controls.Add(this.label2);
@@ -278,7 +250,7 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TreeView triggerTree;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label categoryLabel;
 		private System.Windows.Forms.Button planTriggerBtn;
 		private System.Windows.Forms.Button planNewRoutineBtn;
 		private System.Windows.Forms.Button planActionBtn;

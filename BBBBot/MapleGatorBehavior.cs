@@ -2,6 +2,9 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 
+using TreeNode = System.Windows.Forms.TreeNode;
+using OpenTK.Audio.OpenAL;
+
 namespace MapleGatorBot
 {
 	public partial class MapleGator : Form
@@ -19,6 +22,13 @@ namespace MapleGatorBot
 			_stateCallbacks [BotStates.Attacking] = Tick_Attack;
 
 			_state = BotStates.Idle;
+
+			// simulated //
+			_currLvl = 1;
+			_currExp = 0;
+			_currHp = _maxHP;
+			_currMapID = 0;
+			// simualted //
 		}
 
 		/// <summary>
@@ -83,6 +93,9 @@ namespace MapleGatorBot
 
 		private void Tick_Bot(object sender, EventArgs e)
 		{
+			if (_botPaused)
+				return;
+
 			// if still hooking return
 			if (_hooking)
 				return;
@@ -109,6 +122,8 @@ namespace MapleGatorBot
 
 			// callback the current state
 			_stateCallbacks[_state]();
+			TraverseTriggerTree();
+			TraverseRoutine();
 		}
 
 		private void Tick_StopWatch(object sender, EventArgs e)
@@ -212,7 +227,103 @@ namespace MapleGatorBot
 
 			// NOT YET IMPLEMENTED //
 		}
+
+		private void TraverseTriggerTree()
+		{
+			// we could write a sophisticated traversal tree for nodes
+			// but really, why bother?
+			// their structure is at most depth of 2 and pretty small
+			// the strings contain all the info we'll need
+			// its simple and easy to deal with, no OOP needed
+
+			// nodes are traversed sequentially
+			foreach (TreeNode n in _planner.TriggerTree.Nodes)
+			{
+				PlannerTriggerTypes tag = (PlannerTriggerTypes)n.Tag;
+
+				if (tag == PlannerTriggerTypes.HPBelow)
+				{
+					// HP Below: X%
+					string[] split = n.Text.Split(':');
+					string sVal = split[1].Replace('%', ' ').Trim();
+					float val = float.Parse(sVal);
+
+					float hpPercent = (_currHp / _maxHP) * 100;
+					if(hpPercent < val)
+					{
+						Console.WriteLine($"Trigger Reached: HP Below: {val}%");
+						TraverseTrigger(n);
+					}
+				}
+				else if(tag == PlannerTriggerTypes.LevelRange)
+				{
+					// Level Range: X, Y
+					string[] split = n.Text.Split(':');
+				}
+			}
+		}
+
+		private void TraverseTrigger(TreeNode n)
+		{
+			foreach(TreeNode tn in n.Nodes)
+			{
+				ExecuteActionsInNode(tn);
+			}
+		}
+
+		private void TraverseRoutine()
+		{
+			if (_planner.CurrRoutineNode == null)
+				return;
+
+			foreach (TreeNode tn in _planner.CurrRoutineNode.Nodes)
+			{
+				ExecuteActionsInNode(tn);
+			}
+		}
+
+		private void ExecuteActionsInNode(TreeNode tn)
+		{
+			PlannerActionTypes tag = (PlannerActionTypes)tn.Tag;
+			if (tag == PlannerActionTypes.UseConsumable)
+			{
+				UseConsumable();
+				Console.WriteLine($"Executing Action: Use Consumable: Test");
+			}
+			else if(tag == PlannerActionTypes.GotoMap)
+			{
+				string[] split = tn.Text.Split(':');
+				int val = int.Parse(split[1]);
+				if (_currMapID != val)
+				{
+					Simulate_GotoMap(val);
+					Console.WriteLine($"Executing Action: Goto Map: {val}");
+				}
+			}
+			else if(tag == PlannerActionTypes.HuntInMap)
+			{
+				SimulateHunting();
+			}
+		}
+
+		private void SimulateHunting()
+		{
+			_currExp += 100;
+			_currHp -= 25;
+
+			if(_currExp > 2000)
+			{
+				_currLvl++;
+				_currExp = 0;
+			}
+
+			Console.WriteLine($"Simulating Hunt ... HP: {_currHp} | EXP: {_currExp} / 2000 | LVL: {_currLvl}");
+		}
+
+		private void Simulate_GotoMap(int id)
+		{
+			Console.WriteLine($"Simulating Going to Map ...");
+			_currMapID = id;
+		}
 	}
-
-
 }

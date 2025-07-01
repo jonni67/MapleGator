@@ -74,6 +74,12 @@ namespace MapleGatorBot
 			set { _iMapOpen = value; }
 		}
 
+		public bool BotPaused
+		{
+			get { return _botPaused; }
+			set { _botPaused = value; }
+		}
+
 		#endregion
 
 		#region Private Members
@@ -117,9 +123,9 @@ namespace MapleGatorBot
 		bool _autoLoginEnabled = false;
 		bool _iMapOpen = false;
 		bool _ipcInitiated = false;
+		bool _botPaused = false;
 
 		int _currPID = -1;
-		int _currMapID = 0;
 
 		// timers //
 		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
@@ -129,6 +135,15 @@ namespace MapleGatorBot
 		Stopwatch _stopWatch = Stopwatch.StartNew();
 		float _stopWatchTime = 100f;
 		bool _timerActive = false;
+
+		// node testing //
+		int _currHp = 1000;
+		int _maxHP = 1000;
+		int _currExp = 0;
+		int _currLvl = 1;
+		int _currMapID = 0;
+
+		// node testing
 
 		#endregion
 
@@ -388,6 +403,12 @@ namespace MapleGatorBot
 		private void UpdateGameData()
 		{
 			_primary.UpdatePositionLabel(IPCManager.GAME_DATA.playerX, IPCManager.GAME_DATA.playerY);
+		}
+
+		private void UseConsumable()
+		{
+			_currHp += 150;
+			Console.WriteLine($"Took Potion Consumable. HP: {_currHp} + 150");
 		}
 
 		#endregion
