@@ -19,6 +19,8 @@ namespace MapleGatorBot
 
 		public TreeNode CurrRoutineNode { get { return _currRoutineNode; } }
 
+		public MapleGator GatorParent { get { return _parent; } }
+
 		MapleGator _parent;
 		Form _choiceBox;
 		TreeNode _dragCallbackNode;

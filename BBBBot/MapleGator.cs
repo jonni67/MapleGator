@@ -4,12 +4,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
-using System.Net.NetworkInformation;
-using System.Management;
+using System.Text.Json;
+using SkiaSharp;
 
 namespace MapleGatorBot
 {
@@ -80,6 +79,11 @@ namespace MapleGatorBot
 			set { _botPaused = value; }
 		}
 
+		public List<string> Continents
+		{
+			get { return _continents; }
+		}
+
 		#endregion
 
 		#region Private Members
@@ -117,6 +121,12 @@ namespace MapleGatorBot
 		WaitingStates _waitingState;
 
 		Dictionary<BotStates, Action> _stateCallbacks;
+
+		// continent -> <map name, id>
+		Dictionary<string, Dictionary<string, int>> _mapsToId;
+		// continent -> <id, map name>
+		Dictionary<string, Dictionary<int, string>> _mapsToStr;
+		List<string> _continents;
 
 		bool _hooking = false;
 		bool _hooked = false;
@@ -160,8 +170,6 @@ namespace MapleGatorBot
 			}
 
 			SetStyling();
-
-			Console.WriteLine(this.ClientSize);
 		}
 
 		public void HookProcess(string process)
@@ -183,7 +191,7 @@ namespace MapleGatorBot
 
 			_hooked = false;
 			_hooking = false;
-			MessageBox.Show("DLL Failed to Inject :(");
+			MessageBox.Show("DLL Failed to Inject :[");
 		}
 
 		public void SetUpdateRate(int val)
@@ -192,7 +200,47 @@ namespace MapleGatorBot
 			_stateDelayMs = val;
 			_tickTimer.Interval = _stateDelayMs;
 			_tickTimer.Start();
-		}	
+		}
+		
+		public bool TryGetMapByID(string continent, int id, out string str)
+		{
+			str = "";
+			if (!_mapsToStr.ContainsKey(continent))
+				return false;
+			if (!_mapsToStr[continent].ContainsKey(id))
+				return false;
+
+			str = _mapsToStr[continent][id];
+			return true;
+		}
+
+		public bool TryGetMapID(string continent, string name, out int id)
+		{
+			id = -1;
+			if (!_mapsToId.ContainsKey(continent))
+				return false;
+			if (!_mapsToId[continent].ContainsKey(name))
+				return false;
+
+			id = _mapsToId[continent][name];
+			return true;
+		}
+
+		public List<string> SearchSimilarMapsByTerm(string continent, string searchTerm)
+		{
+			if (!_mapsToId.ContainsKey(continent))
+				return new List<string>();
+
+			List<string> results = new List<string>();
+			foreach(var kvp in _mapsToId[continent])
+			{
+				string k = kvp.Key;
+				if (k.ToLower().Contains(searchTerm.ToLower()))
+					results.Add(k);
+			}
+
+			return results;
+		}
 
 		#endregion
 
@@ -204,6 +252,9 @@ namespace MapleGatorBot
 		private void LoadComponents()
 		{
 			_components = new Dictionary<ComponentIDs, Form>();
+			_mapsToId = new Dictionary<string, Dictionary<string, int>>();
+			_mapsToStr = new Dictionary<string, Dictionary<int, string>>();
+			_continents = new List<string>();
 
 			// create form components
 			_primary = new Primary(this);
@@ -241,6 +292,8 @@ namespace MapleGatorBot
 			IPCManager.OnIPCSuccess += _iMap.UpdateMapSize;
 
 			Console.WriteLine("Loaded Form Components");
+
+			LoadAllMaps();
 		}
 
 		/// <summary>
@@ -399,7 +452,52 @@ namespace MapleGatorBot
 			_primary.HookedLabel.Text = "NOT HOOKED";
 			_primary.HookedLabel.ForeColor = Styling.COLOR_OFF;
 		}
-		
+
+		private void LoadAllMaps()
+		{ 
+			string json = File.ReadAllText("Map.img.json");
+			var options = new JsonSerializerOptions
+			{
+				PropertyNameCaseInsensitive = true
+			};
+
+			Dictionary<string, MapRegion> root = JsonSerializer.Deserialize<Dictionary<string, MapRegion>>(json, options);
+
+			Console.WriteLine(root.Count);
+
+			foreach(var reg in root)
+			{
+				_continents.Add(reg.Key);
+				_mapsToId[reg.Key] = new Dictionary<string, int>();
+				_mapsToStr[reg.Key] = new Dictionary<int, string>();
+
+				foreach (var kvp in root[reg.Key].Maps)
+				{
+					string id = kvp.Key;
+					var mapElement = kvp.Value;
+
+					var map = JsonSerializer.Deserialize<MapEntry>(mapElement.GetRawText(), options);
+
+					if (map.mapName == null)
+					{
+						Console.WriteLine($"Map with No Name Found : {id}");
+						continue;
+					}
+
+					int integerID = int.Parse(id);
+					_mapsToId[reg.Key][map.mapName?.Value] = integerID;
+					_mapsToStr[reg.Key][integerID] = map.mapName?.Value;
+
+					Console.Write($"Loading Map: {id} |");
+					if (map.mapName != null)
+						Console.Write($"Name: {map.mapName?.Value} | ");
+					if (map.streetName != null)
+						Console.Write($"Street: {map.mapName?.Value} |");
+					Console.WriteLine("");
+				}
+			}
+		}
+
 		private void UpdateGameData()
 		{
 			_primary.UpdatePositionLabel(IPCManager.GAME_DATA.playerX, IPCManager.GAME_DATA.playerY);

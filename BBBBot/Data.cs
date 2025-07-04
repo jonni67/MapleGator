@@ -2,6 +2,9 @@
 using System;
 using System.Drawing;
 using SkiaSharp;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MapleGatorBot
 {
@@ -90,5 +93,38 @@ namespace MapleGatorBot
 
 			this.Rect = new SKRect(Start.X, Start.Y, Start.X + Math.Abs(Start.X - End.X), Start.Y + Math.Abs(Start.Y - End.Y) - 32);
 		}
+	}
+
+	public sealed class MapEntryValue
+	{
+		[JsonPropertyName("_value")]
+		public string Value { get; set; }
+	}
+
+	public sealed class MapEntry
+	{
+		[JsonPropertyName("_dirName")]
+		public string DirName { get; set; }
+
+		[JsonPropertyName("_dirType")]
+		public string DirType { get; set; }
+
+		public MapEntryValue streetName { get; set; }
+		public MapEntryValue mapName { get; set; }
+		public MapEntryValue mapDesc { get; set; }
+		public MapEntryValue help0 { get; set; }
+	}
+
+	public sealed class MapRegion
+	{
+		[JsonPropertyName("_dirName")]
+		public string DirName { get; set; }
+
+		[JsonPropertyName("_dirType")]
+		public string DirType { get; set; }
+
+		// Dictionary of all maps in the region
+		[JsonExtensionData]
+		public Dictionary<string, JsonElement> Maps { get; set; }
 	}
 }

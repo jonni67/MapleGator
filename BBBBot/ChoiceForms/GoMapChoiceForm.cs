@@ -28,6 +28,12 @@ namespace MapleGatorBot.ChoiceForms
 		{
 			InitializeComponent();
 			_parent = parent;
+
+			List<string> continents = _parent.GatorParent.Continents;
+			for(int i = 0; i < continents.Count; i++)
+			{
+				continentComboBox.Items.Add(continents[i]);
+			}
 		}
 
 		public void Initialize()
@@ -38,18 +44,36 @@ namespace MapleGatorBot.ChoiceForms
 			_valid = false;
 		}
 
-		private void InputBoxValue_TextChanged(object sender, EventArgs e)
+		private void SearchBoxValue_TextChanged(object sender, EventArgs e)
 		{
-			string v = valueTextBox.Text;
-			bool isNumber = int.TryParse(v, out _firstValue);
+			string term = searchMapTextBox.Text;
+			string cont = continentComboBox.Text;
+			Console.WriteLine($"Searching for maps in {cont} with term: {term}");
 
-			if (!isNumber || _firstValue <= 0)
+			resultsComboBox.Items.Clear();
+			List<string> searchResults = _parent.GatorParent.SearchSimilarMapsByTerm(cont, term);
+
+			for (int i = 0; i < searchResults.Count; i++)
 			{
-				valueTextBox.Text = "40000";
-				return;
+				resultsComboBox.Items.Add(searchResults[i]);
 			}
 
-			valueTextBox.Text = $"{_firstValue}";
+			if(searchResults.Count > 0)
+			{
+				resultsComboBox.Text = searchResults[0];
+			}
+		}
+
+		private void InputBoxValue_TextChanged(object sender, EventArgs e)
+		{
+			string v = resultsComboBox.Text;
+			int id = 0;
+			bool success = _parent.GatorParent.TryGetMapID(continentComboBox.Text, v, out id);
+			if (!success)
+				return;
+
+			mapIdLabel.Text = $"Map ID: {id}";
+			_firstValue = id;
 			_valid = true;
 		}
 
