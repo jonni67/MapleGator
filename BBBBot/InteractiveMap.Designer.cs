@@ -34,13 +34,19 @@
 			this.huntZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.button1 = new System.Windows.Forms.Button();
 			this.infoLabel = new System.Windows.Forms.Label();
+			this.toggleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mobsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.portalsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.playerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.dropsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem});
+            this.addToolStripMenuItem,
+            this.toggleToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(1008, 24);
@@ -58,7 +64,7 @@
 			// huntZoneToolStripMenuItem
 			// 
 			this.huntZoneToolStripMenuItem.Name = "huntZoneToolStripMenuItem";
-			this.huntZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.huntZoneToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
 			this.huntZoneToolStripMenuItem.Text = "Hunt Zone";
 			this.huntZoneToolStripMenuItem.Click += new System.EventHandler(this.huntZoneToolStripMenuItem_Click);
 			// 
@@ -82,6 +88,41 @@
 			this.infoLabel.Size = new System.Drawing.Size(212, 23);
 			this.infoLabel.TabIndex = 2;
 			this.infoLabel.Text = "Use the menu to add new zones.";
+			// 
+			// toggleToolStripMenuItem
+			// 
+			this.toggleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mobsToolStripMenuItem,
+            this.portalsToolStripMenuItem,
+            this.playerToolStripMenuItem,
+            this.dropsToolStripMenuItem});
+			this.toggleToolStripMenuItem.Name = "toggleToolStripMenuItem";
+			this.toggleToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+			this.toggleToolStripMenuItem.Text = "Toggle";
+			// 
+			// mobsToolStripMenuItem
+			// 
+			this.mobsToolStripMenuItem.Name = "mobsToolStripMenuItem";
+			this.mobsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.mobsToolStripMenuItem.Text = "Mobs";
+			// 
+			// portalsToolStripMenuItem
+			// 
+			this.portalsToolStripMenuItem.Name = "portalsToolStripMenuItem";
+			this.portalsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.portalsToolStripMenuItem.Text = "Portals";
+			// 
+			// playerToolStripMenuItem
+			// 
+			this.playerToolStripMenuItem.Name = "playerToolStripMenuItem";
+			this.playerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.playerToolStripMenuItem.Text = "Player";
+			// 
+			// dropsToolStripMenuItem
+			// 
+			this.dropsToolStripMenuItem.Name = "dropsToolStripMenuItem";
+			this.dropsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.dropsToolStripMenuItem.Text = "Drops";
 			// 
 			// InteractiveMap
 			// 
@@ -113,5 +154,10 @@
 		private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem huntZoneToolStripMenuItem;
 		private System.Windows.Forms.Label infoLabel;
+		private System.Windows.Forms.ToolStripMenuItem toggleToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mobsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem portalsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem playerToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem dropsToolStripMenuItem;
 	}
 }

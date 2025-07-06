@@ -25,10 +25,12 @@ namespace MapleGatorBot
 			_state = BotStates.Idle;
 
 			// simulated //
+
 			_currLvl = 1;
 			_currExp = 0;
 			_currHp = _maxHP;
 			_currMapID = 0;
+
 			// simualted //
 		}
 
@@ -229,6 +231,17 @@ namespace MapleGatorBot
 			// NOT YET IMPLEMENTED //
 		}
 
+		private void UpdateGameData()
+		{
+			_primary.UpdatePositionLabel(IPCManager.GAME_DATA.playerX, IPCManager.GAME_DATA.playerY);
+
+			if (_currMapID != IPCManager.GAME_DATA.currentMapID)
+			{
+				_iMap.UpdateMapSize();
+				_currMapID = IPCManager.GAME_DATA.currentMapID;
+			}
+		}
+
 		private void TraverseTriggerTree()
 		{
 			// we could write a sophisticated traversal tree for nodes
@@ -301,8 +314,7 @@ namespace MapleGatorBot
 				{
 					// Simulate_GotoMap(val); // for simulation
 					IPC_GotoMap(val);
-				}
-				
+				}		
 			}
 			else if(tag == PlannerActionTypes.HuntInMap)
 			{
@@ -326,7 +338,6 @@ namespace MapleGatorBot
 				Console.WriteLine($"Action Execute: Goto Map: {id} : ALREADY IN MAP");
 				return;
 			}
-
 
 			// starting test = 40000 -> 40001
 			// Usage: navigate<mapId>

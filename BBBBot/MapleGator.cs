@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Threading;
 using System.Text.Json;
-using SkiaSharp;
+using Timer = System.Windows.Forms.Timer;
 
 namespace MapleGatorBot
 {
@@ -88,10 +88,14 @@ namespace MapleGatorBot
 
 		#region Private Members
 
-		// events
+		// events //
+
 		event Action OnStopWatchTimeComplete;
 
+		// events //
+
 		// memory hex //
+
 		const int PROCESS_ALL_ACCESS = 0x1F0FFF;
 		const uint MEM_COMMIT = 0x1000;
 		const uint MEM_RESERVE = 0x2000;
@@ -101,6 +105,8 @@ namespace MapleGatorBot
 		const int PROCESS_QUERY_LIMITED_INFORMATION = 0x1000;
 		const uint STILL_ACTIVE = 259;
 
+		// memory hex //
+
 		// components //
 		Dictionary<ComponentIDs, Form> _components;
 
@@ -108,19 +114,36 @@ namespace MapleGatorBot
 		Planner _planner;
 		AutoLogin _autoLogin;
 		Form _shownComponent;
-
-		// interactive map //
 		InteractiveMap _iMap;
 
+		// components //
+
 		// settings //
+
 		int _stateDelayMs = 50;
 		int _processListRefreshRate = 1000;
 
+		// settings //
+
 		// states //
+
+		bool _hooking = false;
+		bool _hooked = false;
+		bool _autoLoginEnabled = false;
+		bool _iMapOpen = false;
+		bool _ipcInitiated = false;
+		bool _timerActive = false;
+		bool _botPaused = false;
+
+		int _currPID = -1;
+
 		BotStates _state;
 		WaitingStates _waitingState;
-
 		Dictionary<BotStates, Action> _stateCallbacks;
+
+		// states //
+
+		// cache //
 
 		// continent -> <map name, id>
 		Dictionary<string, Dictionary<string, int>> _mapsToId;
@@ -128,25 +151,21 @@ namespace MapleGatorBot
 		Dictionary<string, Dictionary<int, string>> _mapsToStr;
 		List<string> _continents;
 
-		bool _hooking = false;
-		bool _hooked = false;
-		bool _autoLoginEnabled = false;
-		bool _iMapOpen = false;
-		bool _ipcInitiated = false;
-		bool _botPaused = false;
-
-		int _currPID = -1;
+		// cache //
 
 		// timers //
-		System.Windows.Forms.Timer _tickTimer = new System.Windows.Forms.Timer();
-		System.Windows.Forms.Timer _sysTimer = new System.Windows.Forms.Timer();
-		System.Windows.Forms.Timer _ipcTimer = new System.Windows.Forms.Timer();
+
+		Timer _tickTimer = new Timer();
+		Timer _sysTimer = new Timer();
+		Timer _ipcTimer = new Timer();
 
 		Stopwatch _stopWatch = Stopwatch.StartNew();
 		float _stopWatchTime = 100f;
-		bool _timerActive = false;
+
+		// timers //
 
 		// node testing //
+
 		int _currHp = 1000;
 		int _maxHP = 1000;
 		int _currExp = 0;
@@ -159,7 +178,6 @@ namespace MapleGatorBot
 
 		#region Public Methods
 
-		// constructor //
 		public MapleGator()
 		{
 			InitializeComponent();
@@ -279,8 +297,8 @@ namespace MapleGatorBot
 			_autoLogin.Show();
 			_primary.Show();
 
-			// then must hide all forms then show primary //
-			// weird stuff happens otherwise when navigating //
+			// must hide all forms then show primary //
+			// weird stuff happens otherwise when navigating, dont ask me why //
 			Styling.HideFormWithoutFlicker(_planner);
 			Styling.HideFormWithoutFlicker(_autoLogin);
 			Styling.HideFormWithoutFlicker(_primary);
@@ -292,8 +310,6 @@ namespace MapleGatorBot
 			IPCManager.OnIPCSuccess += _iMap.UpdateMapSize;
 
 			Console.WriteLine("Loaded Form Components");
-
-			LoadAllMaps();
 		}
 
 		/// <summary>
@@ -453,7 +469,7 @@ namespace MapleGatorBot
 			_primary.HookedLabel.ForeColor = Styling.COLOR_OFF;
 		}
 
-		private void LoadAllMaps()
+		private void LoadAllMapsFromJSON()
 		{ 
 			string json = File.ReadAllText("Map.img.json");
 			var options = new JsonSerializerOptions
@@ -463,14 +479,14 @@ namespace MapleGatorBot
 
 			Dictionary<string, MapRegion> root = JsonSerializer.Deserialize<Dictionary<string, MapRegion>>(json, options);
 
-			Console.WriteLine(root.Count);
-
+			// continents
 			foreach(var reg in root)
 			{
 				_continents.Add(reg.Key);
 				_mapsToId[reg.Key] = new Dictionary<string, int>();
 				_mapsToStr[reg.Key] = new Dictionary<int, string>();
 
+				// each map in continent
 				foreach (var kvp in root[reg.Key].Maps)
 				{
 					string id = kvp.Key;
@@ -487,26 +503,16 @@ namespace MapleGatorBot
 					int integerID = int.Parse(id);
 					_mapsToId[reg.Key][map.mapName?.Value] = integerID;
 					_mapsToStr[reg.Key][integerID] = map.mapName?.Value;
-
-					Console.Write($"Loading Map: {id} |");
-					if (map.mapName != null)
-						Console.Write($"Name: {map.mapName?.Value} | ");
-					if (map.streetName != null)
-						Console.Write($"Street: {map.mapName?.Value} |");
-					Console.WriteLine("");
 				}
 			}
-		}
 
-		private void UpdateGameData()
-		{
-			_primary.UpdatePositionLabel(IPCManager.GAME_DATA.playerX, IPCManager.GAME_DATA.playerY);
+			Console.WriteLine("Loaded all maps from JSON");
 		}
 
 		private void UseConsumable()
 		{
 			_currHp += 150;
-			Console.WriteLine($"Took Potion Consumable. HP: {_currHp} + 150");
+			Console.WriteLine($"Simulate: Took Potion Consumable. HP: {_currHp} + 150");
 		}
 
 		#endregion
@@ -517,12 +523,13 @@ namespace MapleGatorBot
 		{
 			LoadComponents();
 			LoadStates();
+			LoadAllMapsFromJSON();
 			StartBot();
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			//IPCManager.DisposeAll();
+			IPCManager.DisposeAll();
 			base.OnFormClosing(e);
 		}
 

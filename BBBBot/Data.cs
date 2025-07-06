@@ -44,12 +44,6 @@ namespace MapleGatorBot
 		MovingDownRight,
 	}
 
-	public enum IMapDrawModes
-	{
-		HuntRectangle,
-		DeadZone,
-	}
-
 	public enum PlannerElementTypes
 	{
 		Trigger,
@@ -75,13 +69,13 @@ namespace MapleGatorBot
 
 	public struct HuntZone
 	{
-		public PointF Start;
-		public PointF End;
-		public PointF MidPoint;
+		public SKPoint Start;
+		public SKPoint End;
+		public SKPoint MidPoint;
 		public string Name;
 		public SKRect Rect;
 
-		public HuntZone(PointF start, PointF end, string name)
+		public HuntZone(SKPoint start, SKPoint end, string name)
 		{
 			this.Start = start;
 			this.End = end;
@@ -89,9 +83,12 @@ namespace MapleGatorBot
 
 			float midX = (Start.X + End.X) / 2;
 			float midY = (Start.Y + End.Y) / 2;
-			this.MidPoint = new PointF(midX, midY);
+			this.MidPoint = new SKPoint(midX, midY);
 
-			this.Rect = new SKRect(Start.X, Start.Y, Start.X + Math.Abs(Start.X - End.X), Start.Y + Math.Abs(Start.Y - End.Y) - 32);
+			float flat = 32;
+
+			//this.Rect = new SKRect(Start.X, Start.Y, Start.X + Math.Abs(Start.X - End.X), Start.Y + Math.Abs(Start.Y - End.Y) - 32);
+			this.Rect = new SKRect(Start.X, Start.Y - flat, End.X, End.Y + flat);
 		}
 	}
 
