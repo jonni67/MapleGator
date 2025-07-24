@@ -253,6 +253,10 @@ namespace MapleGatorBot
 			foreach(var kvp in _mapsToId[continent])
 			{
 				string k = kvp.Key;
+				Console.WriteLine(k);
+
+				if(searchTerm.Length == 0)
+					results.Add(k);
 				if (k.ToLower().Contains(searchTerm.ToLower()))
 					results.Add(k);
 			}

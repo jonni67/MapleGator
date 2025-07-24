@@ -143,6 +143,7 @@
 			this.continentComboBox.Name = "continentComboBox";
 			this.continentComboBox.Size = new System.Drawing.Size(182, 31);
 			this.continentComboBox.TabIndex = 15;
+			this.continentComboBox.TextChanged += new System.EventHandler(this.SearchBoxValue_TextChanged);
 			// 
 			// label3
 			// 
